@@ -14,10 +14,6 @@ $sentencia->bindParam(":trabajador_id", $idTrabajador);
 $sentencia->execute();
 $datosGFamiliar = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
-$sentencia = $conexion->prepare("SELECT * FROM nivel_educacional_familiar WHERE grupo_familiar_id = :grupo_familiar_id");
-$sentencia->bindParam(":grupo_familiar_id", $grupo_familiar_id);
-$sentencia->execute();
-$datosGFamiliar = $sentencia->fetch(PDO::FETCH_LAZY);
 
 }
 ?>
@@ -77,12 +73,12 @@ $datosGFamiliar = $sentencia->fetch(PDO::FETCH_LAZY);
                         <th>Fecha de Nacimiento</th>
                         <th>Sexo M/F</th>
                         <th>Estado Civil</th>
+                        <th>Nivel educacional</th>
                         <th>Actividad</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (!empty($datosGFamiliar)): ?>
                     <?php foreach ($datosGFamiliar as $familiar): ?>
                     <tr>
                         <td><input type="text" name="nombre_apellido_familiar[]"
@@ -95,21 +91,22 @@ $datosGFamiliar = $sentencia->fetch(PDO::FETCH_LAZY);
                                 value="<?php echo htmlspecialchars($familiar['sexo']); ?>"></td>
                         <td><input type="text" name="estado_civil_familiar[]"
                                 value="<?php echo htmlspecialchars($familiar['estado_civil']); ?>"></td>
+                        <td><input type="text" name="nivel_educacional[]"
+                                value="<?php echo htmlspecialchars($familiar['nivel_educacional']); ?>"></td>
                         <td><input type="text" name="actividad_familiar[]"
                                 value="<?php echo htmlspecialchars($familiar['actividad']); ?>"></td>
-                        <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td>
+                            <button type="button" onclick="eliminarFilaGP(this)">Eliminar</button>
+                            <input type="hidden"  value="<?php echo htmlspecialchars($familiar['id']); ?>">
+                        </td>
                     </tr>
                     <?php endforeach; ?>
-                    <?php else: ?>
-                    <tr>
-                        <td colspan="8">No hay miembros en el grupo familiar.</td>
-                    </tr>
-                    <?php endif; ?>
                 </tbody>
             </table>
             <button type="button" onclick="agregarFilaGF('grupo_familiar')">Agregar Miembro Familiar</button>
         </fieldset>
         <!-- 3. Nivel Educacional Familiar -->
+         <!-- 
         <fieldset>
             <legend>3. Nivel Educacional Familiar</legend>
             <table id="nivel_educacional" border="1">
@@ -132,6 +129,8 @@ $datosGFamiliar = $sentencia->fetch(PDO::FETCH_LAZY);
             </table>
             <button type="button" onclick="agregarFilaNEF('nivel_educacional')">Agregar Nivel Educacional</button>
         </fieldset>
+
+        -->
         <!-- 4. Historia Familiar -->
         <fieldset>
             <legend>4. Historia Familiar (en la actualidad)</legend>

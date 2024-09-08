@@ -11,16 +11,24 @@ function agregarFilaGF() {
         <td><input type="date" name="fecha_nacimiento_familiar[]"></td>
         <td><input type="text" name="sexo_familiar[]"></td>
         <td><input type="text" name="estado_civil_familiar[]"></td>
+        <td><input type="text" name="nivel_educacional[]"></td>
         <td><input type="text" name="actividad_familiar[]"></td>
-        <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+        <td>
+        <button type="button" onclick="eliminarFila(this)">Eliminar</button>
+        <input type="hidden" >
+
+        </td>
     `;
 }
 
 
 // Función para eliminar una fila
-function eliminarFila(btn) {
-    var row = btn.parentNode.parentNode;
-    row.parentNode.removeChild(row);
+function eliminarFilaGP(button) {
+    const row = button.closest('tr');
+    row.style.display = 'none'; // Oculta la fila visualmente
+    const hiddenInput = row.querySelector('input[type="hidden"]');
+    hiddenInput.name = "eliminar_familiar[]"; // Cambia el nombre para que se envíe en el formulario POST
+
 }
 
 //3. Nivel Educacional Familiar
