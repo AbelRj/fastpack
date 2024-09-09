@@ -2,15 +2,34 @@
 
 include("bd.php");
 if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
-    $sentencia = $conexion->prepare("SELECT nombre_apellido = :nombre_apellido FROM grupo_familiar");
-    $sentencia->bindParam(":nombre_apellido", $nombreApellido);
-    $sentencia->execute();
-    $nombreApellidoBD = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-    // Recuperar datos del formulario
+    //Identificación del Trabajador
     $trabajador_id = isset($_POST['id']) ? $_POST['id'] : null;
+    // Recuperar datos del formulario 
+    $nombreApellidoT = (isset($_POST['nombre_apellido'])) ? $_POST['nombre_apellido']:"";
+    $fechaNacimientoT = (isset($_POST['fecha_nacimiento'])) ? $_POST['fecha_nacimiento']:"";
+    $nacionalidadT = (isset($_POST['nacionalidad'])) ? $_POST['nacionalidad']:"";
+    $domicilioT = (isset($_POST['domicilio'])) ? $_POST['domicilio']:"";
+    $telefonoT = (isset($_POST['telefono'])) ? $_POST['telefono']:"";
+    $correoT = (isset($_POST['correo'])) ? $_POST['correo']:"";
+    $estadoCivilT = (isset($_POST['estado_civil'])) ? $_POST['estado_civil']:"";
+    $previsionSaludT = (isset($_POST['prevision_salud'])) ? $_POST['prevision_salud']:"";
 
-   
-    
+    $sentencia = $conexion->prepare("UPDATE trabajador SET nombre_apellido = :nombre_apellido, fecha_nacimiento = :fecha_nacimiento, 
+    nacionalidad = :nacionalidad, domicilio = :domicilio, telefono = :telefono, 
+    correo_electronico = :correo_electronico, estado_civil = :estado_civil, prevision_salud = :prevision_salud 
+    WHERE id = :id");
+    $sentencia->bindParam(':id', $trabajador_id);
+    $sentencia->bindParam(':nombre_apellido', $nombreApellidoT);
+    $sentencia->bindParam(':fecha_nacimiento', $fechaNacimientoT);
+    $sentencia->bindParam(':nacionalidad', $nacionalidadT);
+    $sentencia->bindParam(':domicilio', $domicilioT);
+    $sentencia->bindParam(':telefono', $telefonoT);
+    $sentencia->bindParam(':correo_electronico', $correoT);
+    $sentencia->bindParam(':estado_civil', $estadoCivilT);
+    $sentencia->bindParam(':prevision_salud', $previsionSaludT);
+    $sentencia->execute();
+
+    //Grupo Familiar
     // Usar el primer valor de trabajador_id si hay múltiples
     $nombres_apellido = isset($_POST['nombre_apellido_familiar']) ? $_POST['nombre_apellido_familiar'] : [];
     $parentescos = isset($_POST['parentesco']) ? $_POST['parentesco'] : [];
@@ -76,11 +95,57 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           
          }
      }
- 
+
+     //Historia Familiar (en la actualidad)
+     $historia = (isset($_POST['historia_familiar'])) ? $_POST['historia_familiar']:"";
+    $sentencia = $conexion->prepare("UPDATE historia_familiar SET historia = :historia WHERE trabajador_id = :trabajador_id");
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':historia', $historia);
+    $sentencia->execute();
+
+    // Apoyo economico
+    $nombres_apellidosAE = isset($_POST['a_quien_apoya']) ? $_POST['a_quien_apoya'] : [];
+    $motivosAE = isset($_POST['motivo_apoyo']) ? $_POST['motivo_apoyo'] : [];
+    $num_AETrabajador = count($nombres_apellidosAE);
+    if ($num_AETrabajador!== count($motivosAE)) {
+        echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
+        exit;
+    }
+    
+
+// Iterar sobre cada persona apoyada
+for ($i = 0; $i < $num_AETrabajador; $i++) {
+    $nombre_apellidoAE = $nombres_apellidosAE[$i];
+    $motivoAE = $motivosAE[$i];
+
+    // Verificar si la persona de apoyo económico ya existe
+    $sentencia = $conexion->prepare("SELECT id FROM apoyo_economico WHERE trabajador_id = :trabajador_id AND a_quien = :nombre_apellido");
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':nombre_apellido', $nombre_apellidoAE);
+    $sentencia->execute();
+    $persona_AE = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+    if ($persona_AE) {
+        // Si la persona apoyada ya existe, actualizar
+        $sentencia = $conexion->prepare("UPDATE apoyo_economico SET motivo = :motivo WHERE trabajador_id = :trabajador_id AND a_quien = :nombre_apellido");
+    } else {
+        // Si la persona apoyada no existe, insertar
+        $sentencia = $conexion->prepare("INSERT INTO apoyo_economico (trabajador_id, a_quien, motivo) VALUES (:trabajador_id, :nombre_apellido, :motivo)");
+    }
+
+    // Vincular los valores de los campos a la consulta SQL
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':nombre_apellido', $nombre_apellidoAE);
+    $sentencia->bindParam(':motivo', $motivoAE);
+    $sentencia->execute();
+}
+    
+
+    
 
     header('Location: index.php');
     exit;
+
+
 }
-
-
 ?>

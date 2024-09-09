@@ -2,18 +2,29 @@
 include("bd.php");
 
 if(isset($_GET['id'])){
-    //Recuperar los datos del ID correspondiente ( seleccionado )
+    //Identificación del Trabajador - Recuperar los datos del ID correspondiente ( seleccionado )
 $idTrabajador=(isset($_GET['id']))?$_GET['id']:"";
 $sentencia=$conexion->prepare("SELECT * FROM trabajador WHERE id=:id ");
 $sentencia->bindParam(":id",$idTrabajador);
 $sentencia->execute();
 $datostrabajador=$sentencia->fetch(PDO::FETCH_LAZY);
-   // Consulta para obtener todos los miembros del grupo familiar asociados al trabajador
+   //Grupo Familiar Consulta para obtener todos los miembros del grupo familiar asociados al trabajador
 $sentencia = $conexion->prepare("SELECT * FROM grupo_familiar WHERE trabajador_id = :trabajador_id");
 $sentencia->bindParam(":trabajador_id", $idTrabajador);
 $sentencia->execute();
 $datosGFamiliar = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
+//Historia Familiar (en la actualidad)
+$sentencia = $conexion->prepare("SELECT * FROM historia_familiar WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(":trabajador_id", $idTrabajador);
+$sentencia->execute();
+$historiaFamiliar = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+//Ayuda familiar economicamente
+$sentencia = $conexion->prepare("SELECT * FROM apoyo_economico WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(":trabajador_id", $idTrabajador);
+$sentencia->execute();
+$apoyoEconomicoT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 }
 ?>
@@ -43,24 +54,24 @@ $datosGFamiliar = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <fieldset>
             <legend>1. Identificación del Trabajador</legend>
             <label>ID: <input readonly type="text" name="id"
-                    value="<?php echo htmlspecialchars($datostrabajador['id']); ?>" required></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['id']); ?>" ></label><br>
 
             <label>Nombre y Apellido: <input readonly type="text" name="nombre_apellido"
-                    value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>" required></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>" ></label><br>
             <label>Fecha de Nacimiento: <input readonly type="date" name="fecha_nacimiento"
-                    value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>" required></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>" ></label><br>
             <label>Nacionalidad: <input readonly type="text" name="nacionalidad"
-                    value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>" required></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>" ></label><br>
             <label>Domicilio: <input readonly type="text" name="domicilio"
-                    value="<?php echo htmlspecialchars($datostrabajador['domicilio']); ?>" required></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['domicilio']); ?>" ></label><br>
             <label>Teléfono: <input readonly type="tel" name="telefono"
-                    value="<?php echo htmlspecialchars($datostrabajador['telefono']); ?>" required></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['telefono']); ?>" ></label><br>
             <label>Correo Electrónico: <input readonly type="email" name="correo"
-                    value="<?php echo htmlspecialchars($datostrabajador['correo']); ?>" required></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?>" ></label><br>
             <label>Estado Civil: <input readonly type="text" name="estado_civil"
-                    value="<?php echo htmlspecialchars($datostrabajador['estado_civil']); ?>" required></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['estado_civil']); ?>" ></label><br>
             <label>Previsión de Salud: <input readonly type="text" name="prevision_salud"
-                    value="<?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?>" required></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?>" ></label><br>
         </fieldset>
         <!-- 2. Grupo Familiar -->
         <fieldset>
@@ -134,33 +145,40 @@ $datosGFamiliar = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <!-- 4. Historia Familiar -->
         <fieldset>
             <legend>4. Historia Familiar (en la actualidad)</legend>
-            <textarea name="historia_familiar" rows="5" cols="50"></textarea>
+            <textarea name="historia_familiar" rows="5" cols="50"><?php echo htmlspecialchars($historiaFamiliar['historia']); ?></textarea>
         </fieldset>
 
         <!-- 5. ¿Apoya a algún familiar económicamente? -->
         <fieldset>
-            <legend>5. ¿Apoya a algún familiar económicamente?</legend>
-            <label>Si <input type="radio" name="apoyo_economico" value="si"></label>
-            <label>No <input type="radio" name="apoyo_economico" value="no"></label><br>
+    <legend>5. ¿Apoya a algún familiar económicamente?</legend>
+    <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" 
+    <?php echo !empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label>
+    <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)"
+    <?php echo empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label><br>
 
-            <table id="apoyo_economico" border="1">
-                <thead>
-                    <tr>
-                        <th>¿A quién?</th>
-                        <th>Motivo</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="text" name="a_quien_apoya_1"></td>
-                        <td><input type="text" name="motivo_apoyo_1"></td>
-                        <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
-                    </tr>
-                </tbody>
-            </table>
-            <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
-        </fieldset>
+    <div id="contenedor_apoyo_economico" style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
+        <table id="apoyo_economico" border="1">
+            <thead>
+                <tr>
+                    <th>¿A quién?</th>
+                    <th>Motivo</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($apoyoEconomicoT as $apoyo): ?>
+                <tr>
+                    <td><input type="text" name="a_quien_apoya[]" value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
+                    <td><input type="text" name="motivo_apoyo[]" value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
+                    <td><button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button></td>
+                    
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
+    </div>
+</fieldset>
 
 
         <!-- 6. ¿Tiene algún emprendimiento? -->
