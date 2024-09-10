@@ -26,6 +26,13 @@ $sentencia->bindParam(":trabajador_id", $idTrabajador);
 $sentencia->execute();
 $apoyoEconomicoT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
+//Emprendimiento trabajador 
+$sentencia = $conexion->prepare("SELECT * FROM emprendimiento WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(":trabajador_id", $idTrabajador);
+$sentencia->execute();
+$emprendimientoT = $sentencia->fetch(PDO::FETCH_ASSOC);
+print_r($emprendimientoT);
+
 }
 ?>
 
@@ -170,7 +177,10 @@ $apoyoEconomicoT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <tr>
                     <td><input type="text" name="a_quien_apoya[]" value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
                     <td><input type="text" name="motivo_apoyo[]" value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
-                    <td><button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button></td>
+                    <td>
+                        <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
+                        <input type="hidden"  value="<?php echo htmlspecialchars($apoyo['id']); ?>">
+                </td>
                     
                 </tr>
                 <?php endforeach; ?>
@@ -184,9 +194,12 @@ $apoyoEconomicoT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <!-- 6. ¿Tiene algún emprendimiento? -->
         <fieldset>
             <legend>6. ¿Tiene algún emprendimiento?</legend>
-            <label>Si<input type="radio" name="emprendimiento" value="si"></label>
-            <label>No<input type="radio" name="emprendimiento" value="no"></label><br>
-            <label>¿De qué se trata?: <input type="text" name="descripcion_emprendimiento"></label>
+            <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" 
+    <?php echo !empty($emprendimientoT) ? 'checked' : ''; ?>></label>
+    <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)"
+    <?php echo empty($emprendimientoT) ? 'checked' : ''; ?>></label><br>
+            <label>¿De qué se trata?: 
+            <input type="text" name="descripcion_emprendimiento" value="<?php echo htmlspecialchars($emprendimientoT['descripcion']); ?>"></label>
         </fieldset>
 
         <!-- 7. ¿Tiene Mascotas? -->

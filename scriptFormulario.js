@@ -100,7 +100,10 @@ function eliminarFilaGP(button) {
         nuevaFila.innerHTML = `
           <td><input type="text" name="a_quien_apoya[]"></td>
                     <td><input type="text" name="motivo_apoyo[]"></td>
-                    <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+                    <td>
+                    <button type="button" onclick="eliminarFila(this)">Eliminar</button>
+                    <input type="hidden" >
+                    </td>
 
         </td>
     `
@@ -110,6 +113,10 @@ function eliminarFilaGP(button) {
         const row = button.closest('tr');
         const tablaAPF = document.getElementById('apoyo_economico').getElementsByTagName('tbody')[0];
         const radioNo = document.querySelector('input[name="apoyo_economico"][value="no"]');
+        row.style.display = 'none'; // Oculta la fila visualmente
+        const hiddenInput = row.querySelector('input[type="hidden"]');
+        hiddenInput.name = "eliminar_apoyoF[]"; // Cambia el nombre para que se envíe en el formulario POST
+
         
         // Ocultar la fila visualmente
         row.style.display = 'none';
@@ -123,6 +130,7 @@ function eliminarFilaGP(button) {
             mostrarTablaApoyo(false); // Ocultar la tabla
         }
     }
+
 
 
 

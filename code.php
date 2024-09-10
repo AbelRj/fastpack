@@ -139,6 +139,17 @@ for ($i = 0; $i < $num_AETrabajador; $i++) {
     $sentencia->bindParam(':motivo', $motivoAE);
     $sentencia->execute();
 }
+$eliminar_apoyoFT = isset($_POST['eliminar_apoyoF']) ? $_POST['eliminar_apoyoF'] : [];
+print_r($eliminar_apoyoFT);
+    // Procesar eliminaciones
+if (!empty($eliminar_apoyoFT)) {
+foreach ($eliminar_apoyoFT as $idapoyo) {
+    $sentencia = $conexion->prepare("DELETE FROM apoyo_economico WHERE id = :idApoyoE");
+    $sentencia->bindParam(':idApoyoE', $idapoyo);
+    $sentencia->execute();
+ 
+}
+}
     
 
     

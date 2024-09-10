@@ -1,0 +1,17 @@
+body{
+    background-color: white;
+}
+.contenedor-imgLogin{
+    display: flex;
+    justify-content: center;
+}
+.logo-login{
+    width: 60%;
+    height: auto;
+}
+.buttton-login{
+    background-color: #00BFFF;
+}
+.buttton-login:hover{
+background-color: #C71585;
+}
