@@ -85,7 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
          // Recuperar los IDs de los familiares a eliminar
          $eliminar_familiar = isset($_POST['eliminar_familiar']) ? $_POST['eliminar_familiar'] : [];
-         print_r($eliminar_familiar);
              // Procesar eliminaciones
      if (!empty($eliminar_familiar)) {
          foreach ($eliminar_familiar as $idFamiliar) {
@@ -96,12 +95,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
          }
      }
 
-     //Historia Familiar (en la actualidad)
-     $historia = (isset($_POST['historia_familiar'])) ? $_POST['historia_familiar']:"";
+ // Historia Familiar (en la actualidad)
+$historia = (isset($_POST['historia_familiar'])) ? $_POST['historia_familiar'] : "";
+
+// Verificar si ya existe un registro de historia_familiar para este trabajador
+$sentencia = $conexion->prepare("SELECT id FROM historia_familiar WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->execute();
+$historiaExistente = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+if ($historiaExistente) {
+    // Si existe, hacer un UPDATE
     $sentencia = $conexion->prepare("UPDATE historia_familiar SET historia = :historia WHERE trabajador_id = :trabajador_id");
-    $sentencia->bindParam(':trabajador_id', $trabajador_id);
-    $sentencia->bindParam(':historia', $historia);
-    $sentencia->execute();
+} else {
+    // Si no existe, hacer un INSERT
+    $sentencia = $conexion->prepare("INSERT INTO historia_familiar (trabajador_id, historia) VALUES (:trabajador_id, :historia)");
+}
+
+// Vincular los parámetros a la consulta SQL
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->bindParam(':historia', $historia);
+$sentencia->execute();
 
     // Apoyo economico
     $nombres_apellidosAE = isset($_POST['a_quien_apoya']) ? $_POST['a_quien_apoya'] : [];
@@ -150,7 +164,75 @@ foreach ($eliminar_apoyoFT as $idapoyo) {
  
 }
 }
-    
+// Emprendimiento
+// Recuperar el valor del radio y la descripción del emprendimiento
+$emprendimiento = isset($_POST['descripcion_emprendimiento']) ? $_POST['descripcion_emprendimiento'] : "";
+
+// Verificar si el usuario ha seleccionado "No" para el emprendimiento
+if (isset($_POST['emprendimiento']) && $_POST['emprendimiento'] == 'no') {
+    // Si se seleccionó "No", eliminar el registro de emprendimiento si existe
+    $sentencia = $conexion->prepare("DELETE FROM emprendimiento WHERE trabajador_id = :trabajador_id");
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->execute();
+} else {
+    // Verificar si ya existe un registro de emprendimiento para este trabajador
+    $sentencia = $conexion->prepare("SELECT id FROM emprendimiento WHERE trabajador_id = :trabajador_id");
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->execute();
+    $emprendimientoExistente = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+    if ($emprendimientoExistente) {
+        // Si existe, hacer un UPDATE
+        $sentencia = $conexion->prepare("UPDATE emprendimiento SET descripcion = :descripcion WHERE trabajador_id = :trabajador_id");
+    } else {
+        // Si no existe, hacer un INSERT
+        $sentencia = $conexion->prepare("INSERT INTO emprendimiento (trabajador_id, descripcion) VALUES (:trabajador_id, :descripcion)");
+    }
+
+    // Vincular los parámetros a la consulta SQL
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':descripcion', $emprendimiento);
+    $sentencia->execute();
+}
+// Mascotas
+$tipos_mascotasT = isset($_POST['tipo_mascota']) ? $_POST['tipo_mascota'] : [];
+$cantidad_mascotasT = isset($_POST['cantidad_mascota']) ? $_POST['cantidad_mascota'] : [];
+$num_tipos_mascotasT = count($tipos_mascotasT);
+
+print_r($cantidad_mascotasT)
+if ($num_tipos_mascotasT!== count($cantidad_mascotasT)) {
+    echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
+    exit;
+}
+// Iterar sobre cada persona apoyada
+for ($i = 0; $i < $num_tipos_mascotasT; $i++) {
+    $tipo_mascotaT = $tipos_mascotasT[$i];
+    $cantidad_mascotaT = $cantidad_mascotasT[$i];
+
+    // Verificar si la persona de apoyo económico ya existe
+    $sentencia = $conexion->prepare("SELECT id FROM mascotas WHERE trabajador_id = :trabajador_id AND tipo_mascota = :tipo_mascota");
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':tipo_mascota', $tipo_mascotaT);
+    $sentencia->execute();
+    $mascotaT = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+    if ($mascotaT) {
+        // Si la persona apoyada ya existe, actualizar
+        $sentencia = $conexion->prepare("UPDATE mascotas SET tipo_mascota = :tipo_mascota, cantidad = :cantidad_mascota WHERE trabajador_id = :trabajador_id");
+    } else {
+        // Si la persona apoyada no existe, insertar
+        $sentencia = $conexion->prepare("INSERT INTO mascotas (trabajador_id, :tipo_mascota, cantidad) VALUES (:trabajador_id, :tipo_mascota, :cantidad_mascota)");
+    }
+
+    // Vincular los valores de los campos a la consulta SQL
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':tipo_mascota', $tipo_mascotaT);
+    $sentencia->bindParam(':cantidad_mascota', $cantidad_mascotaT);
+    $sentencia->execute();
+}
+
+
+
 
     
 

@@ -20,8 +20,6 @@ function agregarFilaGF() {
         </td>
     `;
 }
-
-
 // Función para eliminar una fila
 function eliminarFilaGP(button) {
     const row = button.closest('tr');
@@ -56,7 +54,6 @@ function eliminarFilaGP(button) {
         }¨*/
 
  //5. ¿Apoya a algún familiar económicamente? 
-
      // Función para manejar el cambio en los radio buttons
      function handleRadioChange(radio) {
         var currentValue = radio.value;
@@ -69,29 +66,32 @@ function eliminarFilaGP(button) {
         }
     }
           // Función para mostrar/ocultar la tabla de apoyo económico
-    function mostrarTablaApoyo(mostrar) {
-        var contenedor = document.getElementById('contenedor_apoyo_economico');
-        var tablaAPF = document.getElementById('apoyo_economico').getElementsByTagName('tbody')[0];
-
-
-        if (mostrar) {
-            contenedor.style.display = 'block'; // Mostrar la tabla
-            Array.from(tablaAPF.rows).forEach(row => {
-                if (row.style.display === 'none') {
-                    row.style.display = ''; // Hacer visible la fila
-                }
-            });
-            if (tablaAPF.rows.length === 0) {
-                agregarFilaAPF('apoyo_economico');
-            }
-
-        } else {
-            contenedor.style.display = 'none'; // Ocultar la tabla
-       
+          function mostrarTablaApoyo(mostrar) {
+            var contenedor = document.getElementById('contenedor_apoyo_economico');
+            var tablaAPF = document.getElementById('apoyo_economico').getElementsByTagName('tbody')[0];
         
+            if (mostrar) {
+                contenedor.style.display = 'block'; // Mostrar la tabla
+                Array.from(tablaAPF.rows).forEach(row => {
+                    if (row.style.display === 'none') {
+                        row.style.display = ''; // Hacer visible la fila
+                    }
+                });
+                if (tablaAPF.rows.length === 0) {
+                    agregarFilaAPF('apoyo_economico');
+                }
+            } else {
+                contenedor.style.display = 'none'; // Ocultar la tabla
+                Array.from(tablaAPF.rows).forEach(row => {
+                    // Marca las filas para eliminación
+                    var hiddenInput = row.querySelector('input[type="hidden"]');
+                    if (hiddenInput) {
+                        hiddenInput.name = 'eliminar_apoyoF[]';
+                    }
+                });
+            }
         }
-    }
-
+        
     // Función para agregar una fila a una tabla específica
     function agregarFilaAPF(tablaId) {
         var tablaAPF = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
@@ -130,6 +130,60 @@ function eliminarFilaGP(button) {
             mostrarTablaApoyo(false); // Ocultar la tabla
         }
     }
+
+
+//Emprendimiento
+     // Función para manejar el cambio en los radio buttons
+function handleRadioChangeE(radio) {
+    var currentValue = radio.value;
+    var contenedor = document.getElementById('contenedor_emprendimiento');
+    var isCurrentlyDisplayed = contenedor.style.display === 'block';
+
+    // Solo ejecutar la función si hay un cambio en la selección
+    if ((currentValue === 'si' && !isCurrentlyDisplayed) || (currentValue === 'no' && isCurrentlyDisplayed)) {
+        mostrarTablaEmprendimiento(currentValue === 'si');
+    }
+}
+
+// Función para mostrar/ocultar el contenedor del emprendimiento
+function mostrarTablaEmprendimiento(mostrar) {
+    var contenedor = document.getElementById('contenedor_emprendimiento');
+    if (mostrar) {
+        contenedor.style.display = 'block'; // Mostrar el campo
+    } else {
+        contenedor.style.display = 'none'; // Ocultar el campo
+    }
+}
+
+//mascotas
+
+function agregarFilaM() {
+    var table = document.getElementById("mascotas").getElementsByTagName('tbody')[0];
+    var newRow = table.insertRow(); // Insertar nueva fila
+
+    // Agregar las celdas con los inputs correspondientes
+    newRow.innerHTML = `
+        <td><input type="text" name="tipo_mascota"></td>
+        <td><input type="number" name="cantidad_mascotas"></td>
+        <td>
+            <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
+            <input type="hidden">
+        </td>
+    `;
+}
+
+function eliminarFilaM(button) {
+    const row = button.closest('tr');
+    row.style.display = 'none'; // Oculta la fila visualmente
+    const hiddenInput = row.querySelector('input[type="hidden"]');
+    hiddenInput.name = "eliminar_mascota[]"; // Cambia el nombre para que se envíe en el formulario POST
+
+}
+
+
+
+
+
 
 
 

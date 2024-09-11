@@ -1,0 +1,34 @@
+        <!-- 5. ¿Apoya a algún familiar económicamente? -->
+        <fieldset>
+            <legend>5. ¿Apoya a algún familiar económicamente?</legend>
+            <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" 
+            <?php echo !empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label>
+            <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)"
+            <?php echo empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label><br>
+        
+            <div id="contenedor_apoyo_economico" style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
+                <table id="apoyo_economico" border="1">
+                    <thead>
+                        <tr>
+                            <th>¿A quién?</th>
+                            <th>Motivo</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($apoyoEconomicoT as $apoyo): ?>
+                        <tr>
+                            <td><input type="text" name="a_quien_apoya[]" value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
+                            <td><input type="text" name="motivo_apoyo[]" value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
+                            <td>
+                                <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
+                                <input type="hidden"  value="<?php echo htmlspecialchars($apoyo['id']); ?>">
+                        </td>
+                            
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
+            </div>
+        </fieldset>

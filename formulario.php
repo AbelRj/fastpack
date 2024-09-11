@@ -19,6 +19,8 @@ $sentencia = $conexion->prepare("SELECT * FROM historia_familiar WHERE trabajado
 $sentencia->bindParam(":trabajador_id", $idTrabajador);
 $sentencia->execute();
 $historiaFamiliar = $sentencia->fetch(PDO::FETCH_ASSOC);
+// Si no existe historia familiar, inicializamos el array con un valor vacío
+$historiaFamiliar = $historiaFamiliar ? $historiaFamiliar : ['historia' => ''];
 
 //Ayuda familiar economicamente
 $sentencia = $conexion->prepare("SELECT * FROM apoyo_economico WHERE trabajador_id = :trabajador_id");
@@ -31,8 +33,16 @@ $sentencia = $conexion->prepare("SELECT * FROM emprendimiento WHERE trabajador_i
 $sentencia->bindParam(":trabajador_id", $idTrabajador);
 $sentencia->execute();
 $emprendimientoT = $sentencia->fetch(PDO::FETCH_ASSOC);
-print_r($emprendimientoT);
+// Si no existe emprendimiento del trabajador, inicializamos el array con un valor vacío
+if (!$emprendimientoT) {
+    $emprendimientoT = ['descripcion' => ''];
+}
 
+//Mascota del trabajador 
+$sentencia = $conexion->prepare("SELECT * FROM mascotas WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(":trabajador_id", $idTrabajador);
+$sentencia->execute();
+$mascotasT = $sentencia->fetch(PDO::FETCH_ASSOC);
 }
 ?>
 
@@ -42,7 +52,8 @@ print_r($emprendimientoT);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link rel="stylesheet" href="styleFormulario.css">
 
@@ -61,24 +72,24 @@ print_r($emprendimientoT);
         <fieldset>
             <legend>1. Identificación del Trabajador</legend>
             <label>ID: <input readonly type="text" name="id"
-                    value="<?php echo htmlspecialchars($datostrabajador['id']); ?>" ></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['id']); ?>"></label><br>
 
             <label>Nombre y Apellido: <input readonly type="text" name="nombre_apellido"
-                    value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>" ></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>"></label><br>
             <label>Fecha de Nacimiento: <input readonly type="date" name="fecha_nacimiento"
-                    value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>" ></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>"></label><br>
             <label>Nacionalidad: <input readonly type="text" name="nacionalidad"
-                    value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>" ></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>"></label><br>
             <label>Domicilio: <input readonly type="text" name="domicilio"
-                    value="<?php echo htmlspecialchars($datostrabajador['domicilio']); ?>" ></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['domicilio']); ?>"></label><br>
             <label>Teléfono: <input readonly type="tel" name="telefono"
-                    value="<?php echo htmlspecialchars($datostrabajador['telefono']); ?>" ></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['telefono']); ?>"></label><br>
             <label>Correo Electrónico: <input readonly type="email" name="correo"
-                    value="<?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?>" ></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?>"></label><br>
             <label>Estado Civil: <input readonly type="text" name="estado_civil"
-                    value="<?php echo htmlspecialchars($datostrabajador['estado_civil']); ?>" ></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['estado_civil']); ?>"></label><br>
             <label>Previsión de Salud: <input readonly type="text" name="prevision_salud"
-                    value="<?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?>" ></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?>"></label><br>
         </fieldset>
         <!-- 2. Grupo Familiar -->
         <fieldset>
@@ -115,7 +126,7 @@ print_r($emprendimientoT);
                                 value="<?php echo htmlspecialchars($familiar['actividad']); ?>"></td>
                         <td>
                             <button type="button" onclick="eliminarFilaGP(this)">Eliminar</button>
-                            <input type="hidden"  value="<?php echo htmlspecialchars($familiar['id']); ?>">
+                            <input type="hidden" value="<?php echo htmlspecialchars($familiar['id']); ?>">
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -124,7 +135,7 @@ print_r($emprendimientoT);
             <button type="button" onclick="agregarFilaGF('grupo_familiar')">Agregar Miembro Familiar</button>
         </fieldset>
         <!-- 3. Nivel Educacional Familiar -->
-         <!-- 
+        <!-- 
         <fieldset>
             <legend>3. Nivel Educacional Familiar</legend>
             <table id="nivel_educacional" border="1">
@@ -152,63 +163,99 @@ print_r($emprendimientoT);
         <!-- 4. Historia Familiar -->
         <fieldset>
             <legend>4. Historia Familiar (en la actualidad)</legend>
-            <textarea name="historia_familiar" rows="5" cols="50"><?php echo htmlspecialchars($historiaFamiliar['historia']); ?></textarea>
+            <textarea name="historia_familiar" rows="5"
+                cols="50"><?php echo htmlspecialchars($historiaFamiliar['historia']); ?></textarea>
         </fieldset>
 
         <!-- 5. ¿Apoya a algún familiar económicamente? -->
         <fieldset>
-    <legend>5. ¿Apoya a algún familiar económicamente?</legend>
-    <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" 
-    <?php echo !empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label>
-    <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)"
-    <?php echo empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label><br>
+            <legend>5. ¿Apoya a algún familiar económicamente?</legend>
+            <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" <?php echo
+                    !empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label>
+            <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)" <?php echo
+                    empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label><br>
 
-    <div id="contenedor_apoyo_economico" style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
-        <table id="apoyo_economico" border="1">
-            <thead>
-                <tr>
-                    <th>¿A quién?</th>
-                    <th>Motivo</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($apoyoEconomicoT as $apoyo): ?>
-                <tr>
-                    <td><input type="text" name="a_quien_apoya[]" value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
-                    <td><input type="text" name="motivo_apoyo[]" value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
-                    <td>
-                        <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
-                        <input type="hidden"  value="<?php echo htmlspecialchars($apoyo['id']); ?>">
-                </td>
-                    
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
-    </div>
-</fieldset>
+            <div id="contenedor_apoyo_economico"
+                style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
+                <table id="apoyo_economico" border="1">
+                    <thead>
+                        <tr>
+                            <th>¿A quién?</th>
+                            <th>Motivo</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($apoyoEconomicoT as $apoyo): ?>
+                        <tr>
+                            <td><input type="text" name="a_quien_apoya[]"
+                                    value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
+                            <td><input type="text" name="motivo_apoyo[]"
+                                    value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
+                            <td>
+                                <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
+                                <input type="hidden" value="<?php echo htmlspecialchars($apoyo['id']); ?>">
+                            </td>
+
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
+            </div>
+        </fieldset>
 
 
         <!-- 6. ¿Tiene algún emprendimiento? -->
         <fieldset>
             <legend>6. ¿Tiene algún emprendimiento?</legend>
-            <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" 
-    <?php echo !empty($emprendimientoT) ? 'checked' : ''; ?>></label>
-    <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)"
-    <?php echo empty($emprendimientoT) ? 'checked' : ''; ?>></label><br>
-            <label>¿De qué se trata?: 
-            <input type="text" name="descripcion_emprendimiento" value="<?php echo htmlspecialchars($emprendimientoT['descripcion']); ?>"></label>
+            <label>Si <input type="radio" name="emprendimiento" value="si" onclick="handleRadioChangeE(this)" <?php echo
+                    !empty($emprendimientoT['descripcion']) ? 'checked' : '' ; ?>></label>
+            <label>No <input type="radio" name="emprendimiento" value="no" onclick="handleRadioChangeE(this)" <?php echo
+                    empty($emprendimientoT['descripcion']) ? 'checked' : '' ; ?>></label><br>
+            <div id="contenedor_emprendimiento"
+                style="display: <?php echo !empty($emprendimientoT['descripcion']) ? 'block' : 'none'; ?>;">
+                <label>¿De qué se trata?:
+                    <input type="text" name="descripcion_emprendimiento"
+                        value="<?php echo htmlspecialchars($emprendimientoT['descripcion']); ?>"></label>
+            </div>
         </fieldset>
+
+
 
         <!-- 7. ¿Tiene Mascotas? -->
         <fieldset>
             <legend>7. ¿Tiene Mascotas?</legend>
-            <label>Si<input type="radio" name="mascotas" value="si"></label>
-            <label>No<input type="radio" name="mascotas" value="no"></label><br>
-            <label>¿Qué tipo de mascota?: <input type="text" name="tipo_mascota"></label><br>
-            <label>¿Cuántas?: <input type="number" name="cantidad_mascotas"></label>
+            <label>Si <input type="radio" name="mascotas" value="si" onclick="handleRadioChangeM(this)" <?php echo
+                    !empty($mascotasT['tipo_mascota']) ? 'checked' : '' ; ?>></label>
+            <label>No <input type="radio" name="mascotas" value="no" onclick="handleRadioChangeM(this)" <?php echo
+                    empty($mascotasT['tipo_mascota']) ? 'checked' : '' ; ?>></label><br>
+        <div id="contenedor_mascotas"style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">
+            <table id="mascotas">
+                <thead>
+                    <tr>
+                    <th>¿Qué tipo de mascota?:</th>
+                    <th>¿Cuántas?:</th>
+                    <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($mascotasT as $mascota): ?>
+                    <tr>
+                        <td><input type="text" name="tipo_mascota[]"
+                                value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
+                        <td><input type="number" name="cantidad_mascota[]"
+                                value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
+                        <td>
+                            <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
+                            <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
+                            </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <button type="button" onclick="agregarFilaM()">Agregar Mascota</button>
+            </div>
         </fieldset>
         <!-- 7. Situacion economica -->
         <fieldset>
@@ -600,28 +647,31 @@ print_r($emprendimientoT);
         </fieldset>
         <!-- Button trigger modal -->
         <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Actualizar
+            Actualizar
         </button>
 
     </form>
     <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">¿Estas seguro de guardar ests datos?</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
-        <button type="button" class="btn btn-primary" id="confirmButton">SI</button>
-      </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">¿Estas seguro de guardar ests datos?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+                    <button type="button" class="btn btn-primary" id="confirmButton">SI</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 </body>
 <script src="scriptFormulario.js" defer></script>
 <script src="scriptModal.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
 </html>
