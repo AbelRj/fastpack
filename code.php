@@ -154,7 +154,7 @@ for ($i = 0; $i < $num_AETrabajador; $i++) {
     $sentencia->execute();
 }
 $eliminar_apoyoFT = isset($_POST['eliminar_apoyoF']) ? $_POST['eliminar_apoyoF'] : [];
-print_r($eliminar_apoyoFT);
+
     // Procesar eliminaciones
 if (!empty($eliminar_apoyoFT)) {
 foreach ($eliminar_apoyoFT as $idapoyo) {
@@ -197,9 +197,11 @@ if (isset($_POST['emprendimiento']) && $_POST['emprendimiento'] == 'no') {
 // Mascotas
 $tipos_mascotasT = isset($_POST['tipo_mascota']) ? $_POST['tipo_mascota'] : [];
 $cantidad_mascotasT = isset($_POST['cantidad_mascota']) ? $_POST['cantidad_mascota'] : [];
+print_r($tipos_mascotasT);
 $num_tipos_mascotasT = count($tipos_mascotasT);
 
-print_r($cantidad_mascotasT);
+
+
 if ($num_tipos_mascotasT!== count($cantidad_mascotasT)) {
     echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
     exit;
@@ -218,7 +220,7 @@ for ($i = 0; $i < $num_tipos_mascotasT; $i++) {
 
     if ($mascotaT) {
         // Si la persona apoyada ya existe, actualizar
-        $sentencia = $conexion->prepare("UPDATE mascotas SET tipo_mascota = :tipo_mascota, cantidad = :cantidad_mascota WHERE trabajador_id = :trabajador_id");
+        $sentencia = $conexion->prepare("UPDATE mascotas SET cantidad = :cantidad_mascota WHERE trabajador_id = :trabajador_id AND tipo_mascota = :tipo_mascota");
     } else {
         // Si la persona apoyada no existe, insertar
         $sentencia = $conexion->prepare("INSERT INTO mascotas (trabajador_id, tipo_mascota, cantidad) VALUES (:trabajador_id, :tipo_mascota, :cantidad_mascota)");
@@ -231,13 +233,74 @@ for ($i = 0; $i < $num_tipos_mascotasT; $i++) {
     $sentencia->execute();
 }
 
+$eliminar_mascota = isset($_POST['eliminar_mascota']) ? $_POST['eliminar_mascota'] : [];
+
+    // Procesar eliminaciones
+if (!empty($eliminar_mascota)) {
+foreach ($eliminar_mascota as $idMascota) {
+    $sentencia = $conexion->prepare("DELETE FROM mascotas WHERE id = :idMascota");
+    $sentencia->bindParam(':idMascota', $idMascota);
+    $sentencia->execute();
+ 
+}
+}
+
+//Ingresos
+
+$nombres_ingresoT = isset($_POST['nombre_ingreso']) ? $_POST['nombre_ingreso'] : [];
+$cantidades_ingresoT = isset($_POST['monto_ingreso']) ? $_POST['monto_ingreso'] : [];
+print_r($nombres_ingresoT);
+
+$num_ingresos = count($nombres_ingresoT);
 
 
 
-    
-
-    header('Location: index.php');
+if ($num_ingresos!== count($cantidades_ingresoT)) {
+    echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
     exit;
+}
+// Iterar sobre cada persona apoyada
+for ($i = 0; $i < $num_ingresos; $i++) {
+    $nombre_ingresoT = $nombres_ingresoT[$i];
+    $cantidad_ingresoT = $cantidades_ingresoT[$i];
+
+    // Verificar si la persona de apoyo económico ya existe
+    $sentencia = $conexion->prepare("SELECT id FROM ingresos WHERE trabajador_id = :trabajador_id AND nombre_persona = :nombre_persona");
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':nombre_persona', $nombre_ingresoT);
+    $sentencia->execute();
+    $ingresoT = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+    if ($ingresoT) {
+        // Si la persona apoyada ya existe, actualizar
+        $sentencia = $conexion->prepare("UPDATE ingresos SET monto = :monto WHERE trabajador_id = :trabajador_id AND nombre_persona = :nombre_persona");
+    } else {
+        // Si la persona apoyada no existe, insertar
+        $sentencia = $conexion->prepare("INSERT INTO ingresos (trabajador_id, nombre_persona, monto) VALUES (:trabajador_id, :nombre_persona, :monto )");
+    }
+
+    // Vincular los valores de los campos a la consulta SQL
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':nombre_persona', $nombre_ingresoT);
+    $sentencia->bindParam(':monto', $cantidad_ingresoT);
+    $sentencia->execute();
+}
+/*
+$eliminar_mascota = isset($_POST['eliminar_mascota']) ? $_POST['eliminar_mascota'] : [];
+
+    // Procesar eliminaciones
+if (!empty($eliminar_mascota)) {
+foreach ($eliminar_mascota as $idMascota) {
+    $sentencia = $conexion->prepare("DELETE FROM mascotas WHERE id = :idMascota");
+    $sentencia->bindParam(':idMascota', $idMascota);
+    $sentencia->execute();
+ 
+}
+}
+*/
+    
+header('Location: index.php');
+exit;
 
 
 }

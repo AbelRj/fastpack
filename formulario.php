@@ -44,6 +44,13 @@ $sentencia->bindParam(":trabajador_id", $idTrabajador);
 $sentencia->execute();
 $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 }
+
+   //Ingresos
+   $sentencia = $conexion->prepare("SELECT * FROM ingresos WHERE trabajador_id = :trabajador_id");
+   $sentencia->bindParam(":trabajador_id", $idTrabajador);
+   $sentencia->execute();
+   $ingresos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -226,41 +233,40 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <!-- 7. ¿Tiene Mascotas? -->
         <fieldset>
             <legend>7. ¿Tiene Mascotas?</legend>
-            <label>Si <input type="radio" name="mascotas" value="si" onclick="handleRadioChangeM(this)" <?php echo
+            <label>Si <input type="radio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo
                     !empty($mascotasT['tipo_mascota']) ? 'checked' : '' ; ?>></label>
-            <label>No <input type="radio" name="mascotas" value="no" onclick="handleRadioChangeM(this)" <?php echo
+            <label>No <input type="radio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo
                     empty($mascotasT['tipo_mascota']) ? 'checked' : '' ; ?>></label><br>
-        <div id="contenedor_mascotas"style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">
-            <table id="mascotas">
-                <thead>
-                    <tr>
-                    <th>¿Qué tipo de mascota?:</th>
-                    <th>¿Cuántas?:</th>
-                    <th>Accion</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($mascotasT as $mascota): ?>
-                    <tr>
-                        <td><input type="text" name="tipo_mascota[]"
-                                value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
-                        <td><input type="number" name="cantidad_mascota[]"
-                                value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
-                        <td>
-                            <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
-                            <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
+            <div id="contenedor_mascotas" style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">
+                <table id="mascotas">
+                    <thead>
+                        <tr>
+                            <th>¿Qué tipo de mascota?:</th>
+                            <th>¿Cuántas?:</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($mascotasT as $mascota): ?>
+                        <tr>
+                            <td><input type="text" name="tipo_mascota[]"
+                                    value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
+                            <td><input type="number" name="cantidad_mascota[]"
+                                    value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
+                            <td>
+                                <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
+                                <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
                             </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <button type="button" onclick="agregarFilaM()">Agregar Mascota</button>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <button type="button" onclick="agregarFilaM()">Agregar Mascota</button>
             </div>
         </fieldset>
         <!-- 7. Situacion economica -->
         <fieldset>
             <legend>8. Situación Económica</legend>
-
             <!-- 8.1 Directa -->
             <fieldset>
                 <legend>8.1 Directa</legend>
@@ -274,12 +280,16 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
+                    <?php foreach ($ingresos as $ingreso): ?>
                         <tr>
-                            <td><input type="text" name="nombre_ingreso_1"></td>
-                            <td><input type="number" name="monto_ingreso_1" class="monto_ingreso"
+                            <td><input type="text" name="nombre_ingreso[]" 
+                            value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
+                            <td><input type="number" name="monto_ingreso[]" class="monto_ingreso"
+                            value="<?php echo htmlspecialchars($ingreso['monto']); ?>"
                                     oninput="calcularTotal()"></td>
                             <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
                         </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
                 <button type="button" onclick="agregarFilaSEDirecta('ingresos_familiares')">Agregar Persona con

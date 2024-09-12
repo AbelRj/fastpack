@@ -28,31 +28,6 @@ function eliminarFilaGP(button) {
     hiddenInput.name = "eliminar_familiar[]"; // Cambia el nombre para que se envíe en el formulario POST
 
 }
-/*
-//3. Nivel Educacional Familiar
-        // Función para agregar una fila a una tabla específica
-        function agregarFilaNEF(tablaId) {
-            var tablaNEF = document.getElementById(tablaId);
-            var nuevaFila = tablaNEF.insertRow();
-            var columnas = tablaNEF.rows[0].cells.length;
-    
-            // Agregar inputs a la nueva fila
-            for (var i = 0; i < columnas - 1; i++) {
-                var nuevaCelda = nuevaFila.insertCell(i);
-                nuevaCelda.innerHTML = `<input type="text" name="${tablaId}_dato_${tablaNEF.rows.length}">`;
-            }
-    
-            // Agregar botón de eliminación en la última celda
-            var btnEliminar = nuevaFila.insertCell(columnas - 1);
-            btnEliminar.innerHTML = '<button type="button" onclick="eliminarFila(this)">Eliminar</button>';
-        }
-    
-        // Función para eliminar la fila
-        function eliminarFila(boton) {
-            var btnEliminar = boton.parentNode.parentNode;
-            btnEliminar.parentNode.removeChild(btnEliminar);
-        }¨*/
-
  //5. ¿Apoya a algún familiar económicamente? 
      // Función para manejar el cambio en los radio buttons
      function handleRadioChange(radio) {
@@ -90,8 +65,7 @@ function eliminarFilaGP(button) {
                     }
                 });
             }
-        }
-        
+        }     
     // Función para agregar una fila a una tabla específica
     function agregarFilaAPF(tablaId) {
         var tablaAPF = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
@@ -130,8 +104,6 @@ function eliminarFilaGP(button) {
             mostrarTablaApoyo(false); // Ocultar la tabla
         }
     }
-
-
 //Emprendimiento
      // Función para manejar el cambio en los radio buttons
 function handleRadioChangeE(radio) {
@@ -154,42 +126,79 @@ function mostrarTablaEmprendimiento(mostrar) {
         contenedor.style.display = 'none'; // Ocultar el campo
     }
 }
-
 //mascotas
-
 function agregarFilaM() {
     var table = document.getElementById("mascotas").getElementsByTagName('tbody')[0];
     var newRow = table.insertRow(); // Insertar nueva fila
 
     // Agregar las celdas con los inputs correspondientes
     newRow.innerHTML = `
-        <td><input type="text" name="tipo_mascota"></td>
-        <td><input type="number" name="cantidad_mascotas"></td>
+        <td><input type="text" name="tipo_mascota[]"></td>
+        <td><input type="number" name="cantidad_mascota[]"></td>
         <td>
             <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
             <input type="hidden">
         </td>
     `;
 }
+     // Función para manejar el cambio en los radio buttons
+     function handleRadioChangeM(radio) {
+        var currentValue = radio.value;
+        var contenedor = document.getElementById('contenedor_mascotas');
+        var isCurrentlyDisplayed = contenedor.style.display === 'block';
+    
+        // Solo ejecutar la función si hay un cambio en la selección
+        if ((currentValue === 'si' && !isCurrentlyDisplayed) || (currentValue === 'no' && isCurrentlyDisplayed)) {
+            mostrarTablaMascotas(currentValue === 'si');
+        }
+    }
 
+    function mostrarTablaMascotas(mostrar) {
+        var contenedor = document.getElementById('contenedor_mascotas');
+        var tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
+
+    if (mostrar) {
+        contenedor.style.display = 'block'; // Mostrar la tabla
+        Array.from(tablaMascotas.rows).forEach(row => {
+            if (row.style.display === 'none') {
+                row.style.display = ''; // Hacer visible la fila
+            }
+        });
+        if (tablaMascotas.rows.length === 0) {
+            agregarFilaM();
+        }
+    } else {
+        contenedor.style.display = 'none'; // Ocultar la tabla
+        Array.from(tablaMascotas.rows).forEach(row => {
+            // Marca las filas para eliminación
+            var hiddenInput = row.querySelector('input[type="hidden"]');
+            if (hiddenInput) {
+                hiddenInput.name = 'eliminar_apoyoF[]';
+            }
+        });
+    }
+
+}
 function eliminarFilaM(button) {
     const row = button.closest('tr');
+    const tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
+    const radioNo = document.querySelector('input[name="tipo_mascota"][value="no"]');
     row.style.display = 'none'; // Oculta la fila visualmente
     const hiddenInput = row.querySelector('input[type="hidden"]');
     hiddenInput.name = "eliminar_mascota[]"; // Cambia el nombre para que se envíe en el formulario POST
 
+    // Ocultar la fila visualmente
+    row.style.display = 'none';
+    
+    // Verificar si ya no quedan filas visibles en la tabla
+    let visibleRows = Array.from(tablaMascotas.rows).filter(row => row.style.display !== 'none');
+    
+    if (visibleRows.length === 0) {
+        // Si no hay filas visibles, marcar el radio "No"
+        radioNo.checked = true;
+        mostrarTablaMascotas(false); // Ocultar la tabla
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
          //Situacion economica directa
     function agregarFilaSEDirecta(tablaId) {
         var table = document.getElementById(tablaId);
