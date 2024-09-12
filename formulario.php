@@ -42,7 +42,7 @@ if (!$emprendimientoT) {
 $sentencia = $conexion->prepare("SELECT * FROM mascotas WHERE trabajador_id = :trabajador_id");
 $sentencia->bindParam(":trabajador_id", $idTrabajador);
 $sentencia->execute();
-$mascotasT = $sentencia->fetch(PDO::FETCH_ASSOC);
+$mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
 

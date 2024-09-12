@@ -199,7 +199,7 @@ $tipos_mascotasT = isset($_POST['tipo_mascota']) ? $_POST['tipo_mascota'] : [];
 $cantidad_mascotasT = isset($_POST['cantidad_mascota']) ? $_POST['cantidad_mascota'] : [];
 $num_tipos_mascotasT = count($tipos_mascotasT);
 
-print_r($cantidad_mascotasT)
+print_r($cantidad_mascotasT);
 if ($num_tipos_mascotasT!== count($cantidad_mascotasT)) {
     echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
     exit;
@@ -221,7 +221,7 @@ for ($i = 0; $i < $num_tipos_mascotasT; $i++) {
         $sentencia = $conexion->prepare("UPDATE mascotas SET tipo_mascota = :tipo_mascota, cantidad = :cantidad_mascota WHERE trabajador_id = :trabajador_id");
     } else {
         // Si la persona apoyada no existe, insertar
-        $sentencia = $conexion->prepare("INSERT INTO mascotas (trabajador_id, :tipo_mascota, cantidad) VALUES (:trabajador_id, :tipo_mascota, :cantidad_mascota)");
+        $sentencia = $conexion->prepare("INSERT INTO mascotas (trabajador_id, tipo_mascota, cantidad) VALUES (:trabajador_id, :tipo_mascota, :cantidad_mascota)");
     }
 
     // Vincular los valores de los campos a la consulta SQL
