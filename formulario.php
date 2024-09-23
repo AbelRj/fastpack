@@ -51,6 +51,12 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
    $sentencia->execute();
    $ingresos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
+      //Egresos
+      $sentencia = $conexion->prepare("SELECT * FROM egresos WHERE trabajador_id = :trabajador_id");
+      $sentencia->bindParam(":trabajador_id", $idTrabajador);
+      $sentencia->execute();
+      $egresos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -101,7 +107,9 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <!-- 2. Grupo Familiar -->
         <fieldset>
             <legend>2. Grupo Familiar</legend>
-            <table id="grupo_familiar" border="1">
+
+            <!-- La tabla se oculta si no hay datos -->
+            <table id="grupo_familiar" border="1" style="<?php echo empty($datosGFamiliar) ? 'display:none;' : ''; ?>">
                 <thead>
                     <tr>
                         <th>Nombre y Apellido</th>
@@ -115,6 +123,7 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                     </tr>
                 </thead>
                 <tbody>
+                    <?php if (!empty($datosGFamiliar)): ?>
                     <?php foreach ($datosGFamiliar as $familiar): ?>
                     <tr>
                         <td><input type="text" name="nombre_apellido_familiar[]"
@@ -132,15 +141,24 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                         <td><input type="text" name="actividad_familiar[]"
                                 value="<?php echo htmlspecialchars($familiar['actividad']); ?>"></td>
                         <td>
-                            <button type="button" onclick="eliminarFilaGP(this)">Eliminar</button>
-                            <input type="hidden" value="<?php echo htmlspecialchars($familiar['id']); ?>">
+                            <button type="button" onclick="ocultarFilaGP(this)">Eliminar</button>
+                            <!-- Mantener el input para el ID del familiar -->
+                            <input type="hidden" name="id_familiar[]"
+                                value="<?php echo htmlspecialchars($familiar['id']); ?>">
                         </td>
                     </tr>
                     <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
-            <button type="button" onclick="agregarFilaGF('grupo_familiar')">Agregar Miembro Familiar</button>
+
+            <!-- Mensaje de "No hay miembros familiares registrados" -->
+            <p id="no-miembros-msg" style="display: <?php echo empty($datosGFamiliar) ? 'block' : 'none'; ?>;">No hay
+                miembros familiares registrados.</p>
+
+            <button type="button" onclick="agregarFilaGF()">Agregar Miembro Familiar</button>
         </fieldset>
+
         <!-- 3. Nivel Educacional Familiar -->
         <!-- 
         <fieldset>
@@ -175,42 +193,45 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         </fieldset>
 
         <!-- 5. ¿Apoya a algún familiar económicamente? -->
-        <fieldset>
-            <legend>5. ¿Apoya a algún familiar económicamente?</legend>
-            <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" <?php echo
-                    !empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label>
-            <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)" <?php echo
-                    empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label><br>
+<fieldset>
+    <legend>5. ¿Apoya a algún familiar económicamente?</legend>
+    
+    <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" 
+        <?php echo !empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label>
+    <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)" 
+        <?php echo empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label><br>
 
-            <div id="contenedor_apoyo_economico"
-                style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
-                <table id="apoyo_economico" border="1">
-                    <thead>
-                        <tr>
-                            <th>¿A quién?</th>
-                            <th>Motivo</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($apoyoEconomicoT as $apoyo): ?>
-                        <tr>
-                            <td><input type="text" name="a_quien_apoya[]"
-                                    value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
-                            <td><input type="text" name="motivo_apoyo[]"
-                                    value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
-                            <td>
-                                <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
-                                <input type="hidden" value="<?php echo htmlspecialchars($apoyo['id']); ?>">
-                            </td>
+    <div id="contenedor_apoyo_economico" 
+        style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
+        
+        <table id="apoyo_economico" border="1">
+            <thead>
+                <tr>
+                    <th>¿A quién?</th>
+                    <th>Motivo</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($apoyoEconomicoT as $apoyo): ?>
+                <tr>
+                    <td><input type="text" name="a_quien_apoya[]" value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
+                    <td><input type="text" name="motivo_apoyo[]" value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
+                    <td>
+                        <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
+                        <!-- Campo oculto para guardar el ID del apoyo -->
+                        <input type="hidden"value="<?php echo htmlspecialchars($apoyo['id']); ?>">
+                        <input type="hidden" name="id_apoyoF[]" value="<?php echo htmlspecialchars($apoyo['id']); ?>">
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        
+        <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
+    </div>
+</fieldset>
 
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
-            </div>
-        </fieldset>
 
 
         <!-- 6. ¿Tiene algún emprendimiento? -->
@@ -256,6 +277,7 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             <td>
                                 <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
                                 <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
+                                <input type="hidden" name="id_mascota[]" value="<?php echo htmlspecialchars($mascota['id']); ?>">
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -280,19 +302,22 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($ingresos as $ingreso): ?>
+                        <?php foreach ($ingresos as $ingreso): ?>
                         <tr>
-                            <td><input type="text" name="nombre_ingreso[]" 
-                            value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
+                            <td><input type="text" name="nombre_ingreso[]"
+                                    value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
                             <td><input type="number" name="monto_ingreso[]" class="monto_ingreso"
-                            value="<?php echo htmlspecialchars($ingreso['monto']); ?>"
+                                    value="<?php echo htmlspecialchars($ingreso['monto']); ?>"
                                     oninput="calcularTotal()"></td>
-                            <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+                            <td>
+                                <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
+                                <input type="hidden" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <button type="button" onclick="agregarFilaSEDirecta('ingresos_familiares')">Agregar Persona con
+                <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con
                     Ingreso</button><br><br>
 
                 <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar"
@@ -320,16 +345,24 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
+                        <?php foreach ($egresos as $egreso): ?>
                         <tr>
-                            <td><input type="text" name="descripcion_egreso_1"></td>
-                            <td><input type="number" name="monto_egreso_1" class="monto_egreso"
+                            <td><input type="text" name="descripcion_egreso[]"
+                                    value="<?php echo htmlspecialchars($egreso['descripcion']); ?>"></td>
+                            <td><input type="number" name="monto_egreso[]" class="monto_egreso"
+                                    value="<?php echo htmlspecialchars($egreso['monto']); ?>"
                                     oninput="calcularTotalEgresos()"></td>
-                            <td><input type="text" name="observacion_egreso_1"></td>
-                            <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+                            <td><input type="text" name="observacion_egreso[]"
+                                    value="<?php echo htmlspecialchars($egreso['observaciones']); ?>"></td>
+                            <td>
+                                <button type="button" onclick="eliminarFilaE(this)">Eliminar</button>
+                                <input type="hidden" value="<?php echo htmlspecialchars($egreso['id']); ?>">
+                            </td>
                         </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
-                <button type="button" onclick="agregarFilaEI('egresos_importantes')">Agregar Egreso</button><br><br>
+                <button type="button" onclick="agregarFilaE('egresos_importantes')">Agregar Egreso</button><br><br>
 
                 <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
             </fieldset>

@@ -38,51 +38,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $estados_civil = isset($_POST['estado_civil_familiar']) ? $_POST['estado_civil_familiar'] : [];
     $niveles_educacionales = isset($_POST['nivel_educacional']) ? $_POST['nivel_educacional'] : [];
     $actividades = isset($_POST['actividad_familiar']) ? $_POST['actividad_familiar'] : [];
+    $ids_familiares = isset($_POST['id_familiar']) ? $_POST['id_familiar'] : [];
 
-    // Verificar que todos los arreglos tengan la misma longitud
-    $num_familiares = count($nombres_apellido);
-    if ($num_familiares !== count($parentescos) || $num_familiares !== count($fechas_nacimiento) || 
-        $num_familiares !== count($sexos) || $num_familiares !== count($estados_civil) || $num_familiares !== count($niveles_educacionales) || $num_familiares !== count($actividades)) {
-        echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
-        exit;
-    }
+   // Verificar que todos los arreglos tengan la misma longitud
+   $num_familiares = count($nombres_apellido);
+   if ($num_familiares !== count($parentescos) || 
+       $num_familiares !== count($fechas_nacimiento) || 
+       $num_familiares !== count($sexos) || 
+       $num_familiares !== count($estados_civil) || 
+       $num_familiares !== count($niveles_educacionales) || 
+       $num_familiares !== count($actividades)) {
+       echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
+       exit;
+   }
 
     // Iterar sobre cada miembro del grupo familiar
-    for ($i = 0; $i < $num_familiares; $i++) {
-        $nombre_apellido = $nombres_apellido[$i];
-        $parentesco = $parentescos[$i];
-        $fecha_nacimiento = $fechas_nacimiento[$i];
-        $sexo = $sexos[$i];
-        $estado_civil = $estados_civil[$i];
-        $nivel_educacional = $niveles_educacionales[$i];
-        $actividad = $actividades[$i];
-
-        // Verificar si el familiar ya existe
-        $sentencia = $conexion->prepare("SELECT id FROM grupo_familiar WHERE trabajador_id = :trabajador_id AND nombre_apellido = :nombre_apellido");
-        $sentencia->bindParam(':trabajador_id', $trabajador_id);
-        $sentencia->bindParam(':nombre_apellido', $nombre_apellido);
-        $sentencia->execute();
-        $familiarExistente = $sentencia->fetch(PDO::FETCH_ASSOC);
-
-        if ($familiarExistente) {
-            // Si el familiar existe, actualizar
-            $sentencia = $conexion->prepare("UPDATE grupo_familiar SET parentesco = :parentesco, fecha_nacimiento = :fecha_nacimiento, sexo = :sexo, estado_civil = :estado_civil, nivel_educacional = :nivel_educacional, actividad = :actividad WHERE trabajador_id = :trabajador_id AND nombre_apellido = :nombre_apellido");
-        } else {
-            // Si el familiar no existe, insertar
-            $sentencia = $conexion->prepare("INSERT INTO grupo_familiar (trabajador_id, nombre_apellido, parentesco, fecha_nacimiento, sexo, estado_civil, nivel_educacional, actividad) VALUES (:trabajador_id, :nombre_apellido, :parentesco, :fecha_nacimiento, :sexo, :estado_civil, :nivel_educacional, :actividad)");
-        }
-
-        // Vincular los valores de los campos a la consulta SQL
-        $sentencia->bindParam(':trabajador_id', $trabajador_id);
-        $sentencia->bindParam(':nombre_apellido', $nombre_apellido);
-        $sentencia->bindParam(':parentesco', $parentesco);
-        $sentencia->bindParam(':fecha_nacimiento', $fecha_nacimiento);
-        $sentencia->bindParam(':sexo', $sexo);
-        $sentencia->bindParam(':estado_civil', $estado_civil);
-        $sentencia->bindParam(':nivel_educacional', $nivel_educacional);
-        $sentencia->bindParam(':actividad', $actividad);
-        $sentencia->execute();
+   // Procesar cada fila del grupo familiar
+for ($i = 0; $i < count($nombres_apellido); $i++) {
+    $idFamiliar = $ids_familiares[$i];
+    
+    if ($idFamiliar === "new") {
+        // Insertar nueva fila
+        $sentencia = $conexion->prepare("INSERT INTO grupo_familiar 
+            (trabajador_id, nombre_apellido, parentesco, fecha_nacimiento, sexo, estado_civil, nivel_educacional, actividad) 
+            VALUES (:trabajador_id, :nombre_apellido, :parentesco, :fecha_nacimiento, :sexo, :estado_civil, :nivel_educacional, :actividad)");
+    } else {
+        // Actualizar fila existente
+        $sentencia = $conexion->prepare("UPDATE grupo_familiar SET 
+            nombre_apellido = :nombre_apellido, 
+            parentesco = :parentesco, 
+            fecha_nacimiento = :fecha_nacimiento, 
+            sexo = :sexo, 
+            estado_civil = :estado_civil, 
+            nivel_educacional = :nivel_educacional, 
+            actividad = :actividad 
+            WHERE trabajador_id = :trabajador_id AND id = :id_familiar");
+        $sentencia->bindParam(':id_familiar', $idFamiliar);
     }
+
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':nombre_apellido', $nombres_apellido[$i]);
+    $sentencia->bindParam(':parentesco', $parentescos[$i]);
+    $sentencia->bindParam(':fecha_nacimiento', $fechas_nacimiento[$i]);
+    $sentencia->bindParam(':sexo', $sexos[$i]);
+    $sentencia->bindParam(':estado_civil', $estados_civil[$i]);
+    $sentencia->bindParam(':nivel_educacional', $niveles_educacionales[$i]);
+    $sentencia->bindParam(':actividad', $actividades[$i]);
+
+    $sentencia->execute();
+}
          // Recuperar los IDs de los familiares a eliminar
          $eliminar_familiar = isset($_POST['eliminar_familiar']) ? $_POST['eliminar_familiar'] : [];
              // Procesar eliminaciones
@@ -117,10 +121,12 @@ $sentencia->bindParam(':trabajador_id', $trabajador_id);
 $sentencia->bindParam(':historia', $historia);
 $sentencia->execute();
 
-    // Apoyo economico
+// Apoyo economico
     $nombres_apellidosAE = isset($_POST['a_quien_apoya']) ? $_POST['a_quien_apoya'] : [];
     $motivosAE = isset($_POST['motivo_apoyo']) ? $_POST['motivo_apoyo'] : [];
+    $ids_apoyoF = isset($_POST['id_apoyoF']) ? $_POST['id_apoyoF'] : null;
     $num_AETrabajador = count($nombres_apellidosAE);
+    
     if ($num_AETrabajador!== count($motivosAE)) {
         echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
         exit;
@@ -131,25 +137,27 @@ $sentencia->execute();
 for ($i = 0; $i < $num_AETrabajador; $i++) {
     $nombre_apellidoAE = $nombres_apellidosAE[$i];
     $motivoAE = $motivosAE[$i];
+    $id_apoyoF = $ids_apoyoF[$i];
 
     // Verificar si la persona de apoyo económico ya existe
-    $sentencia = $conexion->prepare("SELECT id FROM apoyo_economico WHERE trabajador_id = :trabajador_id AND a_quien = :nombre_apellido");
+    $sentencia = $conexion->prepare("SELECT id FROM apoyo_economico WHERE trabajador_id = :trabajador_id AND id = :id");
     $sentencia->bindParam(':trabajador_id', $trabajador_id);
-    $sentencia->bindParam(':nombre_apellido', $nombre_apellidoAE);
+    $sentencia->bindParam(':id', $id_apoyoF);
     $sentencia->execute();
     $persona_AE = $sentencia->fetch(PDO::FETCH_ASSOC);
 
     if ($persona_AE) {
         // Si la persona apoyada ya existe, actualizar
-        $sentencia = $conexion->prepare("UPDATE apoyo_economico SET motivo = :motivo WHERE trabajador_id = :trabajador_id AND a_quien = :nombre_apellido");
+        $sentencia = $conexion->prepare("UPDATE apoyo_economico SET  a_quien = :nombre_apoyoF, motivo = :motivo WHERE trabajador_id = :trabajador_id AND id = :id");
     } else {
         // Si la persona apoyada no existe, insertar
-        $sentencia = $conexion->prepare("INSERT INTO apoyo_economico (trabajador_id, a_quien, motivo) VALUES (:trabajador_id, :nombre_apellido, :motivo)");
+        $sentencia = $conexion->prepare("INSERT INTO apoyo_economico (trabajador_id, a_quien, motivo) VALUES (:trabajador_id, :nombre_apoyoF, :motivo)");
     }
 
     // Vincular los valores de los campos a la consulta SQL
     $sentencia->bindParam(':trabajador_id', $trabajador_id);
-    $sentencia->bindParam(':nombre_apellido', $nombre_apellidoAE);
+    $sentencia->bindParam(':id', $id_apoyoF);
+    $sentencia->bindParam(':nombre_apoyoF', $nombre_apellidoAE);
     $sentencia->bindParam(':motivo', $motivoAE);
     $sentencia->execute();
 }
@@ -197,37 +205,40 @@ if (isset($_POST['emprendimiento']) && $_POST['emprendimiento'] == 'no') {
 // Mascotas
 $tipos_mascotasT = isset($_POST['tipo_mascota']) ? $_POST['tipo_mascota'] : [];
 $cantidad_mascotasT = isset($_POST['cantidad_mascota']) ? $_POST['cantidad_mascota'] : [];
-print_r($tipos_mascotasT);
+$ids_mascotas = isset($_POST['id_mascota']) ? $_POST['id_mascota'] : null;
 $num_tipos_mascotasT = count($tipos_mascotasT);
-
-
 
 if ($num_tipos_mascotasT!== count($cantidad_mascotasT)) {
     echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
     exit;
 }
+
 // Iterar sobre cada persona apoyada
 for ($i = 0; $i < $num_tipos_mascotasT; $i++) {
     $tipo_mascotaT = $tipos_mascotasT[$i];
     $cantidad_mascotaT = $cantidad_mascotasT[$i];
+    $id_mascota = $ids_mascotas[$i];
+    print_r($id_mascota);
 
     // Verificar si la persona de apoyo económico ya existe
-    $sentencia = $conexion->prepare("SELECT id FROM mascotas WHERE trabajador_id = :trabajador_id AND tipo_mascota = :tipo_mascota");
+    $sentencia = $conexion->prepare("SELECT id FROM mascotas WHERE trabajador_id = :trabajador_id AND id = :id");
     $sentencia->bindParam(':trabajador_id', $trabajador_id);
-    $sentencia->bindParam(':tipo_mascota', $tipo_mascotaT);
+    $sentencia->bindParam(':id', $id_mascota);
     $sentencia->execute();
     $mascotaT = $sentencia->fetch(PDO::FETCH_ASSOC);
 
     if ($mascotaT) {
         // Si la persona apoyada ya existe, actualizar
-        $sentencia = $conexion->prepare("UPDATE mascotas SET cantidad = :cantidad_mascota WHERE trabajador_id = :trabajador_id AND tipo_mascota = :tipo_mascota");
+        $sentencia = $conexion->prepare("UPDATE mascotas SET tipo_mascota = :tipo_mascota, cantidad = :cantidad_mascota WHERE trabajador_id = :trabajador_id AND id = :id");
     } else {
         // Si la persona apoyada no existe, insertar
         $sentencia = $conexion->prepare("INSERT INTO mascotas (trabajador_id, tipo_mascota, cantidad) VALUES (:trabajador_id, :tipo_mascota, :cantidad_mascota)");
     }
 
     // Vincular los valores de los campos a la consulta SQL
+
     $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':id', $id_mascota);
     $sentencia->bindParam(':tipo_mascota', $tipo_mascotaT);
     $sentencia->bindParam(':cantidad_mascota', $cantidad_mascotaT);
     $sentencia->execute();
@@ -249,11 +260,8 @@ foreach ($eliminar_mascota as $idMascota) {
 
 $nombres_ingresoT = isset($_POST['nombre_ingreso']) ? $_POST['nombre_ingreso'] : [];
 $cantidades_ingresoT = isset($_POST['monto_ingreso']) ? $_POST['monto_ingreso'] : [];
-print_r($nombres_ingresoT);
 
 $num_ingresos = count($nombres_ingresoT);
-
-
 
 if ($num_ingresos!== count($cantidades_ingresoT)) {
     echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
@@ -285,22 +293,75 @@ for ($i = 0; $i < $num_ingresos; $i++) {
     $sentencia->bindParam(':monto', $cantidad_ingresoT);
     $sentencia->execute();
 }
-/*
-$eliminar_mascota = isset($_POST['eliminar_mascota']) ? $_POST['eliminar_mascota'] : [];
+
+$eliminar_ingresos = isset($_POST['eliminar_ingreso']) ? $_POST['eliminar_ingreso'] : [];
 
     // Procesar eliminaciones
-if (!empty($eliminar_mascota)) {
-foreach ($eliminar_mascota as $idMascota) {
-    $sentencia = $conexion->prepare("DELETE FROM mascotas WHERE id = :idMascota");
-    $sentencia->bindParam(':idMascota', $idMascota);
+if (!empty($eliminar_ingresos)) {
+foreach ($eliminar_ingresos as $idIngreso) {
+    $sentencia = $conexion->prepare("DELETE FROM ingresos WHERE id = :idingreso");
+    $sentencia->bindParam(':idingreso', $idIngreso);
     $sentencia->execute();
  
 }
 }
-*/
-    
-header('Location: index.php');
-exit;
+//Egresos
+
+$descripciones_egresoT = isset($_POST['descripcion_egreso']) ? $_POST['descripcion_egreso'] : [];
+$cantidades_egresoT = isset($_POST['monto_egreso']) ? $_POST['monto_egreso'] : [];
+$observaciones_egresoT = isset($_POST['observacion_egreso']) ? $_POST['observacion_egreso'] : [];
+print_r($descripciones_egresoT);
+$num_egresos = count($descripciones_egresoT);
+
+if ($num_egresos!== count($cantidades_egresoT) || $num_egresos !== count($observaciones_egresoT)) {
+    echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
+    exit;
+}
+
+// Iterar sobre cada persona apoyada
+for ($i = 0; $i < $num_egresos; $i++) {
+    $descripcion_egresoT = $descripciones_egresoT[$i];
+    $cantidad_egresoT = $cantidades_egresoT[$i];
+    $observacion_egresoT = $observaciones_egresoT[$i];
+
+    // Verificar si la persona de apoyo económico ya existe
+    $sentencia = $conexion->prepare("SELECT id FROM egresos WHERE trabajador_id = :trabajador_id AND descripcion = :descripcion_egreso");
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':descripcion_egreso', $descripcion_egresoT);
+    $sentencia->execute();
+    $egresoT = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+    if ($egresoT) {
+        // Si la persona apoyada ya existe, actualizar
+        $sentencia = $conexion->prepare("UPDATE egresos SET monto = :monto, observaciones = :observaciones  WHERE trabajador_id = :trabajador_id AND descripcion = :descripcion_egreso");
+    } else {
+        // Si la persona apoyada no existe, insertar
+        $sentencia = $conexion->prepare("INSERT INTO egresos (trabajador_id, descripcion, monto, observaciones) VALUES (:trabajador_id, :descripcion_egreso, :monto, :observaciones )");
+    }
+
+    // Vincular los valores de los campos a la consulta SQL
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':descripcion_egreso', $descripcion_egresoT);
+    $sentencia->bindParam(':monto', $cantidad_egresoT);
+    $sentencia->bindParam(':observaciones', $observacion_egresoT);
+    $sentencia->execute();
+}
+
+$eliminar_egresos = isset($_POST['eliminar_egreso']) ? $_POST['eliminar_egreso'] : [];
+
+    // Procesar eliminaciones
+if (!empty($eliminar_egresos)) {
+foreach ($eliminar_egresos as $idEgreso) {
+    $sentencia = $conexion->prepare("DELETE FROM egresos WHERE id = :idegreso");
+    $sentencia->bindParam(':idegreso', $idEgreso);
+    $sentencia->execute();
+ 
+}
+}
+
+   
+//header('Location: index.php');
+//exit;
 
 
 }
