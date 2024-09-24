@@ -54,3 +54,44 @@ body::before {
 .card-footer {
     background-color: transparent; /* Hacer que el fondo de los encabezados y pie de página sea transparente */
 }
+
+
+
+
+
+
+
+
+
+
+
+.footerr {
+    background-color: #333;
+    color:black;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+
+}
+
+.social-media {
+    list-style: none;
+    padding: 0;
+}
+
+.social-media li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.social-media a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.social-media a:hover {
+    text-decoration: underline;
+}

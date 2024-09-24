@@ -1,31 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
 
-<!doctype html>
-<html lang="en">
 <head>
-  <title>Administrador del sitio web</title>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- Bootstrap CSS v5.2.1 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <title>Lista de Trabajadores</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <header>
-    <!-- place navbar here -->
-    <nav class="navbar navbar-expand navbar-light bg-light">
-        <div class="nav navbar-nav">
-            <a class="nav-item nav-link active" href="#" aria-current="page">Administrador <span class="visually-hidden">(current)</span></a>
-            <a class="nav-item nav-link" href="<?php echo $url_base?>secciones/servicios/">Servicios</a>
-            <a class="nav-item nav-link" href="<?php echo $url_base?>secciones/portafolio/">Portafolio</a>
-            <a class="nav-item nav-link" href="<?php echo $url_base?>secciones/entradas/">Entradas</a>
-            <a class="nav-item nav-link" href="<?php echo $url_base?>secciones/equipo/">Equipo</a>
-            <a class="nav-item nav-link" href="<?php echo $url_base?>secciones/configuraciones/">Configuraciones</a>
-            <a class="nav-item nav-link" href="<?php echo $url_base?>secciones/usuarios/">Usuarios</a>
-            <a class="nav-item nav-link" href="<?php echo $url_base?>login.php">Cerrar sesión</a>
 
-        </div>
-    </nav>
-  </header>
-  <main class="container">
-    <br/>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">FASTPACK</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="./estadistica.php">Estadisticas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="./index.php">Lista de trabajadores</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="login.html">Cerrar sesion</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+  <main>

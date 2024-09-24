@@ -69,6 +69,9 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link rel="stylesheet" href="styleFormulario.css">
+    <!--excel-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
 
     <title>Ficha Social Familiar – Trabajadores Fastpack</title>
 
@@ -691,6 +694,8 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Actualizar
         </button>
+        <button type="button" id="exportButton" class="btn btn-primary">Exportar a Excel</button>
+
 
     </form>
     <!-- Modal -->
@@ -710,6 +715,21 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
 </body>
+<script>
+    //excel
+        document.getElementById('exportButton').addEventListener('click', function () {
+            const formData = new FormData(document.getElementById('form'));
+            const data = [];
+            formData.forEach((value, key) => {
+                data.push({ [key]: value });
+            });
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos');
+            XLSX.writeFile(workbook, 'datos_ficha_social.xlsx');
+        });
+    </script>
+    
 <script src="scriptFormulario.js" defer></script>
 <script src="scriptModal.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
