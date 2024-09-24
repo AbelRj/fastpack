@@ -57,6 +57,15 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
       $sentencia->execute();
       $egresos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
+    //Identificación del Trabajador - Recuperar los datos del ID correspondiente ( seleccionado )
+    $idTrabajador=(isset($_GET['id']))?$_GET['id']:"";
+    $sentencia=$conexion->prepare("SELECT * FROM condiciones_habitabilidad WHERE id=:id ");
+    $sentencia->bindParam(":id",$idTrabajador);
+    $sentencia->execute();
+    $habitalidad=$sentencia->fetch(PDO::FETCH_LAZY);
+
+    print_r($habitalidad);
+
 ?>
 
 <!DOCTYPE html>
@@ -255,7 +264,7 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 
         <!-- 7. ¿Tiene Mascotas? -->
-        <fieldset>
+<fieldset>
     <legend>7. ¿Tiene Mascotas?</legend>
     <label>Si <input type="radio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo !empty($mascotasT) ? 'checked' : ''; ?>></label>
     <label>No <input type="radio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo empty($mascotasT) ? 'checked' : ''; ?>></label><br>
@@ -381,25 +390,29 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <option value="otro">Otro</option>
             </select><br><br>
 
-            <label for="material_vivienda">Material de la Vivienda:</label>
-            <select name="material_vivienda" id="material_vivienda">
-                <option value="fuerte">Fuerte</option>
-                <option value="ligero">Ligero</option>
-                <option value="madera">Madera</option>
-                <option value="otro">Otro</option>
-            </select><br><br>
+    <label for="material_vivienda">Material de la Vivienda:</label>
+    <select name="material_vivienda" id="material_vivienda">
+        <option value="fuerte" <?php echo ($habitalidad['material_vivienda'] == 'fuerte') ? 'selected' : ''; ?>>Fuerte</option>
+        <option value="ligero" <?php echo ($habitalidad['material_vivienda'] == 'ligero') ? 'selected' : ''; ?>>Ligero</option>
+        <option value="madera" <?php echo ($habitalidad['material_vivienda'] == 'madera') ? 'selected' : ''; ?>>Madera</option>
+        <option value="otro" <?php echo ($habitalidad['material_vivienda'] == 'otro') ? 'selected' : ''; ?>>Otro</option>
+    </select><br><br>
 
             <label for="numero_habitaciones">Número de Habitaciones:</label>
-            <input type="number" name="numero_habitaciones" id="numero_habitaciones"><br><br>
+            <input type="number" name="numero_habitaciones" id="numero_habitaciones" 
+            value="<?php echo htmlspecialchars($habitalidad['num_habitaciones']); ?>"><br><br>
 
             <label for="numero_banos">Número de Baños:</label>
-            <input type="number" name="numero_banos" id="numero_banos"><br><br>
+            <input type="number" name="numero_banos" id="numero_banos"
+            value="<?php echo htmlspecialchars($habitalidad['num_banos']); ?>"><br><br>
 
             <label for="cocina">Cocina:</label>
-            <input type="number" name="cocina" id="cocina"><br><br>
+            <input type="number" name="cocina" id="cocina"
+            value="<?php echo htmlspecialchars($habitalidad['num_cocina']); ?>"><br><br>
 
             <label for="logia">Logia:</label>
-            <input type="number" name="logia" id="logia"><br><br>
+            <input type="number" name="logia" id="logia"
+            value="<?php echo htmlspecialchars($habitalidad['num_logia']); ?>"><br><br>
 
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
             <select name="condiciones_habitabilidad" id="condiciones_habitabilidad">

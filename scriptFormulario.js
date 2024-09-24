@@ -218,6 +218,7 @@ function eliminarFilaM(button) {
 
 window.onload = function() {
     calcularTotal(); // Llama a la función para calcular el total al cargar la página
+    calcularTotalEgresos();
 };
 function agregarFilaI(tablaId) {
     var table = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
@@ -264,10 +265,6 @@ function calcularTotal() {
 }
 
 //egresos importantes
-
-window.onload = function() {
-    calcularTotalEgresos(); // Llama a la función para calcular el total al cargar la página
-};
 
 function agregarFilaE(tablaId) {
     var table = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
