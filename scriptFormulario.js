@@ -174,27 +174,20 @@ function mostrarTablaEmprendimiento(mostrar) {
 function agregarFilaM() {
     var table = document.getElementById("mascotas").getElementsByTagName('tbody')[0];
     var newRow = table.insertRow(); // Insertar nueva fila
-
-    // Agregar las celdas con los inputs correspondientes
     newRow.innerHTML = `
         <td><input type="text" name="tipo_mascota[]"></td>
         <td><input type="number" name="cantidad_mascota[]"></td>
         <td>
             <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
-            <input type="hidden">
+            <input type="hidden" name="id_mascota[]">
         </td>
     `;
 }
-// Función para manejar el cambio en los radio buttons
-function handleRadioChangeM(radio) {
-    var currentValue = radio.value;
-    var contenedor = document.getElementById('contenedor_mascotas');
-    var isCurrentlyDisplayed = contenedor.style.display === 'block';
 
-    // Solo ejecutar la función si hay un cambio en la selección
-    if ((currentValue === 'si' && !isCurrentlyDisplayed) || (currentValue === 'no' && isCurrentlyDisplayed)) {
-        mostrarTablaMascotas(currentValue === 'si');
-    }
+function handleRadioChangeM(radio) {
+    var contenedor = document.getElementById('contenedor_mascotas');
+    var mostrar = radio.value === 'si';
+    mostrarTablaMascotas(mostrar);
 }
 
 function mostrarTablaMascotas(mostrar) {
@@ -202,48 +195,30 @@ function mostrarTablaMascotas(mostrar) {
     var tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
 
     if (mostrar) {
-        contenedor.style.display = 'block'; // Mostrar la tabla
-        Array.from(tablaMascotas.rows).forEach(row => {
-            if (row.style.display === 'none') {
-                row.style.display = ''; // Hacer visible la fila
-            }
-        });
+        contenedor.style.display = 'block';
         if (tablaMascotas.rows.length === 0) {
             agregarFilaM();
         }
     } else {
-        contenedor.style.display = 'none'; // Ocultar la tabla
+        contenedor.style.display = 'none';
         Array.from(tablaMascotas.rows).forEach(row => {
-            // Marca las filas para eliminación
             var hiddenInput = row.querySelector('input[type="hidden"]');
-            if (hiddenInput) {
-                hiddenInput.name = 'eliminar_apoyoF[]';
-            }
+            hiddenInput.name = 'eliminar_mascota[]'; // Marcar para eliminación
         });
     }
-
 }
+
 function eliminarFilaM(button) {
-    const row = button.closest('tr');
-    const tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
-    const radioNo = document.querySelector('input[name="tipo_mascota"][value="no"]');
-    row.style.display = 'none'; // Oculta la fila visualmente
-    const hiddenInput = row.querySelector('input[type="hidden"]');
-    hiddenInput.name = "eliminar_mascota[]"; // Cambia el nombre para que se envíe en el formulario POST
-
-    // Ocultar la fila visualmente
+    var row = button.closest('tr');
     row.style.display = 'none';
-
-    // Verificar si ya no quedan filas visibles en la tabla
-    let visibleRows = Array.from(tablaMascotas.rows).filter(row => row.style.display !== 'none');
-
-    if (visibleRows.length === 0) {
-        // Si no hay filas visibles, marcar el radio "No"
-        radioNo.checked = true;
-        mostrarTablaMascotas(false); // Ocultar la tabla
-    }
+    var hiddenInput = row.querySelector('input[type="hidden"]');
+    hiddenInput.name = "eliminar_mascota[]"; // Marcar para eliminación
 }
 //Situacion economica directa
+
+window.onload = function() {
+    calcularTotal(); // Llama a la función para calcular el total al cargar la página
+};
 function agregarFilaI(tablaId) {
     var table = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
     var newRow = table.insertRow();
@@ -261,23 +236,39 @@ function eliminarFilaI(button) {
     const row = button.closest('tr');
     row.style.display = 'none'; // Oculta la fila visualmente
     const hiddenInput = row.querySelector('input[type="hidden"]');
-    hiddenInput.name = "eliminar_ingreso[]"; // Cambia el nombre para que se envíe en el formulario POST
-
+    
+    // Si la fila no tiene un ID (es una fila recién agregada)
+    if (!hiddenInput || !hiddenInput.value) {
+        row.remove(); // Elimina la fila si es nueva y no tiene ID
+    } else {
+        hiddenInput.name = "eliminar_ingreso[]"; // Si la fila tiene un ID, se envía para eliminación
+    }
+    calcularTotal(); // Recalcular el total cuando se elimina una fila
 }
+
 
 function calcularTotal() {
     var inputs = document.getElementsByClassName('monto_ingreso');
     var total = 0;
 
     for (var i = 0; i < inputs.length; i++) {
-        var value = parseFloat(inputs[i].value) || 0; // Convierte a número o usa 0
-        total += value;
+        var fila = inputs[i].closest('tr');
+        // Si la fila está oculta, no sumar su monto
+        if (fila.style.display !== 'none') {
+            var value = parseFloat(inputs[i].value) || 0;
+            total += value;
+        }
     }
 
     document.getElementById('total_ingreso_familiar').value = total;
 }
 
 //egresos importantes
+
+window.onload = function() {
+    calcularTotalEgresos(); // Llama a la función para calcular el total al cargar la página
+};
+
 function agregarFilaE(tablaId) {
     var table = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
     var newRow = table.insertRow();
@@ -298,7 +289,14 @@ function eliminarFilaE(button) {
     const row = button.closest('tr');
     row.style.display = 'none'; // Oculta la fila visualmente
     const hiddenInput = row.querySelector('input[type="hidden"]');
-    hiddenInput.name = "eliminar_egreso[]"; // Cambia el nombre para que se envíe en el formulario POST
+    // Si la fila no tiene un ID (es una fila recién agregada)
+    if (!hiddenInput || !hiddenInput.value) {
+        row.remove(); // Elimina la fila si es nueva y no tiene ID
+    } else {
+        hiddenInput.name = "eliminar_egreso[]";// Si la fila tiene un ID, se envía para eliminación
+    }
+    calcularTotalEgresos(); // Recalcular el total cuando se elimina una fila
+
 
 }
 
@@ -307,8 +305,12 @@ function calcularTotalEgresos() {
     var total = 0;
 
     for (var i = 0; i < inputs.length; i++) {
-        var value = parseFloat(inputs[i].value) || 0; // Convierte a número o usa 0
-        total += value;
+        var fila = inputs[i].closest('tr');
+        // Si la fila está oculta, no sumar su monto
+        if (fila.style.display !== 'none') {
+            var value = parseFloat(inputs[i].value) || 0;
+            total += value;
+        }
     }
 
     document.getElementById('total_egresos').value = total;

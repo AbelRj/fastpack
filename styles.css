@@ -8,6 +8,7 @@ body {
    
     
 }
+
 body::before {
     content: '';
     position: fixed; /* Cubre toda la pantalla */
