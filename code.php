@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $estadoCivilT = (isset($_POST['estado_civil'])) ? $_POST['estado_civil']:"";
     $previsionSaludT = (isset($_POST['prevision_salud'])) ? $_POST['prevision_salud']:"";
 
+
     $sentencia = $conexion->prepare("UPDATE trabajador SET nombre_apellido = :nombre_apellido, fecha_nacimiento = :fecha_nacimiento, 
     nacionalidad = :nacionalidad, domicilio = :domicilio, telefono = :telefono, 
     correo_electronico = :correo_electronico, estado_civil = :estado_civil, prevision_salud = :prevision_salud 
@@ -378,6 +379,7 @@ foreach ($eliminar_egresos as $idEgreso) {
  $n_logia = isset($_POST['logia']) ? $_POST['logia'] :"";
  $condiciones_h = isset($_POST['condiciones_habitabilidad']) ? $_POST['condiciones_habitabilidad'] :"";
 
+
  $sentencia = $conexion->prepare("
  UPDATE condiciones_habitabilidad 
  SET tipo_vivienda = :tipo_vivienda,
@@ -400,6 +402,78 @@ $sentencia->bindParam(':num_cocina', $n_cocina);
 $sentencia->bindParam(':num_logia', $n_logia);
 $sentencia->bindParam(':condiciones_habitabilidad', $condiciones_h);
 $sentencia->execute();
+
+//Mapa conceptual
+$mapa_conceptual = isset($_POST['mapa_conceptual']) ? $_POST['mapa_conceptual'] :"";
+$sentencia = $conexion->prepare("SELECT id FROM mapa_conceptual WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->execute();
+$mapaExistente = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+if ($mapaExistente) {
+    // Si existe, hacer un UPDATE
+    $sentencia = $conexion->prepare("UPDATE mapa_conceptual SET mapa_conceptual	 = :mapa_conceptual	 WHERE trabajador_id = :trabajador_id");
+} else {
+    // Si no existe, hacer un INSERT
+    $sentencia = $conexion->prepare("INSERT INTO mapa_conceptual (trabajador_id, mapa_conceptual) VALUES (:trabajador_id, :mapa_conceptual)");
+}
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->bindParam(':mapa_conceptual', $mapa_conceptual);
+$sentencia->execute();
+
+//Otros 
+$otros = isset($_POST['otros']) ? $_POST['otros'] :"";
+$sentencia = $conexion->prepare("SELECT id FROM otros WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->execute();
+$otrosExistente = $sentencia->fetch(PDO::FETCH_ASSOC);
+if ($otrosExistente) {
+    // Si existe, hacer un UPDATE
+    $sentencia = $conexion->prepare("UPDATE otros SET descripcion = :descripcion_otros	 WHERE trabajador_id = :trabajador_id");
+} else {
+    // Si no existe, hacer un INSERT
+    $sentencia = $conexion->prepare("INSERT INTO otros (trabajador_id, descripcion) VALUES (:trabajador_id, :descripcion_otros)");
+}
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->bindParam(':descripcion_otros', $otros);
+$sentencia->execute();
+
+//beneficios valora
+$beneficioV = isset($_POST['beneficios_valora']) ? $_POST['beneficios_valora'] :"";
+$sentencia = $conexion->prepare("SELECT id FROM beneficios_valorados WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->execute();
+$beneficioVExistente = $sentencia->fetch(PDO::FETCH_ASSOC);
+if ($beneficioVExistente) {
+    // Si existe, hacer un UPDATE
+    $sentencia = $conexion->prepare("UPDATE beneficios_valorados SET beneficio = :beneficioV	WHERE trabajador_id = :trabajador_id");
+} else {
+    // Si no existe, hacer un INSERT
+    $sentencia = $conexion->prepare("INSERT INTO beneficios_valorados (trabajador_id, beneficio) VALUES (:trabajador_id, :beneficioV)");
+}
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->bindParam(':beneficioV', $beneficioV);
+$sentencia->execute();
+
+
+//beneficios necesarios
+$beneficioN = isset($_POST['beneficios_necesarios']) ? $_POST['beneficios_necesarios'] :"";
+$sentencia = $conexion->prepare("SELECT id FROM beneficios_necesarios WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->execute();
+$beneficioNExistente = $sentencia->fetch(PDO::FETCH_ASSOC);
+if ($beneficioNExistente) {
+    // Si existe, hacer un UPDATE
+    $sentencia = $conexion->prepare("UPDATE beneficios_necesarios SET beneficio = :beneficioN	WHERE trabajador_id = :trabajador_id");
+} else {
+    // Si no existe, hacer un INSERT
+    $sentencia = $conexion->prepare("INSERT INTO beneficios_necesarios (trabajador_id, beneficio) VALUES (:trabajador_id, :beneficioN)");
+}
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->bindParam(':beneficioN', $beneficioN);
+$sentencia->execute();
+
+
 
 header('Location: index.php');
 exit;

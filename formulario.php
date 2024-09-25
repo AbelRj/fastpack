@@ -63,8 +63,37 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     $sentencia->bindParam(":id",$idTrabajador);
     $sentencia->execute();
     $habitalidad=$sentencia->fetch(PDO::FETCH_LAZY);
+    //Mapa conceptual
+$sentencia = $conexion->prepare("SELECT * FROM mapa_conceptual WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(":trabajador_id", $idTrabajador);
+$sentencia->execute();
+$mapaConceptual= $sentencia->fetch(PDO::FETCH_ASSOC);
+$mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
+    //Otros
+    $sentencia = $conexion->prepare("SELECT * FROM otros WHERE trabajador_id = :trabajador_id");
+    $sentencia->bindParam(":trabajador_id", $idTrabajador);
+    $sentencia->execute();
+    $otros= $sentencia->fetch(PDO::FETCH_ASSOC);
+    $otros = $otros ? $otros : ['descripcion' => ''];
+    //beneficios valorados
+    $sentencia = $conexion->prepare("SELECT * FROM beneficios_valorados WHERE trabajador_id = :trabajador_id");
+    $sentencia->bindParam(":trabajador_id", $idTrabajador);
+    $sentencia->execute();
+    $beneficioV= $sentencia->fetch(PDO::FETCH_ASSOC);
+    $beneficioV = $beneficioV ? $beneficioV : ['beneficio' => ''];
+     //beneficios necesarios
+     $sentencia = $conexion->prepare("SELECT * FROM beneficios_necesarios WHERE trabajador_id = :trabajador_id");
+     $sentencia->bindParam(":trabajador_id", $idTrabajador);
+     $sentencia->execute();
+     $beneficioN= $sentencia->fetch(PDO::FETCH_ASSOC);
+     $beneficioN = $beneficioN ? $beneficioN : ['beneficio' => ''];
 
-    print_r($habitalidad);
+          //declaracion de salud
+          $sentencia = $conexion->prepare("SELECT * FROM declaracion_salud WHERE trabajador_id = :trabajador_id");
+          $sentencia->bindParam(":trabajador_id", $idTrabajador);
+          $sentencia->execute();
+          $declaracionSalud= $sentencia->fetch(PDO::FETCH_ASSOC);
+          var_dump( $declaracionSalud);
 
 ?>
 
@@ -431,7 +460,8 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             </p>
             <!-- Este espacio está reservado para incluir un mapa conceptual o un campo donde el trabajador pueda describir su entorno -->
             <textarea name="mapa_conceptual" rows="10" cols="80"
-                placeholder="Describe aquí el entorno en el que se desarrolla la vida del trabajador y su familia..."></textarea>
+                placeholder="Describe aquí el entorno en el que se desarrolla la vida del trabajador y su familia..."
+                ><?php echo htmlspecialchars($mapaConceptual['mapa_conceptual']); ?></textarea>
         </fieldset>
 
         <br>
@@ -440,7 +470,8 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <fieldset>
             <legend>11. Otros</legend>
             <textarea name="otros" rows="10" cols="80"
-                placeholder="Agregar cualquier otra información relevante..."></textarea>
+                placeholder="Agregar cualquier otra información relevante..."
+                ><?php echo htmlspecialchars($otros['descripcion']); ?></textarea>
         </fieldset>
 
         <br>
@@ -449,7 +480,8 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <fieldset>
             <legend>12. ¿Qué beneficios valora de parte de la empresa?</legend>
             <textarea name="beneficios_valora" rows="5" cols="80"
-                placeholder="Escribe aquí los beneficios que valoras de la empresa..."></textarea>
+                placeholder="Escribe aquí los beneficios que valoras de la empresa..."
+                ><?php echo htmlspecialchars($beneficioV['beneficio']); ?></textarea>
         </fieldset>
 
         <br>
@@ -458,7 +490,8 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <fieldset>
             <legend>13. ¿Qué beneficios no tenemos y considera son necesarios?</legend>
             <textarea name="beneficios_necesarios" rows="5" cols="80"
-                placeholder="Escribe aquí los beneficios que consideras necesarios..."></textarea>
+                placeholder="Escribe aquí los beneficios que consideras necesarios..."
+                ><?php echo htmlspecialchars($beneficioN['beneficio']); ?></textarea>
         </fieldset>
         <!-- 14. Declaración de salud -->
         <fieldset>
@@ -475,9 +508,9 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <tr>
                     <td>Cáncer, tumores, pólipos, nódulos, enfermedad de los ganglios linfáticos, leucemia, linfomas,
                         aplasia medular.</td>
-                    <td><input type="radio" name="salud_cancer" value="si"></td>
-                    <td><input type="radio" name="salud_cancer" value="no"></td>
-                </tr>
+                        <td><input type="radio" name="salud_cancer" value="si" <?php echo ($declaracionSalud['salud_cancer'] === 'si') ? 'checked' : ''; ?>></td>
+                        <td><input type="radio" name="salud_cancer" value="no" <?php echo ($declaracionSalud['salud_cancer'] === 'no') ? 'checked' : ''; ?>></td>
+          </tr>
                 <tr>
                     <td colspan="3">
                         <hr>
