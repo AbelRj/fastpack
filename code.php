@@ -369,8 +369,38 @@ foreach ($eliminar_egresos as $idEgreso) {
  
 }
 }
+ //Habitalidad
+ $tipo_vivienda = isset($_POST['tipo_vivienda']) ? $_POST['tipo_vivienda'] :"";
+ $material_vivienda = isset($_POST['material_vivienda']) ? $_POST['material_vivienda'] :"";
+ $n_habitaciones = isset($_POST['numero_habitaciones']) ? $_POST['numero_habitaciones'] :"";
+ $n_banos = isset($_POST['numero_banos']) ? $_POST['numero_banos'] :"";
+ $n_cocina = isset($_POST['cocina']) ? $_POST['cocina'] :"";
+ $n_logia = isset($_POST['logia']) ? $_POST['logia'] :"";
+ $condiciones_h = isset($_POST['condiciones_habitabilidad']) ? $_POST['condiciones_habitabilidad'] :"";
 
-   
+ $sentencia = $conexion->prepare("
+ UPDATE condiciones_habitabilidad 
+ SET tipo_vivienda = :tipo_vivienda,
+     material_vivienda = :material_vivienda,
+     num_habitaciones = :num_habitaciones,
+     num_banos = :num_banos,
+     num_cocina = :num_cocina,
+     num_logia = :num_logia,
+     condiciones_habitabilidad = :condiciones_habitabilidad
+ WHERE trabajador_id = :trabajador_id
+");
+
+// Vincular los parámetros a la consulta SQ
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->bindParam(':tipo_vivienda', $tipo_vivienda);
+$sentencia->bindParam(':material_vivienda', $material_vivienda);
+$sentencia->bindParam(':num_habitaciones', $n_habitaciones);
+$sentencia->bindParam(':num_banos', $n_banos);
+$sentencia->bindParam(':num_cocina', $n_cocina);
+$sentencia->bindParam(':num_logia', $n_logia);
+$sentencia->bindParam(':condiciones_habitabilidad', $condiciones_h);
+$sentencia->execute();
+
 header('Location: index.php');
 exit;
 

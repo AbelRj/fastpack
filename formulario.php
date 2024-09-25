@@ -57,7 +57,7 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
       $sentencia->execute();
       $egresos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
-    //Identificación del Trabajador - Recuperar los datos del ID correspondiente ( seleccionado )
+    //Habitalidad
     $idTrabajador=(isset($_GET['id']))?$_GET['id']:"";
     $sentencia=$conexion->prepare("SELECT * FROM condiciones_habitabilidad WHERE id=:id ");
     $sentencia->bindParam(":id",$idTrabajador);
@@ -384,14 +384,16 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
             <label for="tipo_vivienda">Tipo de Vivienda:</label>
             <select name="tipo_vivienda" id="tipo_vivienda">
-                <option value="propia">Propia</option>
-                <option value="arriendo">Arriendo</option>
-                <option value="cedida">Cedida</option>
-                <option value="otro">Otro</option>
+            <option value="" >Seleccionar</option>
+                <option value="propia"<?php echo ($habitalidad['tipo_vivienda'] == 'propia') ? 'selected' : ''; ?>>Propia</option>
+                <option value="arriendo"<?php echo ($habitalidad['tipo_vivienda'] == 'arriendo') ? 'selected' : ''; ?>>Arriendo</option>
+                <option value="cedida"<?php echo ($habitalidad['tipo_vivienda'] == 'cedida') ? 'selected' : ''; ?>>Cedida</option>
+                <option value="otro"<?php echo ($habitalidad['tipo_vivienda'] == 'otro') ? 'selected' : ''; ?>>Otro</option>
             </select><br><br>
 
     <label for="material_vivienda">Material de la Vivienda:</label>
     <select name="material_vivienda" id="material_vivienda">
+        <option value="" >Seleccionar</option>
         <option value="fuerte" <?php echo ($habitalidad['material_vivienda'] == 'fuerte') ? 'selected' : ''; ?>>Fuerte</option>
         <option value="ligero" <?php echo ($habitalidad['material_vivienda'] == 'ligero') ? 'selected' : ''; ?>>Ligero</option>
         <option value="madera" <?php echo ($habitalidad['material_vivienda'] == 'madera') ? 'selected' : ''; ?>>Madera</option>
@@ -416,9 +418,10 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
             <select name="condiciones_habitabilidad" id="condiciones_habitabilidad">
-                <option value="normal">Normal</option>
-                <option value="hacinamiento">Hacinamiento</option>
-                <option value="otro">Otro</option>
+            <option value="" >Seleccionar</option>
+                <option value="normal"<?php echo ($habitalidad['condiciones_habitabilidad'] == 'normal') ? 'selected' : ''; ?>>Normal</option>
+                <option value="hacinamiento"<?php echo ($habitalidad['condiciones_habitabilidad'] == 'hacinamiento') ? 'selected' : ''; ?>>Hacinamiento</option>
+                <option value="otro"<?php echo ($habitalidad['condiciones_habitabilidad'] == 'otro') ? 'selected' : ''; ?>>Otro</option>
             </select>
         </fieldset>
         <!-- 10. Mapa conceptual -->
