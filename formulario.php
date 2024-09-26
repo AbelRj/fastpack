@@ -59,8 +59,8 @@ $mascotasT = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
     //Habitalidad
     $idTrabajador=(isset($_GET['id']))?$_GET['id']:"";
-    $sentencia=$conexion->prepare("SELECT * FROM condiciones_habitabilidad WHERE id=:id ");
-    $sentencia->bindParam(":id",$idTrabajador);
+    $sentencia=$conexion->prepare("SELECT * FROM condiciones_habitabilidad WHERE trabajador_id=:trabajador_id ");
+    $sentencia->bindParam(":trabajador_id",$idTrabajador);
     $sentencia->execute();
     $habitalidad=$sentencia->fetch(PDO::FETCH_LAZY);
     //Mapa conceptual
@@ -93,7 +93,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
           $sentencia->bindParam(":trabajador_id", $idTrabajador);
           $sentencia->execute();
           $declaracionSalud= $sentencia->fetch(PDO::FETCH_ASSOC);
-          var_dump( $declaracionSalud);
+
+// Detalles Adicionales de Salud de Usted o su Grupo Familiar
+$sentencia = $conexion->prepare("SELECT * FROM personas_enfermas WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(":trabajador_id", $idTrabajador);
+$sentencia->execute();
+$infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+          
 
 ?>
 
@@ -108,7 +114,7 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
 
     <link rel="stylesheet" href="styleFormulario.css">
     <!--excel-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
 
     <title>Ficha Social Familiar – Trabajadores Fastpack</title>
@@ -234,44 +240,47 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
         </fieldset>
 
         <!-- 5. ¿Apoya a algún familiar económicamente? -->
-<fieldset>
-    <legend>5. ¿Apoya a algún familiar económicamente?</legend>
-    
-    <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" 
-        <?php echo !empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label>
-    <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)" 
-        <?php echo empty($apoyoEconomicoT) ? 'checked' : ''; ?>></label><br>
+        <fieldset>
+            <legend>5. ¿Apoya a algún familiar económicamente?</legend>
 
-    <div id="contenedor_apoyo_economico" 
-        style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
-        
-        <table id="apoyo_economico" border="1">
-            <thead>
-                <tr>
-                    <th>¿A quién?</th>
-                    <th>Motivo</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($apoyoEconomicoT as $apoyo): ?>
-                <tr>
-                    <td><input type="text" name="a_quien_apoya[]" value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
-                    <td><input type="text" name="motivo_apoyo[]" value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
-                    <td>
-                        <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
-                        <!-- Campo oculto para guardar el ID del apoyo -->
-                        <input type="hidden"value="<?php echo htmlspecialchars($apoyo['id']); ?>">
-                        <input type="hidden" name="id_apoyoF[]" value="<?php echo htmlspecialchars($apoyo['id']); ?>">
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        
-        <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
-    </div>
-</fieldset>
+            <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" <?php echo
+                    !empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label>
+            <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)" <?php echo
+                    empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label><br>
+
+            <div id="contenedor_apoyo_economico"
+                style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
+
+                <table id="apoyo_economico" border="1">
+                    <thead>
+                        <tr>
+                            <th>¿A quién?</th>
+                            <th>Motivo</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($apoyoEconomicoT as $apoyo): ?>
+                        <tr>
+                            <td><input type="text" name="a_quien_apoya[]"
+                                    value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
+                            <td><input type="text" name="motivo_apoyo[]"
+                                    value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
+                            <td>
+                                <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
+                                <!-- Campo oculto para guardar el ID del apoyo -->
+                                <input type="hidden" value="<?php echo htmlspecialchars($apoyo['id']); ?>">
+                                <input type="hidden" name="id_apoyoF[]"
+                                    value="<?php echo htmlspecialchars($apoyo['id']); ?>">
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+                <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
+            </div>
+        </fieldset>
 
 
 
@@ -293,37 +302,42 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
 
 
         <!-- 7. ¿Tiene Mascotas? -->
-<fieldset>
-    <legend>7. ¿Tiene Mascotas?</legend>
-    <label>Si <input type="radio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo !empty($mascotasT) ? 'checked' : ''; ?>></label>
-    <label>No <input type="radio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo empty($mascotasT) ? 'checked' : ''; ?>></label><br>
-    <div id="contenedor_mascotas" style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">
-        <table id="mascotas">
-            <thead>
-                <tr>
-                    <th>¿Qué tipo de mascota?:</th>
-                    <th>¿Cuántas?:</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($mascotasT as $mascota): ?>
-                <tr>
-                    <td><input type="text" name="tipo_mascota[]" value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
-                    <td><input type="number" name="cantidad_mascota[]" value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
-                    <td>
-                        <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
-                        <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
-                        <input type="hidden" name="id_mascota[]" value="<?php echo htmlspecialchars($mascota['id']); ?>">
+        <fieldset>
+            <legend>7. ¿Tiene Mascotas?</legend>
+            <label>Si <input type="radio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo
+                    !empty($mascotasT) ? 'checked' : '' ; ?>></label>
+            <label>No <input type="radio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo
+                    empty($mascotasT) ? 'checked' : '' ; ?>></label><br>
+            <div id="contenedor_mascotas" style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">
+                <table id="mascotas">
+                    <thead>
+                        <tr>
+                            <th>¿Qué tipo de mascota?:</th>
+                            <th>¿Cuántas?:</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($mascotasT as $mascota): ?>
+                        <tr>
+                            <td><input type="text" name="tipo_mascota[]"
+                                    value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
+                            <td><input type="number" name="cantidad_mascota[]"
+                                    value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
+                            <td>
+                                <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
+                                <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
+                                <input type="hidden" name="id_mascota[]"
+                                    value="<?php echo htmlspecialchars($mascota['id']); ?>">
 
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <button type="button" onclick="agregarFilaM()">Agregar Mascota</button>
-    </div>
-</fieldset>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <button type="button" onclick="agregarFilaM()">Agregar Mascota</button>
+            </div>
+        </fieldset>
         <!-- 7. Situacion economica -->
         <fieldset>
             <legend>8. Situación Económica</legend>
@@ -331,7 +345,7 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
             <fieldset>
                 <legend>8.1 Directa</legend>
 
-                <table id="ingresos_familiares" border="1">
+                <table id="ingresos_familiares" border="1" style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -350,7 +364,8 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                             <td>
                                 <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
                                 <input type="hidden" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
-                                <input type="hidden" name="id_ingreso[]" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
+                                <input type="hidden" name="id_ingreso[]"
+                                    value="<?php echo htmlspecialchars($ingreso['id']); ?>">
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -396,7 +411,8 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                             <td>
                                 <button type="button" onclick="eliminarFilaE(this)">Eliminar</button>
                                 <input type="hidden" value="<?php echo htmlspecialchars($egreso['id']); ?>">
-                                <input type="hidden" name="id_egreso[]" value="<?php echo htmlspecialchars($egreso['id']); ?>">
+                                <input type="hidden" name="id_egreso[]"
+                                    value="<?php echo htmlspecialchars($egreso['id']); ?>">
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -413,44 +429,58 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
 
             <label for="tipo_vivienda">Tipo de Vivienda:</label>
             <select name="tipo_vivienda" id="tipo_vivienda">
-            <option value="" >Seleccionar</option>
-                <option value="propia"<?php echo ($habitalidad['tipo_vivienda'] == 'propia') ? 'selected' : ''; ?>>Propia</option>
-                <option value="arriendo"<?php echo ($habitalidad['tipo_vivienda'] == 'arriendo') ? 'selected' : ''; ?>>Arriendo</option>
-                <option value="cedida"<?php echo ($habitalidad['tipo_vivienda'] == 'cedida') ? 'selected' : ''; ?>>Cedida</option>
-                <option value="otro"<?php echo ($habitalidad['tipo_vivienda'] == 'otro') ? 'selected' : ''; ?>>Otro</option>
+                <option value="seleccionar" <?php echo (isset($habitalidad['tipo_vivienda']) &&
+                    $habitalidad['tipo_vivienda']=='seleccionar' ) ? 'selected' : '' ; ?>>Seleccionar</option>
+                <option value="propia" <?php echo (isset($habitalidad['tipo_vivienda']) &&
+                    $habitalidad['tipo_vivienda']=='propia' ) ? 'selected' : '' ; ?>>Propia</option>
+                <option value="arriendo" <?php echo (isset($habitalidad['tipo_vivienda']) &&
+                    $habitalidad['tipo_vivienda']=='arriendo' ) ? 'selected' : '' ; ?>>Arriendo</option>
+                <option value="cedida" <?php echo (isset($habitalidad['tipo_vivienda']) &&
+                    $habitalidad['tipo_vivienda']=='cedida' ) ? 'selected' : '' ; ?>>Cedida</option>
+                <option value="otro" <?php echo (isset($habitalidad['tipo_vivienda']) &&
+                    $habitalidad['tipo_vivienda']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
             </select><br><br>
 
-    <label for="material_vivienda">Material de la Vivienda:</label>
-    <select name="material_vivienda" id="material_vivienda">
-        <option value="" >Seleccionar</option>
-        <option value="fuerte" <?php echo ($habitalidad['material_vivienda'] == 'fuerte') ? 'selected' : ''; ?>>Fuerte</option>
-        <option value="ligero" <?php echo ($habitalidad['material_vivienda'] == 'ligero') ? 'selected' : ''; ?>>Ligero</option>
-        <option value="madera" <?php echo ($habitalidad['material_vivienda'] == 'madera') ? 'selected' : ''; ?>>Madera</option>
-        <option value="otro" <?php echo ($habitalidad['material_vivienda'] == 'otro') ? 'selected' : ''; ?>>Otro</option>
-    </select><br><br>
+            <label for="material_vivienda">Material de la Vivienda:</label>
+            <select name="material_vivienda" id="material_vivienda">
+                <option value="seleccionar" <?php echo (isset($habitalidad['material_vivienda']) &&
+                    $habitalidad['material_vivienda']=='seleccionar' ) ? 'selected' : '' ; ?>>Seleccionar</option>
+                <option value="fuerte" <?php echo (isset($habitalidad['material_vivienda']) &&
+                    $habitalidad['material_vivienda']=='fuerte' ) ? 'selected' : '' ; ?>>Fuerte</option>
+                <option value="ligero" <?php echo (isset($habitalidad['material_vivienda']) &&
+                    $habitalidad['material_vivienda']=='ligero' ) ? 'selected' : '' ; ?>>Ligero</option>
+                <option value="madera" <?php echo (isset($habitalidad['material_vivienda']) &&
+                    $habitalidad['material_vivienda']=='madera' ) ? 'selected' : '' ; ?>>Madera</option>
+                <option value="otro" <?php echo (isset($habitalidad['material_vivienda']) &&
+                    $habitalidad['material_vivienda']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
+            </select><br><br>
 
             <label for="numero_habitaciones">Número de Habitaciones:</label>
-            <input type="number" name="numero_habitaciones" id="numero_habitaciones" 
-            value="<?php echo htmlspecialchars($habitalidad['num_habitaciones']); ?>"><br><br>
+            <input type="number" name="numero_habitaciones" id="numero_habitaciones"
+                value="<?php echo htmlspecialchars($habitalidad['num_habitaciones']); ?>"><br><br>
 
             <label for="numero_banos">Número de Baños:</label>
             <input type="number" name="numero_banos" id="numero_banos"
-            value="<?php echo htmlspecialchars($habitalidad['num_banos']); ?>"><br><br>
+                value="<?php echo htmlspecialchars($habitalidad['num_banos']); ?>"><br><br>
 
             <label for="cocina">Cocina:</label>
             <input type="number" name="cocina" id="cocina"
-            value="<?php echo htmlspecialchars($habitalidad['num_cocina']); ?>"><br><br>
+                value="<?php echo htmlspecialchars($habitalidad['num_cocina']); ?>"><br><br>
 
             <label for="logia">Logia:</label>
             <input type="number" name="logia" id="logia"
-            value="<?php echo htmlspecialchars($habitalidad['num_logia']); ?>"><br><br>
+                value="<?php echo htmlspecialchars($habitalidad['num_logia']); ?>"><br><br>
 
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
             <select name="condiciones_habitabilidad" id="condiciones_habitabilidad">
-            <option value="" >Seleccionar</option>
-                <option value="normal"<?php echo ($habitalidad['condiciones_habitabilidad'] == 'normal') ? 'selected' : ''; ?>>Normal</option>
-                <option value="hacinamiento"<?php echo ($habitalidad['condiciones_habitabilidad'] == 'hacinamiento') ? 'selected' : ''; ?>>Hacinamiento</option>
-                <option value="otro"<?php echo ($habitalidad['condiciones_habitabilidad'] == 'otro') ? 'selected' : ''; ?>>Otro</option>
+                <option value="">Seleccionar</option>
+                <option value="normal" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
+                    $habitalidad['condiciones_habitabilidad']=='normal' ) ? 'selected' : '' ; ?>>Normal</option>
+                <option value="hacinamiento" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
+                    $habitalidad['condiciones_habitabilidad']=='hacinamiento' ) ? 'selected' : '' ; ?>>Hacinamiento
+                </option>
+                <option value="otro" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
+                    $habitalidad['condiciones_habitabilidad']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
             </select>
         </fieldset>
         <!-- 10. Mapa conceptual -->
@@ -460,8 +490,7 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
             </p>
             <!-- Este espacio está reservado para incluir un mapa conceptual o un campo donde el trabajador pueda describir su entorno -->
             <textarea name="mapa_conceptual" rows="10" cols="80"
-                placeholder="Describe aquí el entorno en el que se desarrolla la vida del trabajador y su familia..."
-                ><?php echo htmlspecialchars($mapaConceptual['mapa_conceptual']); ?></textarea>
+                placeholder="Describe aquí el entorno en el que se desarrolla la vida del trabajador y su familia..."><?php echo htmlspecialchars($mapaConceptual['mapa_conceptual']); ?></textarea>
         </fieldset>
 
         <br>
@@ -470,8 +499,7 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
         <fieldset>
             <legend>11. Otros</legend>
             <textarea name="otros" rows="10" cols="80"
-                placeholder="Agregar cualquier otra información relevante..."
-                ><?php echo htmlspecialchars($otros['descripcion']); ?></textarea>
+                placeholder="Agregar cualquier otra información relevante..."><?php echo htmlspecialchars($otros['descripcion']); ?></textarea>
         </fieldset>
 
         <br>
@@ -480,8 +508,7 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
         <fieldset>
             <legend>12. ¿Qué beneficios valora de parte de la empresa?</legend>
             <textarea name="beneficios_valora" rows="5" cols="80"
-                placeholder="Escribe aquí los beneficios que valoras de la empresa..."
-                ><?php echo htmlspecialchars($beneficioV['beneficio']); ?></textarea>
+                placeholder="Escribe aquí los beneficios que valoras de la empresa..."><?php echo htmlspecialchars($beneficioV['beneficio']); ?></textarea>
         </fieldset>
 
         <br>
@@ -490,8 +517,7 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
         <fieldset>
             <legend>13. ¿Qué beneficios no tenemos y considera son necesarios?</legend>
             <textarea name="beneficios_necesarios" rows="5" cols="80"
-                placeholder="Escribe aquí los beneficios que consideras necesarios..."
-                ><?php echo htmlspecialchars($beneficioN['beneficio']); ?></textarea>
+                placeholder="Escribe aquí los beneficios que consideras necesarios..."><?php echo htmlspecialchars($beneficioN['beneficio']); ?></textarea>
         </fieldset>
         <!-- 14. Declaración de salud -->
         <fieldset>
@@ -508,9 +534,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 <tr>
                     <td>Cáncer, tumores, pólipos, nódulos, enfermedad de los ganglios linfáticos, leucemia, linfomas,
                         aplasia medular.</td>
-                        <td><input type="radio" name="salud_cancer" value="si" <?php echo ($declaracionSalud['salud_cancer'] === 'si') ? 'checked' : ''; ?>></td>
-                        <td><input type="radio" name="salud_cancer" value="no" <?php echo ($declaracionSalud['salud_cancer'] === 'no') ? 'checked' : ''; ?>></td>
-          </tr>
+                    <td><input type="radio" name="salud_cancer" value="si" <?php echo
+                            (isset($declaracionSalud['salud_cancer']) && $declaracionSalud['salud_cancer']==='si' )
+                            ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_cancer" value="no" <?php echo
+                            (isset($declaracionSalud['salud_cancer']) && $declaracionSalud['salud_cancer']==='no' )
+                            ? 'checked' : '' ; ?>></td>
+                </tr>
                 <tr>
                     <td colspan="3">
                         <hr>
@@ -520,8 +550,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                     <td>Epilepsia, parkinson, neuropatías, esclerosis múltiple, parálisis, accidentes cerebrovasculares,
                         derrame cerebral, aneurisma, infarto cerebral, encefalitis u otra enfermedad del sistema
                         nervioso central.</td>
-                    <td><input type="radio" name="salud_sistema_nervioso" value="si"></td>
-                    <td><input type="radio" name="salud_sistema_nervioso" value="no"></td>
+                    <td><input type="radio" name="salud_sistema_nervioso" value="si" <?php echo
+                            (isset($declaracionSalud['salud_sistema_nervioso']) &&
+                            $declaracionSalud['salud_sistema_nervioso']==='si' ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_sistema_nervioso" value="no" <?php echo
+                            (isset($declaracionSalud['salud_sistema_nervioso']) &&
+                            $declaracionSalud['salud_sistema_nervioso']==='no' ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -531,8 +566,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 <tr>
                     <td>Depresión, esquizofrenia, trastornos del ánimo o de la personalidad, psicosis, crisis de pánico,
                         bulimia, anorexia u otra enfermedad de salud mental.</td>
-                    <td><input type="radio" name="salud_salud_mental" value="si"></td>
-                    <td><input type="radio" name="salud_salud_mental" value="no"></td>
+                    <td><input type="radio" name="salud_salud_mental" value="si" <?php echo
+                            (isset($declaracionSalud['salud_salud_mental']) &&
+                            $declaracionSalud['salud_salud_mental']==='si' ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_salud_mental" value="no" <?php echo
+                            (isset($declaracionSalud['salud_salud_mental']) &&
+                            $declaracionSalud['salud_salud_mental']==='no' ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -542,8 +582,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 <tr>
                     <td>Miopía, astigmatismo, hipermetropía, glaucoma, cataratas, estrabismo, queratocono, ceguera, o
                         cualquier enfermedad a los ojos.</td>
-                    <td><input type="radio" name="salud_ojo" value="si"></td>
-                    <td><input type="radio" name="salud_ojo" value="no"></td>
+                    <td><input type="radio" name="salud_ojo" value="si" <?php echo
+                            (isset($declaracionSalud['salud_ojo']) && $declaracionSalud['salud_ojo']==='si' )
+                            ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_ojo" value="no" <?php echo
+                            (isset($declaracionSalud['salud_ojo']) && $declaracionSalud['salud_ojo']==='no' )
+                            ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -553,8 +598,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 <tr>
                     <td>Desviación tabique nasal, obstrucción nasal, sordera, hipoacusia, o cualquier otra enfermedad
                         que afecta a la nariz o los oídos.</td>
-                    <td><input type="radio" name="salud_nariz_oidos" value="si"></td>
-                    <td><input type="radio" name="salud_nariz_oidos" value="no"></td>
+                    <td><input type="radio" name="salud_nariz_oidos" value="si" <?php echo
+                            (isset($declaracionSalud['salud_nariz_oidos']) &&
+                            $declaracionSalud['salud_nariz_oidos']==='si' ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_nariz_oidos" value="no" <?php echo
+                            (isset($declaracionSalud['salud_nariz_oidos']) &&
+                            $declaracionSalud['salud_nariz_oidos']==='no' ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -565,8 +615,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                     <td>Enfermedad pulmonar obstructiva crónica (EPOC), enfisema pulmonar, fibrosis quística, asma,
                         neumotórax, pleuresía, fibrosis pulmonar y cualquier otra enfermedad que afecte al sistema
                         respiratorio.</td>
-                    <td><input type="radio" name="salud_respiratorio" value="si"></td>
-                    <td><input type="radio" name="salud_respiratorio" value="no"></td>
+                    <td><input type="radio" name="salud_respiratorio" value="si" <?php echo
+                            (isset($declaracionSalud['salud_respiratorio']) &&
+                            $declaracionSalud['salud_respiratorio']==='si' ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_respiratorio" value="no" <?php echo
+                            (isset($declaracionSalud['salud_respiratorio']) &&
+                            $declaracionSalud['salud_respiratorio']==='no' ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -577,8 +632,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                     <td>Hipertensión arterial, angina, infarto al miocardio, by-pass o angioplastia, soplos, enfermedad
                         reumática, arritmias, portador de marcapaso, insuficiencia cardíaca, enfermedad de las válvulas
                         del corazón o cualquier otra enfermedad del corazón.</td>
-                    <td><input type="radio" name="salud_corazon" value="si"></td>
-                    <td><input type="radio" name="salud_corazon" value="no"></td>
+                    <td><input type="radio" name="salud_corazon" value="si" <?php echo
+                            (isset($declaracionSalud['salud_corazon']) && $declaracionSalud['salud_corazon']==='si' )
+                            ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_corazon" value="no" <?php echo
+                            (isset($declaracionSalud['salud_corazon']) && $declaracionSalud['salud_corazon']==='no' )
+                            ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -589,8 +649,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                     <td>Aneurisma aórtico, tromboflebitis, várices, tratamiento anticoagulante, trombosis venosa
                         profunda, claudicación intermitente, enfermedades del sistema vascular, alteraciones de
                         coagulación, trombofilia, hemofilia y/o enfermedades del bazo y médula ósea.</td>
-                    <td><input type="radio" name="salud_vascular" value="si"></td>
-                    <td><input type="radio" name="salud_vascular" value="no"></td>
+                    <td><input type="radio" name="salud_vascular" value="si" <?php echo
+                            (isset($declaracionSalud['salud_vascular']) && $declaracionSalud['salud_vascular']==='si' )
+                            ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_vascular" value="no" <?php echo
+                            (isset($declaracionSalud['salud_vascular']) && $declaracionSalud['salud_vascular']==='no' )
+                            ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -601,8 +666,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                     <td>Síndrome metabólico, colesterol alto, triglicéridos altos, dislipidemia, hiperuricemia o gota,
                         resistencia a la insulina, resistencia a la glucosa, diabetes mellitus, sobrepeso, obesidad, u
                         otras alteraciones metabólicas.</td>
-                    <td><input type="radio" name="salud_metabolico" value="si"></td>
-                    <td><input type="radio" name="salud_metabolico" value="no"></td>
+                    <td><input type="radio" name="salud_metabolico" value="si" <?php echo
+                            (isset($declaracionSalud['salud_metabolico']) &&
+                            $declaracionSalud['salud_metabolico']==='si' ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_metabolico" value="no" <?php echo
+                            (isset($declaracionSalud['salud_metabolico']) &&
+                            $declaracionSalud['salud_metabolico']==='no' ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -614,8 +684,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                         biliar, esófago de Barret, colitis ulcerosa, enfermedad de Crohn, úlceras digestivas,
                         hemorragias digestivas, sangramiento anal, hernia hiatal, hernias abdominales e inguinales,
                         diverticulitis, pólipos de colon u otras enfermedades que afecten al sistema digestivo.</td>
-                    <td><input type="radio" name="salud_digestivo" value="si"></td>
-                    <td><input type="radio" name="salud_digestivo" value="no"></td>
+                    <td><input type="radio" name="salud_digestivo" value="si" <?php echo
+                            (isset($declaracionSalud['salud_digestivo']) && $declaracionSalud['salud_digestivo']==='si'
+                            ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_digestivo" value="no" <?php echo
+                            (isset($declaracionSalud['salud_digestivo']) && $declaracionSalud['salud_digestivo']==='no'
+                            ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -625,8 +700,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 <tr>
                     <td>Hepatitis B, hepatitis C, síndrome de inmunodeficiencia adquirida (SIDA) (portador o enfermo).
                     </td>
-                    <td><input type="radio" name="salud_hepatitis_sida" value="si"></td>
-                    <td><input type="radio" name="salud_hepatitis_sida" value="no"></td>
+                    <td><input type="radio" name="salud_hepatitis_sida" value="si" <?php echo
+                            (isset($declaracionSalud['salud_hepatitis_sida']) &&
+                            $declaracionSalud['salud_hepatitis_sida']==='si' ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_hepatitis_sida" value="no" <?php echo
+                            (isset($declaracionSalud['salud_hepatitis_sida']) &&
+                            $declaracionSalud['salud_hepatitis_sida']==='no' ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -637,8 +717,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                     <td>Cálculos renales, nefritis, pielonefritis, riñones poliquísticos, insuficiencia renal,
                         malformación de riñones o de las vías urinarias, enfermedades a la vejiga, testículos o
                         próstata.</td>
-                    <td><input type="radio" name="salud_renal" value="si"></td>
-                    <td><input type="radio" name="salud_renal" value="no"></td>
+                    <td><input type="radio" name="salud_renal" value="si" <?php echo
+                            (isset($declaracionSalud['salud_renal']) && $declaracionSalud['salud_renal']==='si' )
+                            ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_renal" value="no" <?php echo
+                            (isset($declaracionSalud['salud_renal']) && $declaracionSalud['salud_renal']==='no' )
+                            ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -648,8 +733,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 <tr>
                     <td>Enfermedad de las mamas, mioma uterino, quistes ováricos, endometriosis, PAP alterados u otras
                         enfermedades que afecten el aparato reproductor femenino.</td>
-                    <td><input type="radio" name="salud_reproductor_femenino" value="si"></td>
-                    <td><input type="radio" name="salud_reproductor_femenino" value="no"></td>
+                    <td><input type="radio" name="salud_reproductor_femenino" value="si" <?php echo
+                            (isset($declaracionSalud['salud_reproductor_femenino']) &&
+                            $declaracionSalud['salud_reproductor_femenino']==='si' ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_reproductor_femenino" value="no" <?php echo
+                            (isset($declaracionSalud['salud_reproductor_femenino']) &&
+                            $declaracionSalud['salud_reproductor_femenino']==='no' ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -661,8 +751,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                         tiroiditis de Hashimoto, esclerosis múltiple, esclerosis lateral amiotrófica,
                         poliorradiculopatía desmielinizante inflamatoria crónica, síndrome Guillain-Barré, fibromialgia,
                         eritema nodoso u otras enfermedades autoinmunes.</td>
-                    <td><input type="radio" name="salud_autoinmune" value="si"></td>
-                    <td><input type="radio" name="salud_autoinmune" value="no"></td>
+                    <td><input type="radio" name="salud_autoinmune" value="si" <?php echo
+                            (isset($declaracionSalud['salud_autoinmune']) &&
+                            $declaracionSalud['salud_autoinmune']==='si' ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_autoinmune" value="no" <?php echo
+                            (isset($declaracionSalud['salud_autoinmune']) &&
+                            $declaracionSalud['salud_autoinmune']==='no' ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -672,8 +767,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 <tr>
                     <td>Hipotiroidismo, hipertiroidismo, nódulos a la tiroides o bocio multinodular u otras patologías
                         de tiroides.</td>
-                    <td><input type="radio" name="salud_tiroides" value="si"></td>
-                    <td><input type="radio" name="salud_tiroides" value="no"></td>
+                    <td><input type="radio" name="salud_tiroides" value="si" <?php echo
+                            (isset($declaracionSalud['salud_tiroides']) && $declaracionSalud['salud_tiroides']==='si' )
+                            ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_tiroides" value="no" <?php echo
+                            (isset($declaracionSalud['salud_tiroides']) && $declaracionSalud['salud_tiroides']==='no' )
+                            ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -683,8 +783,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 <tr>
                     <td>Artrosis, osteoporosis, hernias de columna, escoliosis, espondilosis o discopatía, meniscopatía
                         o lesiones a la rodilla.</td>
-                    <td><input type="radio" name="salud_esqueletico" value="si"></td>
-                    <td><input type="radio" name="salud_esqueletico" value="no"></td>
+                    <td><input type="radio" name="salud_esqueletico" value="si" <?php echo
+                            (isset($declaracionSalud['salud_esqueletico']) &&
+                            $declaracionSalud['salud_esqueletico']==='si' ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_esqueletico" value="no" <?php echo
+                            (isset($declaracionSalud['salud_esqueletico']) &&
+                            $declaracionSalud['salud_esqueletico']==='no' ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -694,8 +799,13 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 <tr>
                     <td>Cardiopatías congénitas, fisura palatina o labio leporino, displasia de cadera, síndrome de
                         Down, o cualquier otra malformación o patología congénita.</td>
-                    <td><input type="radio" name="salud_congenito" value="si"></td>
-                    <td><input type="radio" name="salud_congenito" value="no"></td>
+                    <td><input type="radio" name="salud_congenito" value="si" <?php echo
+                            (isset($declaracionSalud['salud_congenito']) && $declaracionSalud['salud_congenito']==='si'
+                            ) ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_congenito" value="no" <?php echo
+                            (isset($declaracionSalud['salud_congenito']) && $declaracionSalud['salud_congenito']==='no'
+                            ) ? 'checked' : '' ; ?>></td>
+
                 </tr>
                 <tr>
                     <td colspan="3">
@@ -704,11 +814,17 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 </tr>
                 <tr>
                     <td>Embarazo actual.</td>
-                    <td><input type="radio" name="salud_embarazo" value="si"></td>
-                    <td><input type="radio" name="salud_embarazo" value="no"></td>
+                    <td><input type="radio" name="salud_embarazo" value="si" <?php echo
+                            (isset($declaracionSalud['salud_embarazo']) && $declaracionSalud['salud_embarazo']==='si' )
+                            ? 'checked' : '' ; ?>></td>
+                    <td><input type="radio" name="salud_embarazo" value="no" <?php echo
+                            (isset($declaracionSalud['salud_embarazo']) && $declaracionSalud['salud_embarazo']==='no' )
+                            ? 'checked' : '' ; ?>></td>
+
                 </tr>
             </table>
         </fieldset>
+        <!-- 15. Detalle de Enfermedades Adicionales -->
         <!-- 15. Detalle de Enfermedades Adicionales -->
         <fieldset>
             <legend>15. Detalles Adicionales de Salud de Usted o su Grupo Familiar</legend>
@@ -716,7 +832,8 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                 familiar, padece alguna otra enfermedad, patología o condición de salud que no haya sido antes
                 detallada, agradecemos completar el detalle señalado a continuación.</p>
 
-            <table id="enfermedades_adicionales" border="1">
+            <table id="enfermedades_adicionales" border="1"
+                style="<?php echo empty($infoPersonaE) ? 'display:none;' : ''; ?>">
                 <thead>
                     <tr>
                         <th>Nombre Persona Afectada</th>
@@ -727,18 +844,36 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
                     </tr>
                 </thead>
                 <tbody>
+                    <?php if (!empty($infoPersonaE)): ?>
+                    <?php foreach ($infoPersonaE as $inforPersona): ?>
                     <tr>
-                        <td><input type="text" name="nombre_persona_1"></td>
-                        <td><input type="text" name="enfermedad_1"></td>
-                        <td><input type="date" name="fecha_diagnostico_1"></td>
-                        <td><input type="text" name="estado_actual_1"></td>
-                        <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><input type="text" name="nombre_persona[]"
+                                value="<?php echo htmlspecialchars($inforPersona['nombre_persona']); ?>"></td>
+                        <td><input type="text" name="enfermedad[]"
+                                value="<?php echo htmlspecialchars($inforPersona['enfermedad']); ?>"></td>
+                        <td><input type="date" name="fecha_diagnostico[]"
+                                value="<?php echo htmlspecialchars($inforPersona['fecha_diagnostico']); ?>"></td>
+                        <td><input type="text" name="estado_actual[]"
+                                value="<?php echo htmlspecialchars($inforPersona['estado_actual']); ?>"></td>
+                        <td>
+                            <button type="button" onclick="eliminarFila(this)">Eliminar</button>
+                            <input type="hidden" name="id_enfermedad[]"
+                                value="<?php echo htmlspecialchars($inforPersona['id']); ?>">
+                        </td>
                     </tr>
+                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
-            <br>
-            <button type="button" onclick="agregarFilaDASF('enfermedades_adicionales')">Agregar Persona</button>
+
+            <!-- Mensaje de "No hay enfermedades registradas" -->
+            <p id="no-enfermedades-msg" style="display: <?php echo empty($infoPersonaE) ? 'block' : 'none'; ?>;">No
+                hay
+                enfermedades registradas.</p>
+
+            <button type="button" onclick="agregarFilaEA()">Agregar Persona</button>
         </fieldset>
+
         <!-- Button trigger modal -->
         <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Actualizar
@@ -766,19 +901,19 @@ $mapaConceptual = $mapaConceptual ? $mapaConceptual : ['mapa_conceptual' => ''];
 </body>
 <script>
     //excel
-        document.getElementById('exportButton').addEventListener('click', function () {
-            const formData = new FormData(document.getElementById('form'));
-            const data = [];
-            formData.forEach((value, key) => {
-                data.push({ [key]: value });
-            });
-            const worksheet = XLSX.utils.json_to_sheet(data);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos');
-            XLSX.writeFile(workbook, 'datos_ficha_social.xlsx');
+    document.getElementById('exportButton').addEventListener('click', function () {
+        const formData = new FormData(document.getElementById('form'));
+        const data = [];
+        formData.forEach((value, key) => {
+            data.push({ [key]: value });
         });
-    </script>
-    
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos');
+        XLSX.writeFile(workbook, 'datos_ficha_social.xlsx');
+    });
+</script>
+
 <script src="scriptFormulario.js" defer></script>
 <script src="scriptModal.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

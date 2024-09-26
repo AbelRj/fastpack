@@ -233,6 +233,7 @@ for ($i = 0; $i < $num_tipos_mascotasT; $i++) {
         if ($mascotaT) {
             // Si la mascota ya existe, actualizar
             $sentencia = $conexion->prepare("UPDATE mascotas SET tipo_mascota = :tipo_mascota, cantidad = :cantidad_mascota WHERE trabajador_id = :trabajador_id AND id = :id");
+            $sentencia->bindParam(':id', $id_mascota); // Aquí se asegura de vincular el ID si es una actualización
         } else {
             // Si la mascota no existe, insertar
             $sentencia = $conexion->prepare("INSERT INTO mascotas (trabajador_id, tipo_mascota, cantidad) VALUES (:trabajador_id, :tipo_mascota, :cantidad_mascota)");
@@ -244,7 +245,6 @@ for ($i = 0; $i < $num_tipos_mascotasT; $i++) {
 
     // Vincular los valores a la consulta SQL
     $sentencia->bindParam(':trabajador_id', $trabajador_id);
-    if ($id_mascota) $sentencia->bindParam(':id', $id_mascota);
     $sentencia->bindParam(':tipo_mascota', $tipo_mascotaT);
     $sentencia->bindParam(':cantidad_mascota', $cantidad_mascotaT);
     $sentencia->execute();
@@ -260,6 +260,7 @@ if (!empty($eliminar_mascota)) {
         $sentencia->execute();
     }
 }
+
 
 
 //Ingresos
@@ -379,18 +380,33 @@ foreach ($eliminar_egresos as $idEgreso) {
  $n_logia = isset($_POST['logia']) ? $_POST['logia'] :"";
  $condiciones_h = isset($_POST['condiciones_habitabilidad']) ? $_POST['condiciones_habitabilidad'] :"";
 
+ $sentencia = $conexion->prepare("SELECT trabajador_id FROM condiciones_habitabilidad WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->execute();
+$habitalidadExistente = $sentencia->fetch(PDO::FETCH_ASSOC);
 
- $sentencia = $conexion->prepare("
- UPDATE condiciones_habitabilidad 
- SET tipo_vivienda = :tipo_vivienda,
-     material_vivienda = :material_vivienda,
-     num_habitaciones = :num_habitaciones,
-     num_banos = :num_banos,
-     num_cocina = :num_cocina,
-     num_logia = :num_logia,
-     condiciones_habitabilidad = :condiciones_habitabilidad
- WHERE trabajador_id = :trabajador_id
-");
+if ($habitalidadExistente) {
+    // Si existe un registro, actualizamos los datos
+    $sentencia = $conexion->prepare("
+    UPDATE condiciones_habitabilidad 
+    SET tipo_vivienda = :tipo_vivienda,
+        material_vivienda = :material_vivienda,
+        num_habitaciones = :num_habitaciones,
+        num_banos = :num_banos,
+        num_cocina = :num_cocina,
+        num_logia = :num_logia,
+        condiciones_habitabilidad = :condiciones_habitabilidad
+    WHERE trabajador_id = :trabajador_id
+    ");
+} else {
+    // Si no existe un registro, lo insertamos
+    $sentencia = $conexion->prepare("
+    INSERT INTO condiciones_habitabilidad 
+    (trabajador_id, tipo_vivienda, material_vivienda, num_habitaciones, num_banos, num_cocina, num_logia, condiciones_habitabilidad) 
+    VALUES (:trabajador_id, :tipo_vivienda, :material_vivienda, :num_habitaciones, :num_banos, :num_cocina, :num_logia, :condiciones_habitabilidad)
+    ");
+}
+
 
 // Vincular los parámetros a la consulta SQ
 $sentencia->bindParam(':trabajador_id', $trabajador_id);
@@ -473,6 +489,129 @@ $sentencia->bindParam(':trabajador_id', $trabajador_id);
 $sentencia->bindParam(':beneficioN', $beneficioN);
 $sentencia->execute();
 
+//Declaracion Salud 
+$salud_cancer = isset($_POST['salud_cancer']) ? $_POST['salud_cancer'] : '';
+$salud_sistema_nervioso = isset($_POST['salud_sistema_nervioso']) ? $_POST['salud_sistema_nervioso'] : '';
+$salud_salud_mental = isset($_POST['salud_salud_mental']) ? $_POST['salud_salud_mental'] : '';
+$salud_ojo = isset($_POST['salud_ojo']) ? $_POST['salud_ojo'] : '';
+$salud_nariz_oidos = isset($_POST['salud_nariz_oidos']) ? $_POST['salud_nariz_oidos'] : '';
+$salud_respiratorio = isset($_POST['salud_respiratorio']) ? $_POST['salud_respiratorio'] : '';
+$salud_corazon = isset($_POST['salud_corazon']) ? $_POST['salud_corazon'] : '';
+$salud_vascular = isset($_POST['salud_vascular']) ? $_POST['salud_vascular'] : '';
+$salud_metabolico = isset($_POST['salud_metabolico']) ? $_POST['salud_metabolico'] : '';
+$salud_digestivo = isset($_POST['salud_digestivo']) ? $_POST['salud_digestivo'] : '';
+$salud_hepatitis_sida = isset($_POST['salud_hepatitis_sida']) ? $_POST['salud_hepatitis_sida'] : '';
+$salud_renal = isset($_POST['salud_renal']) ? $_POST['salud_renal'] : '';
+$salud_reproductor_femenino = isset($_POST['salud_reproductor_femenino']) ? $_POST['salud_reproductor_femenino'] : '';
+$salud_autoinmune = isset($_POST['salud_autoinmune']) ? $_POST['salud_autoinmune'] : '';
+$salud_tiroides = isset($_POST['salud_tiroides']) ? $_POST['salud_tiroides'] : '';
+$salud_esqueletico = isset($_POST['salud_esqueletico']) ? $_POST['salud_esqueletico'] : '';
+$salud_congenito = isset($_POST['salud_congenito']) ? $_POST['salud_congenito'] : '';
+$salud_embarazo = isset($_POST['salud_embarazo']) ? $_POST['salud_embarazo'] : '';
+
+
+$sentencia = $conexion->prepare("SELECT id FROM declaracion_salud WHERE trabajador_id = :trabajador_id");
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->execute();
+$declaracionSaludExistente = $sentencia->fetch(PDO::FETCH_ASSOC);
+print_r($declaracionSaludExistente);
+if ($declaracionSaludExistente) {
+    // Si existe, hacer un UPDATE
+    $sentencia = $conexion->prepare("UPDATE declaracion_salud SET salud_cancer = :salud_cancer, salud_sistema_nervioso = :salud_sistema_nervioso, 
+     salud_salud_mental = :salud_salud_mental, salud_ojo = :salud_ojo, salud_nariz_oidos = :salud_nariz_oidos, salud_respiratorio = :salud_respiratorio, 
+     salud_corazon = :salud_corazon, salud_vascular = :salud_vascular, salud_metabolico = :salud_metabolico, salud_digestivo = :salud_digestivo,
+     salud_hepatitis_sida = :salud_hepatitis_sida, salud_renal = :salud_renal, salud_reproductor_femenino = :salud_reproductor_femenino, 
+     salud_autoinmune = :salud_autoinmune, salud_tiroides = :salud_tiroides, salud_esqueletico = :salud_esqueletico, salud_congenito = :salud_congenito,
+     salud_embarazo = :salud_embarazo
+    	WHERE trabajador_id = :trabajador_id");
+} else {
+    // Si no existe, hacer un INSERT
+    $sentencia = $conexion->prepare("INSERT INTO declaracion_salud (trabajador_id, salud_cancer, salud_sistema_nervioso, salud_salud_mental,salud_ojo, salud_nariz_oidos, 
+    salud_respiratorio, salud_corazon, salud_vascular, salud_metabolico,
+     salud_digestivo, salud_hepatitis_sida, salud_renal, salud_reproductor_femenino, salud_autoinmune, salud_tiroides, salud_esqueletico, salud_congenito, salud_embarazo) 
+     VALUES (:trabajador_id, :salud_cancer, :salud_sistema_nervioso, :salud_salud_mental, :salud_ojo, :salud_nariz_oidos, :salud_respiratorio, :salud_corazon, :salud_vascular,
+      :salud_metabolico, :salud_digestivo, :salud_hepatitis_sida, :salud_renal, :salud_reproductor_femenino, :salud_autoinmune, :salud_tiroides, :salud_esqueletico,
+       :salud_congenito, :salud_embarazo)");
+}
+$sentencia->bindParam(':trabajador_id', $trabajador_id);
+$sentencia->bindParam(':salud_cancer', $salud_cancer);
+$sentencia->bindParam(':salud_sistema_nervioso', $salud_sistema_nervioso);
+$sentencia->bindParam(':salud_salud_mental', $salud_salud_mental);
+$sentencia->bindParam(':salud_ojo', $salud_ojo);
+$sentencia->bindParam(':salud_nariz_oidos', $salud_nariz_oidos);
+$sentencia->bindParam(':salud_respiratorio', $salud_respiratorio);
+$sentencia->bindParam(':salud_corazon', $salud_corazon);
+$sentencia->bindParam(':salud_vascular', $salud_vascular);
+$sentencia->bindParam(':salud_metabolico', $salud_metabolico);
+$sentencia->bindParam(':salud_digestivo', $salud_digestivo);
+$sentencia->bindParam(':salud_hepatitis_sida', $salud_hepatitis_sida);
+$sentencia->bindParam(':salud_renal', $salud_renal);
+$sentencia->bindParam(':salud_reproductor_femenino', $salud_reproductor_femenino);
+$sentencia->bindParam(':salud_autoinmune', $salud_autoinmune);
+$sentencia->bindParam(':salud_tiroides', $salud_tiroides);
+$sentencia->bindParam(':salud_esqueletico', $salud_esqueletico);
+$sentencia->bindParam(':salud_congenito', $salud_congenito);
+$sentencia->bindParam(':salud_embarazo', $salud_embarazo);
+$sentencia->execute();
+
+
+//Detalles adicional de salud 
+// Datos de salud recibidos desde el formulario
+$nombres_persona = isset($_POST['nombre_persona']) ? $_POST['nombre_persona'] : [];
+$enfermedades = isset($_POST['enfermedad']) ? $_POST['enfermedad'] : [];
+$fechas_diagnostico = isset($_POST['fecha_diagnostico']) ? $_POST['fecha_diagnostico'] : [];
+$estados_actuales = isset($_POST['estado_actual']) ? $_POST['estado_actual'] : [];
+$ids_enfermedades = isset($_POST['id_enfermedad']) ? $_POST['id_enfermedad'] : [];
+print_r($ids_enfermedades);
+// Verificar que todos los arreglos tengan la misma longitud
+$num_registros = count($nombres_persona);
+if ($num_registros !== count($enfermedades) || 
+    $num_registros !== count($fechas_diagnostico) || 
+    $num_registros !== count($estados_actuales)) {
+    echo "Error: Todos los campos deben tener la misma cantidad de entradas.";
+    exit;
+}
+
+// Procesar cada fila del detalle de salud
+for ($i = 0; $i < $num_registros; $i++) {
+    $idEnfermedad = $ids_enfermedades[$i];
+
+    if ($idEnfermedad === "new") {
+        // Insertar nuevo registro de enfermedad
+        $sentencia = $conexion->prepare("INSERT INTO personas_enfermas
+            (trabajador_id,nombre_persona, enfermedad, fecha_diagnostico, estado_actual) 
+            VALUES (:trabajador_id,:nombre_persona, :enfermedad, :fecha_diagnostico, :estado_actual)");
+    } else {
+        // Actualizar registro existente
+        $sentencia = $conexion->prepare("UPDATE personas_enfermas SET 
+            nombre_persona = :nombre_persona, 
+            enfermedad = :enfermedad, 
+            fecha_diagnostico = :fecha_diagnostico, 
+            estado_actual = :estado_actual 
+            WHERE trabajador_id = :trabajador_id AND id = :id_enfermedad");
+        $sentencia->bindParam(':id_enfermedad', $idEnfermedad);
+    }
+
+    // Asignar valores a los parámetros
+    $sentencia->bindParam(':trabajador_id', $trabajador_id);
+    $sentencia->bindParam(':nombre_persona', $nombres_persona[$i]);
+    $sentencia->bindParam(':enfermedad', $enfermedades[$i]);
+    $sentencia->bindParam(':fecha_diagnostico', $fechas_diagnostico[$i]);
+    $sentencia->bindParam(':estado_actual', $estados_actuales[$i]);
+
+    // Ejecutar la sentencia
+    $sentencia->execute();
+}
+
+// Procesar las eliminaciones de registros de enfermedades
+$eliminar_enfermedad = isset($_POST['eliminar_enfermedad']) ? $_POST['eliminar_enfermedad'] : [];
+if (!empty($eliminar_enfermedad)) {
+    foreach ($eliminar_enfermedad as $idEnfermedad) {
+        $sentencia = $conexion->prepare("DELETE FROM personas_enfermas WHERE id = :idEnfermedad");
+        $sentencia->bindParam(':idEnfermedad', $idEnfermedad);
+        $sentencia->execute();
+    }
+}
 
 
 header('Location: index.php');

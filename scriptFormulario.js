@@ -193,6 +193,7 @@ function handleRadioChangeM(radio) {
 function mostrarTablaMascotas(mostrar) {
     var contenedor = document.getElementById('contenedor_mascotas');
     var tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
+    
 
     if (mostrar) {
         contenedor.style.display = 'block';
@@ -214,6 +215,7 @@ function eliminarFilaM(button) {
     var hiddenInput = row.querySelector('input[type="hidden"]');
     hiddenInput.name = "eliminar_mascota[]"; // Marcar para eliminación
 }
+
 //Situacion economica directa
 
 window.onload = function() {
@@ -232,6 +234,7 @@ function agregarFilaI(tablaId) {
                 <input type="hidden" >
                 </td>
             `;
+            
 }
 function eliminarFilaI(button) {
     const row = button.closest('tr');
@@ -246,7 +249,10 @@ function eliminarFilaI(button) {
     }
     calcularTotal(); // Recalcular el total cuando se elimina una fila
 }
-
+function mostrarTablaIngresos() {
+    var tabla = document.getElementById('ingresos_familiares');
+    tabla.style.display = 'block';
+}
 
 function calcularTotal() {
     var inputs = document.getElementsByClassName('monto_ingreso');
@@ -314,33 +320,70 @@ function calcularTotalEgresos() {
 }
 
 //15. Detalles Adicionales de Salud de Usted o su Grupo Familiar
-// Función para agregar una fila a una tabla específica
-function agregarFilaDASF(tablaId) {
-    var tablaDASF = document.getElementById(tablaId);
-    var nuevaFila = tablaDASF.insertRow();
-    var columnas = tablaDASF.rows[0].cells.length;
+// Función para agregar una nueva fila al detalle de enfermedades
+function agregarFilaEA() {
+    var table = document.getElementById("enfermedades_adicionales");
+    table.style.display = "table"; // Mostrar la tabla si está oculta
 
-    // Agregar inputs a la nueva fila
-    for (var i = 0; i < columnas - 1; i++) {
-        var nuevaCelda = nuevaFila.insertCell(i);
-        nuevaCelda.innerHTML = `<input type="text" name="${tablaId}_dato_${tablaDASF.rows.length}">`;
+    var tbody = table.getElementsByTagName('tbody')[0];
+    var newRow = tbody.insertRow(); // Insertar nueva fila
+
+    // Agregar las celdas con los inputs correspondientes
+    newRow.innerHTML = `
+        <td><input type="text" name="nombre_persona[]"></td>
+        <td><input type="text" name="enfermedad[]"></td>
+        <td><input type="date" name="fecha_diagnostico[]"></td>
+        <td><input type="text" name="estado_actual[]"></td>
+        <td><button type="button" onclick="eliminarFila(this)">Eliminar</button>
+            <input type="hidden" name="id_enfermedad[]" value="new"> <!-- Agregar un valor especial -->
+        </td>
+    `;
+
+    // Ocultar el mensaje de "No hay enfermedades registradas"
+    var noEnfermedadesMsg = document.getElementById("no-enfermedades-msg");
+    if (noEnfermedadesMsg) {
+        noEnfermedadesMsg.style.display = "none";
+    }
+}
+
+// Función para eliminar una fila
+function eliminarFila(button) {
+    const row = button.closest('tr');
+    const idEnfermedad = row.querySelector('input[name="id_enfermedad[]"]').value;
+
+    if (idEnfermedad === "new") {
+        // Si es una fila nueva, eliminarla del DOM
+        row.remove();
+    } else {
+        // Ocultar la fila y agregar un input hidden para marcarla como eliminada
+        row.style.display = 'none';
+
+        const hiddenInputEliminar = document.createElement('input');
+        hiddenInputEliminar.type = "hidden";
+        hiddenInputEliminar.name = "eliminar_enfermedad[]";
+        hiddenInputEliminar.value = idEnfermedad;
+
+        row.appendChild(hiddenInputEliminar);
     }
 
-    // Agregar botón de eliminación en la última celda
-    var btnEliminar = nuevaFila.insertCell(columnas - 1);
-    btnEliminar.innerHTML = '<button type="button" onclick="eliminarFila(this)">Eliminar</button>';
-}
+    // Verificar si todas las filas están ocultas
+    var table = document.getElementById("enfermedades_adicionales");
+    var tbody = table.getElementsByTagName('tbody')[0];
+    var rows = tbody.getElementsByTagName('tr');
+    var allHidden = true;
 
-// Función para eliminar la fila
-function eliminarFila(boton) {
-    var btnEliminar = boton.parentNode.parentNode;
-    btnEliminar.parentNode.removeChild(btnEliminar);
-}
+    for (var i = 0; i < rows.length; i++) {
+        if (rows[i].style.display !== 'none') {
+            allHidden = false;
+            break;
+        }
+    }
 
-//boton editar
-document.getElementById('enableButton').addEventListener('click', function () {
-    var inputs = document.querySelectorAll('input[readonly]'); // Selecciona todos los inputs con readonly
-    inputs.forEach(function (input) {
-        input.readOnly = false; // Habilita la edición de los inputs
-    });
-});
+    if (allHidden) {
+        table.style.display = "none";
+        var noEnfermedadesMsg = document.getElementById("no-enfermedades-msg");
+        if (noEnfermedadesMsg) {
+            noEnfermedadesMsg.style.display = "block";
+        }
+    }
+}
