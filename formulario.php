@@ -343,85 +343,90 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <legend>8. Situación Económica</legend>
             <!-- 8.1 Directa -->
             <fieldset>
-                <legend>8.1 Directa</legend>
+    <legend>8.1 Directa</legend>
 
-                <table id="ingresos_familiares" border="1" style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Monto</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($ingresos as $ingreso): ?>
-                        <tr>
-                            <td><input type="text" name="nombre_ingreso[]"
-                                    value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
-                            <td><input type="number" name="monto_ingreso[]" class="monto_ingreso"
-                                    value="<?php echo htmlspecialchars($ingreso['monto']); ?>"
-                                    oninput="calcularTotal()"></td>
-                            <td>
-                                <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
-                                <input type="hidden" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
-                                <input type="hidden" name="id_ingreso[]"
-                                    value="<?php echo htmlspecialchars($ingreso['id']); ?>">
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con
-                    Ingreso</button><br><br>
+    <!-- La tabla se oculta si no hay datos -->
+    <table id="ingresos_familiares" border="1" style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Monto</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($ingresos)): ?>
+            <?php foreach ($ingresos as $ingreso): ?>
+            <tr>
+                <td><input type="text" name="nombre_ingreso[]" value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
+                <td><input type="number" name="monto_ingreso[]" class="monto_ingreso" value="<?php echo htmlspecialchars($ingreso['monto']); ?>" oninput="calcularTotal()"></td>
+                <td>
+                    <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
+                    <input type="hidden" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
+                    <input type="hidden" name="id_ingreso[]" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
-                <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar"
-                        readonly></label><br><br>
+    <!-- Mensaje de "No hay ingresos registrados" -->
+    <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay ingresos registrados.</p>
 
-                <label>Rangos Ingreso Grupo Familiar:</label><br>
-                <p>$ 460.000 -> $ 700.000</p>
-                <p>$ 700.001 -> $ 1.000.000</p>
-                <p>$ 1.000.001 -> $ 1.500.000</p>
-                <p>$ 1.500.001 -> $ 2.000.000</p>
-                <p>$ 2.000.001 -> $ 2.500.000</p>
-                <p>> $ 2.500.000</p>
-            </fieldset>
+    <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con Ingreso</button><br><br>
+
+    <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar" readonly></label><br><br>
+
+    <label>Rangos Ingreso Grupo Familiar:</label><br>
+    <p>$ 460.000 -> $ 700.000</p>
+    <p>$ 700.001 -> $ 1.000.000</p>
+    <p>$ 1.000.001 -> $ 1.500.000</p>
+    <p>$ 1.500.001 -> $ 2.000.000</p>
+    <p>$ 2.000.001 -> $ 2.500.000</p>
+    <p>> $ 2.500.000</p>
+</fieldset>
+
             <!-- 8.2 Egresos importantes -->
             <fieldset>
-                <legend>8.2 Egresos importantes</legend>
+    <legend>8.2 Egresos importantes</legend>
 
-                <table id="egresos_importantes" border="1">
-                    <thead>
-                        <tr>
-                            <th>Descripción</th>
-                            <th>Monto</th>
-                            <th>Observaciones</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($egresos as $egreso): ?>
-                        <tr>
-                            <td><input type="text" name="descripcion_egreso[]"
-                                    value="<?php echo htmlspecialchars($egreso['descripcion']); ?>"></td>
-                            <td><input type="number" name="monto_egreso[]" class="monto_egreso"
-                                    value="<?php echo htmlspecialchars($egreso['monto']); ?>"
-                                    oninput="calcularTotalEgresos()"></td>
-                            <td><input type="text" name="observacion_egreso[]"
-                                    value="<?php echo htmlspecialchars($egreso['observaciones']); ?>"></td>
-                            <td>
-                                <button type="button" onclick="eliminarFilaE(this)">Eliminar</button>
-                                <input type="hidden" value="<?php echo htmlspecialchars($egreso['id']); ?>">
-                                <input type="hidden" name="id_egreso[]"
-                                    value="<?php echo htmlspecialchars($egreso['id']); ?>">
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <button type="button" onclick="agregarFilaE('egresos_importantes')">Agregar Egreso</button><br><br>
+    <!-- La tabla se oculta si no hay datos -->
+    <table id="egresos_importantes" border="1" style="<?php echo empty($egresos) ? 'display:none;' : ''; ?>">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Observaciones</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($egresos)): ?>
+            <?php foreach ($egresos as $egreso): ?>
+            <tr>
+                <td><input type="text" name="descripcion_egreso[]" value="<?php echo htmlspecialchars($egreso['descripcion']); ?>"></td>
+                <td><input type="number" name="monto_egreso[]" class="monto_egreso" value="<?php echo htmlspecialchars($egreso['monto']); ?>" oninput="calcularTotalEgresos()"></td>
+                <td><input type="text" name="observacion_egreso[]" value="<?php echo htmlspecialchars($egreso['observaciones']); ?>"></td>
+                <td>
+                    <button type="button" onclick="eliminarFilaE(this)">Eliminar</button>
+                    <input type="hidden" value="<?php echo htmlspecialchars($egreso['id']); ?>">
+                    <input type="hidden" name="id_egreso[]" value="<?php echo htmlspecialchars($egreso['id']); ?>">
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
-                <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
-            </fieldset>
+    <!-- Mensaje de "No hay egresos registrados" -->
+    <p id="no-egresos-msg" style="display: <?php echo empty($egresos) ? 'block' : 'none'; ?>;">No hay egresos registrados.</p>
+
+    <button type="button" onclick="agregarFilaE('egresos_importantes')">Agregar Egreso</button><br><br>
+
+    <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
+</fieldset>
+
         </fieldset>
         <!-- 9. Condiciones de Habitabilidad -->
         <fieldset>

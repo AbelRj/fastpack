@@ -225,29 +225,51 @@ window.onload = function() {
 function agregarFilaI(tablaId) {
     var table = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
     var newRow = table.insertRow();
+    var tabla = document.getElementById(tablaId);
 
+    tabla.style.display = 'table'; // Mostrar la tabla si está oculta
     newRow.innerHTML = `
-                <td><input type="text" name="nombre_ingreso[]"></td>
-                <td><input type="number" name="monto_ingreso[]" class="monto_ingreso" oninput="calcularTotal()"></td>
-                <td>
-                <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
-                <input type="hidden" >
-                </td>
-            `;
-            
+        <td><input type="text" name="nombre_ingreso[]"></td>
+        <td><input type="number" name="monto_ingreso[]" class="monto_ingreso" oninput="calcularTotal()"></td>
+        <td><button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
+        <input type="hidden" value="new"></td>
+    `;
+
+    // Ocultar el mensaje de "No hay ingresos registrados"
+    var noIngresosMsg = document.getElementById("no-ingresos-msg");
+    noIngresosMsg.style.display = "none";
 }
 function eliminarFilaI(button) {
     const row = button.closest('tr');
-    row.style.display = 'none'; // Oculta la fila visualmente
     const hiddenInput = row.querySelector('input[type="hidden"]');
-    
-    // Si la fila no tiene un ID (es una fila recién agregada)
-    if (!hiddenInput || !hiddenInput.value) {
-        row.remove(); // Elimina la fila si es nueva y no tiene ID
+
+    if (!hiddenInput || hiddenInput.value === "new") {
+        row.remove(); // Eliminar fila si es nueva
     } else {
-        hiddenInput.name = "eliminar_ingreso[]"; // Si la fila tiene un ID, se envía para eliminación
+        row.style.display = 'none'; // Ocultar fila visualmente si ya tiene ID
+        hiddenInput.name = "eliminar_ingreso[]";
     }
-    calcularTotal(); // Recalcular el total cuando se elimina una fila
+
+    calcularTotal(); // Recalcular el total
+
+    // Verificar si todas las filas están ocultas o eliminadas
+    var tabla = document.getElementById("ingresos_familiares");
+    var tbody = tabla.getElementsByTagName('tbody')[0];
+    var rows = tbody.getElementsByTagName('tr');
+    var allHidden = true;
+
+    for (var i = 0; i < rows.length; i++) {
+        if (rows[i].style.display !== 'none') {
+            allHidden = false;
+            break;
+        }
+    }
+
+    if (allHidden) {
+        tabla.style.display = "none"; // Ocultar tabla
+        var noIngresosMsg = document.getElementById("no-ingresos-msg");
+        noIngresosMsg.style.display = "block"; // Mostrar mensaje de "No hay ingresos registrados"
+    }
 }
 function mostrarTablaIngresos() {
     var tabla = document.getElementById('ingresos_familiares');
@@ -275,32 +297,52 @@ function calcularTotal() {
 function agregarFilaE(tablaId) {
     var table = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
     var newRow = table.insertRow();
+    var tabla = document.getElementById(tablaId);
 
+    tabla.style.display = 'table'; // Mostrar la tabla si está oculta
     newRow.innerHTML = `
-            <td><input type="text" name="descripcion_egreso[]"></td>
-            <td><input type="number" name="monto_egreso[]" class="monto_egreso"
-            oninput="calcularTotalEgresos()"></td>
-            <td><input type="text" name="observacion_egreso[]"></td>
-            <td>
-                <button type="button" onclick="eliminarFilaE(this)">Eliminar</button>
-                <input type="hidden">
-            </td>
-        `;
+        <td><input type="text" name="descripcion_egreso[]"></td>
+        <td><input type="number" name="monto_egreso[]" class="monto_egreso" oninput="calcularTotalEgresos()"></td>
+        <td><input type="text" name="observacion_egreso[]"></td>
+        <td><button type="button" onclick="eliminarFilaE(this)">Eliminar</button><input type="hidden" value="new"></td>
+    `;
+
+    // Ocultar el mensaje de "No hay egresos registrados"
+    var noEgresosMsg = document.getElementById("no-egresos-msg");
+    noEgresosMsg.style.display = "none";
 }
 
 function eliminarFilaE(button) {
     const row = button.closest('tr');
-    row.style.display = 'none'; // Oculta la fila visualmente
     const hiddenInput = row.querySelector('input[type="hidden"]');
-    // Si la fila no tiene un ID (es una fila recién agregada)
-    if (!hiddenInput || !hiddenInput.value) {
-        row.remove(); // Elimina la fila si es nueva y no tiene ID
+
+    if (!hiddenInput || hiddenInput.value === "new") {
+        row.remove(); // Eliminar fila si es nueva
     } else {
-        hiddenInput.name = "eliminar_egreso[]";// Si la fila tiene un ID, se envía para eliminación
+        row.style.display = 'none'; // Ocultar fila visualmente si ya tiene ID
+        hiddenInput.name = "eliminar_egreso[]";
     }
-    calcularTotalEgresos(); // Recalcular el total cuando se elimina una fila
 
+    calcularTotalEgresos(); // Recalcular el total
 
+    // Verificar si todas las filas están ocultas o eliminadas
+    var tabla = document.getElementById("egresos_importantes");
+    var tbody = tabla.getElementsByTagName('tbody')[0];
+    var rows = tbody.getElementsByTagName('tr');
+    var allHidden = true;
+
+    for (var i = 0; i < rows.length; i++) {
+        if (rows[i].style.display !== 'none') {
+            allHidden = false;
+            break;
+        }
+    }
+
+    if (allHidden) {
+        tabla.style.display = "none"; // Ocultar tabla
+        var noEgresosMsg = document.getElementById("no-egresos-msg");
+        noEgresosMsg.style.display = "block"; // Mostrar mensaje de "No hay egresos registrados"
+    }
 }
 
 function calcularTotalEgresos() {
