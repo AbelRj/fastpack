@@ -132,24 +132,24 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <fieldset>
             <legend>1. Identificación del Trabajador</legend>
             <label>ID: <input readonly type="text" name="id"
-                    value="<?php echo htmlspecialchars($datostrabajador['id']); ?>"></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['id']); ?>"></label>
 
             <label>Nombre y Apellido: <input readonly type="text" name="nombre_apellido"
-                    value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>"></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>"></label>
             <label>Fecha de Nacimiento: <input readonly type="date" name="fecha_nacimiento"
-                    value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>"></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>"></label>
             <label>Nacionalidad: <input readonly type="text" name="nacionalidad"
-                    value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>"></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>"></label>
             <label>Domicilio: <input readonly type="text" name="domicilio"
-                    value="<?php echo htmlspecialchars($datostrabajador['domicilio']); ?>"></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['domicilio']); ?>"></label>
             <label>Teléfono: <input readonly type="tel" name="telefono"
-                    value="<?php echo htmlspecialchars($datostrabajador['telefono']); ?>"></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['telefono']); ?>"></label>
             <label>Correo Electrónico: <input readonly type="email" name="correo"
-                    value="<?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?>"></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?>"></label>
             <label>Estado Civil: <input readonly type="text" name="estado_civil"
-                    value="<?php echo htmlspecialchars($datostrabajador['estado_civil']); ?>"></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['estado_civil']); ?>"></label>
             <label>Previsión de Salud: <input readonly type="text" name="prevision_salud"
-                    value="<?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?>"></label><br>
+                    value="<?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?>"></label>
         </fieldset>
         <!-- 2. Grupo Familiar -->
         <fieldset>
@@ -206,36 +206,10 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <button type="button" onclick="agregarFilaGF()">Agregar Miembro Familiar</button>
         </fieldset>
 
-        <!-- 3. Nivel Educacional Familiar -->
-        <!-- 
-        <fieldset>
-            <legend>3. Nivel Educacional Familiar</legend>
-            <table id="nivel_educacional" border="1">
-                <thead>
-                    <tr>
-                        <th>Nombre y Apellido</th>
-                        <th>Parentesco</th>
-                        <th>Nivel</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="text" name="nombre_apellido_educacion_1"></td>
-                        <td><input type="text" name="parentesco_educacion_1"></td>
-                        <td><input type="text" name="nivel_educacional_1"></td>
-                        <td><button type="button" onclick="eliminarFila(this)">Eliminar</button></td>
-                    </tr>
-                </tbody>
-            </table>
-            <button type="button" onclick="agregarFilaNEF('nivel_educacional')">Agregar Nivel Educacional</button>
-        </fieldset>
-
-        -->
         <!-- 4. Historia Familiar -->
         <fieldset>
             <legend>4. Historia Familiar (en la actualidad)</legend>
-            <textarea name="historia_familiar" rows="5"
+            <textarea name="historia_familiar" rows="3"
                 cols="50"><?php echo htmlspecialchars($historiaFamiliar['historia']); ?></textarea>
         </fieldset>
 
@@ -374,17 +348,17 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <!-- Mensaje de "No hay ingresos registrados" -->
     <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay ingresos registrados.</p>
 
-    <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con Ingreso</button><br><br>
+    <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con Ingreso</button>
 
-    <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar" readonly></label><br><br>
-
+    <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar" readonly></label>
+<!-- 
     <label>Rangos Ingreso Grupo Familiar:</label><br>
     <p>$ 460.000 -> $ 700.000</p>
     <p>$ 700.001 -> $ 1.000.000</p>
     <p>$ 1.000.001 -> $ 1.500.000</p>
     <p>$ 1.500.001 -> $ 2.000.000</p>
     <p>$ 2.000.001 -> $ 2.500.000</p>
-    <p>> $ 2.500.000</p>
+    <p>> $ 2.500.000</p>-->
 </fieldset>
 
             <!-- 8.2 Egresos importantes -->
@@ -422,7 +396,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <!-- Mensaje de "No hay egresos registrados" -->
     <p id="no-egresos-msg" style="display: <?php echo empty($egresos) ? 'block' : 'none'; ?>;">No hay egresos registrados.</p>
 
-    <button type="button" onclick="agregarFilaE('egresos_importantes')">Agregar Egreso</button><br><br>
+    <button type="button" onclick="agregarFilaE('egresos_importantes')">Agregar Egreso</button>
 
     <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
 </fieldset>
@@ -444,7 +418,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                     $habitalidad['tipo_vivienda']=='cedida' ) ? 'selected' : '' ; ?>>Cedida</option>
                 <option value="otro" <?php echo (isset($habitalidad['tipo_vivienda']) &&
                     $habitalidad['tipo_vivienda']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
-            </select><br><br>
+            </select>
 
             <label for="material_vivienda">Material de la Vivienda:</label>
             <select name="material_vivienda" id="material_vivienda">
@@ -458,23 +432,23 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                     $habitalidad['material_vivienda']=='madera' ) ? 'selected' : '' ; ?>>Madera</option>
                 <option value="otro" <?php echo (isset($habitalidad['material_vivienda']) &&
                     $habitalidad['material_vivienda']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
-            </select><br><br>
+            </select>
 
             <label for="numero_habitaciones">Número de Habitaciones:</label>
             <input type="number" name="numero_habitaciones" id="numero_habitaciones"
-                value="<?php echo htmlspecialchars($habitalidad['num_habitaciones']); ?>"><br><br>
+                value="<?php echo htmlspecialchars($habitalidad['num_habitaciones']); ?>">
 
             <label for="numero_banos">Número de Baños:</label>
             <input type="number" name="numero_banos" id="numero_banos"
-                value="<?php echo htmlspecialchars($habitalidad['num_banos']); ?>"><br><br>
+                value="<?php echo htmlspecialchars($habitalidad['num_banos']); ?>">
 
             <label for="cocina">Cocina:</label>
             <input type="number" name="cocina" id="cocina"
-                value="<?php echo htmlspecialchars($habitalidad['num_cocina']); ?>"><br><br>
+                value="<?php echo htmlspecialchars($habitalidad['num_cocina']); ?>">
 
             <label for="logia">Logia:</label>
             <input type="number" name="logia" id="logia"
-                value="<?php echo htmlspecialchars($habitalidad['num_logia']); ?>"><br><br>
+                value="<?php echo htmlspecialchars($habitalidad['num_logia']); ?>">
 
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
             <select name="condiciones_habitabilidad" id="condiciones_habitabilidad">
@@ -494,34 +468,30 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <p>(Herramienta para la comprensión del entorno en que se desarrolla la vida del trabajador y su familia)
             </p>
             <!-- Este espacio está reservado para incluir un mapa conceptual o un campo donde el trabajador pueda describir su entorno -->
-            <textarea name="mapa_conceptual" rows="10" cols="80"
+            <textarea name="mapa_conceptual" rows="3" cols="80"
                 placeholder="Describe aquí el entorno en el que se desarrolla la vida del trabajador y su familia..."><?php echo htmlspecialchars($mapaConceptual['mapa_conceptual']); ?></textarea>
         </fieldset>
 
-        <br>
 
         <!-- 11. Otros -->
         <fieldset>
             <legend>11. Otros</legend>
-            <textarea name="otros" rows="10" cols="80"
+            <textarea name="otros" rows="3" cols="80"
                 placeholder="Agregar cualquier otra información relevante..."><?php echo htmlspecialchars($otros['descripcion']); ?></textarea>
         </fieldset>
 
-        <br>
 
         <!-- 12. ¿Qué beneficios valora de parte de la empresa? -->
         <fieldset>
             <legend>12. ¿Qué beneficios valora de parte de la empresa?</legend>
-            <textarea name="beneficios_valora" rows="5" cols="80"
+            <textarea name="beneficios_valora" rows="3" cols="80"
                 placeholder="Escribe aquí los beneficios que valoras de la empresa..."><?php echo htmlspecialchars($beneficioV['beneficio']); ?></textarea>
         </fieldset>
-
-        <br>
 
         <!-- 13. ¿Qué beneficios no tenemos y considera son necesarios? -->
         <fieldset>
             <legend>13. ¿Qué beneficios no tenemos y considera son necesarios?</legend>
-            <textarea name="beneficios_necesarios" rows="5" cols="80"
+            <textarea name="beneficios_necesarios" rows="3" cols="80"
                 placeholder="Escribe aquí los beneficios que consideras necesarios..."><?php echo htmlspecialchars($beneficioN['beneficio']); ?></textarea>
         </fieldset>
         <!-- 14. Declaración de salud -->
@@ -546,11 +516,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             (isset($declaracionSalud['salud_cancer']) && $declaracionSalud['salud_cancer']==='no' )
                             ? 'checked' : '' ; ?>></td>
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Epilepsia, parkinson, neuropatías, esclerosis múltiple, parálisis, accidentes cerebrovasculares,
                         derrame cerebral, aneurisma, infarto cerebral, encefalitis u otra enfermedad del sistema
@@ -563,11 +529,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             $declaracionSalud['salud_sistema_nervioso']==='no' ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Depresión, esquizofrenia, trastornos del ánimo o de la personalidad, psicosis, crisis de pánico,
                         bulimia, anorexia u otra enfermedad de salud mental.</td>
@@ -579,11 +541,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             $declaracionSalud['salud_salud_mental']==='no' ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Miopía, astigmatismo, hipermetropía, glaucoma, cataratas, estrabismo, queratocono, ceguera, o
                         cualquier enfermedad a los ojos.</td>
@@ -595,11 +553,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Desviación tabique nasal, obstrucción nasal, sordera, hipoacusia, o cualquier otra enfermedad
                         que afecta a la nariz o los oídos.</td>
@@ -611,11 +565,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             $declaracionSalud['salud_nariz_oidos']==='no' ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Enfermedad pulmonar obstructiva crónica (EPOC), enfisema pulmonar, fibrosis quística, asma,
                         neumotórax, pleuresía, fibrosis pulmonar y cualquier otra enfermedad que afecte al sistema
@@ -628,11 +578,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             $declaracionSalud['salud_respiratorio']==='no' ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Hipertensión arterial, angina, infarto al miocardio, by-pass o angioplastia, soplos, enfermedad
                         reumática, arritmias, portador de marcapaso, insuficiencia cardíaca, enfermedad de las válvulas
@@ -645,11 +591,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Aneurisma aórtico, tromboflebitis, várices, tratamiento anticoagulante, trombosis venosa
                         profunda, claudicación intermitente, enfermedades del sistema vascular, alteraciones de
@@ -662,11 +604,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Síndrome metabólico, colesterol alto, triglicéridos altos, dislipidemia, hiperuricemia o gota,
                         resistencia a la insulina, resistencia a la glucosa, diabetes mellitus, sobrepeso, obesidad, u
@@ -679,11 +617,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             $declaracionSalud['salud_metabolico']==='no' ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Cirrosis, várices esofágicas, insuficiencia hepática, pancreatitis, enfermedad a la vesícula
                         biliar, esófago de Barret, colitis ulcerosa, enfermedad de Crohn, úlceras digestivas,
@@ -697,11 +631,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Hepatitis B, hepatitis C, síndrome de inmunodeficiencia adquirida (SIDA) (portador o enfermo).
                     </td>
@@ -713,11 +643,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             $declaracionSalud['salud_hepatitis_sida']==='no' ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Cálculos renales, nefritis, pielonefritis, riñones poliquísticos, insuficiencia renal,
                         malformación de riñones o de las vías urinarias, enfermedades a la vejiga, testículos o
@@ -730,11 +656,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Enfermedad de las mamas, mioma uterino, quistes ováricos, endometriosis, PAP alterados u otras
                         enfermedades que afecten el aparato reproductor femenino.</td>
@@ -746,11 +668,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             $declaracionSalud['salud_reproductor_femenino']==='no' ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Lupus eritromatoso, artritis reumatoidea, cirrosis hepática autoinmune, miastenia gravis,
                         tiroiditis de Hashimoto, esclerosis múltiple, esclerosis lateral amiotrófica,
@@ -764,11 +682,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             $declaracionSalud['salud_autoinmune']==='no' ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Hipotiroidismo, hipertiroidismo, nódulos a la tiroides o bocio multinodular u otras patologías
                         de tiroides.</td>
@@ -780,11 +694,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Artrosis, osteoporosis, hernias de columna, escoliosis, espondilosis o discopatía, meniscopatía
                         o lesiones a la rodilla.</td>
@@ -796,11 +706,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             $declaracionSalud['salud_esqueletico']==='no' ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Cardiopatías congénitas, fisura palatina o labio leporino, displasia de cadera, síndrome de
                         Down, o cualquier otra malformación o patología congénita.</td>
@@ -812,11 +718,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             ) ? 'checked' : '' ; ?>></td>
 
                 </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr>
-                    </td>
-                </tr>
+
                 <tr>
                     <td>Embarazo actual.</td>
                     <td><input type="radio" name="salud_embarazo" value="si" <?php echo
