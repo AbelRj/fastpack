@@ -883,7 +883,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Actualizar
         </button>
-        <button type="button" id="exportButton" class="btn btn-primary">Exportar a Excel</button>
+        <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class="btn btn-primary">pdf</a>
 
 
     </form>
