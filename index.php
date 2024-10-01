@@ -21,14 +21,6 @@ include("templates/header.php") ?>
                     <input type="radio" name="option" value="email">
                     Email
                 </label>
-                <label>
-                    <input type="radio" name="option" value="celular">
-                    Celular
-                </label>
-                <label>
-                    <input type="radio" name="option" value="apellidoPaterno">
-                    Apellido Paterno
-                </label>
         </div>
     </form>
 </div>
@@ -86,7 +78,7 @@ try {
                 $rows = $stmt->fetchAll();
                 break;
             case "apellidoPaterno":
-                $sql="SELECT * FROM `trabajador` WHERE ``=:buscar";
+                $sql="SELECT * FROM `trabajador` WHERE `nombre_apellido`=:buscar";
                 $stmt =$conexion->prepare($sql);
                 $stmt->bindParam(':buscar', $buscar, PDO::PARAM_STR);
                 $stmt->execute();
@@ -95,11 +87,11 @@ try {
                 break;
         }
          foreach ($rows as $row) {?>
-            <tr onclick="window.location.href='formulario.php?ficha=<?php echo $row['id']; ?>';" style="cursor: pointer;">
+            <tr>
             <td class="text-end">
                   <span class="dropdown">
                     <a class="btn dropdown-toggle align-text-top"
-                      href="formulario.php?id=<?php echo $trabajador['id']; ?>" data-bs-boundary="viewport">Ver
+                      href="formulario.php?id=<?php echo $row['id']; ?>" data-bs-boundary="viewport">Ver
                       ficha</a>
                   </span>
                 </td>
@@ -129,7 +121,7 @@ try {
 
 foreach( $lista_trabajadores as $trabajador){?>
 
-<tr onclick="window.location.href='formulario.php?ficha=<?php echo $trabajador['id']; ?>';" style="cursor: pointer;">
+<tr>
 <td class="text-end">
                   <span class="dropdown">
                     <a class="btn dropdown-toggle align-text-top"

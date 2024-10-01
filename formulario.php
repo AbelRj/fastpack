@@ -444,7 +444,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
             <label for="numero_habitaciones">Número de Habitaciones:</label>
             <input type="number" name="numero_habitaciones" id="numero_habitaciones"
-                value="<?php echo htmlspecialchars($habitalidad['num_habitaciones']); ?>">
+                value="<?php echo ($habitalidad['num_habitaciones']); ?>">
 
             <label for="numero_banos">Número de Baños:</label>
             <input type="number" name="numero_banos" id="numero_banos"

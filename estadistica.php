@@ -1,32 +1,43 @@
-<?php include("templates/header.php") ?>
+<?php
+// Incluye la conexión a la base de datos
+include("bd.php");
+
+// Prepara y ejecuta la consulta
+$sentencia = $conexion->prepare("SELECT nacionalidad, COUNT(*) as total FROM trabajador GROUP BY nacionalidad");
+$sentencia->execute();
+$conteo_pais = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+// Convertir los datos a arrays separados para países y totales
+$paises = [];
+$totales = [];
+
+foreach ($conteo_pais as $row) {
+    $paises[] = $row['nacionalidad']; // Suponiendo que el campo de país es 'nacionalidad'
+    $totales[] = $row['total'];
+}
+
+// Incluir la cabecera de la plantilla
+include("templates/header.php");
+?>
 
 <canvas id="myChart" width="900" height="200"></canvas>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  // Obtener los datos de PHP
+  var paises = <?php echo json_encode($paises); ?>; // Datos de nacionalidades
+  var totales = <?php echo json_encode($totales); ?>; // Datos de conteos
+
   var ctx = document.getElementById('myChart').getContext('2d');
   var myChart = new Chart(ctx, {
-    type: 'bar', // Tipo de gráfico: 'bar', 'line', 'pie', etc.
+    type: 'bar', // Tipo de gráfico
     data: {
-        labels: ['Rojo', 'Azul', 'Amarillo', 'Verde', 'Púrpura', 'Naranja'],
+        labels: paises, // Etiquetas del gráfico
         datasets: [{
-            label: '# de votos',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
+            label: 'Número de Trabajadores por País',
+            data: totales, // Datos del conteo
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1
         }]
     },
@@ -39,7 +50,6 @@
     }
   });
 </script>
-
 
 <canvas id="lineChart" width="900" height="200"></canvas>
 <script>
@@ -66,9 +76,4 @@
   });
 </script>
 
-
-
-
-
-
-<?php include("templates/footer.php") ?>
+<?php include("templates/footer.php"); ?>
