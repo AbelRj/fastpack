@@ -1,3 +1,38 @@
+<?php 
+include("bd.php");
+session_start();
+
+$error = '';
+
+if (isset($_SESSION["usuario"]) && $_SESSION["usuario"] != null) {
+  header("Location: index.php");
+  exit();
+}
+
+if ($_POST) {
+       
+  $usuario=$_POST["usuario"];
+  $contrasenia=$_POST["contrasenia"];
+
+  $sentencia=$conexion->prepare("SELECT * FROM `login` WHERE nombre_usuario=:usuario");
+  $sentencia->bindParam(":usuario",$usuario);
+  $sentencia->execute();
+  $usuarios=$sentencia->fetchAll();
+
+  foreach($usuarios as $user) {
+        
+    if ($user["nombre_usuario"]==$usuario && $user["password"]==$contrasenia ) {
+      $_SESSION["usuario"]=$user["nombre_usuario"];
+      header("location:index.php");
+      exit();
+    }  
+  }
+
+  $error= "Usuario o contraseña incorrecta";
+  //echo "<script>alert('Usuario o contraseña incorrecta'); window.location.href='login.php';</script>";
+    
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,17 +57,17 @@
                 <img src="img/Logo Fastpack 4.jpg"  alt="Tabler" class="navbar-brand-image logo-login">
             </div>
             
-            <form action="./" method="get" autocomplete="off" novalidate>
+            <form action="login.php" method="post" autocomplete="off" novalidate>
               <div class="mb-3">
-                <label class="form-label">Correo electronico</label>
-                <input type="email" class="form-control" placeholder="your@email.com" autocomplete="off">
+                <label class="form-label">Usuario</label>
+                <input type="text" name="usuario" class="form-control" placeholder="..." autocomplete="off">
               </div>
               <div class="mb-2">
                 <label class="form-label">
                   Contraseña
                 </label>
                 <div class="input-group input-group-flat">
-                  <input type="password" class="form-control"  placeholder="Your password"  autocomplete="off">
+                  <input type="password" name="contrasenia" class="form-control"  placeholder="Your password"  autocomplete="off">
                   <span class="input-group-text">
                     <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
@@ -46,6 +81,11 @@
                 <button type="submit" class="btn btn-primary w-100 buttton-login">Iniciar sesión</button>
               </div>
             </form>
+            <?php if ($error): ?>
+                <div class="alert alert-danger mt-3" role="alert">
+                    <?php echo $error; ?>
+                </div>
+            <?php endif; ?>
           </div>
         </div>
       </div>

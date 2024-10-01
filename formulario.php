@@ -1,6 +1,14 @@
 <?php 
 include("bd.php");
 
+session_start();
+
+if (isset($_SESSION["usuario"])) {
+    echo "Usuario Activo: ".$_SESSION["usuario"];
+}else {
+    header("location:login.php");
+}
+
 if(isset($_GET['id'])){
     //Identificación del Trabajador - Recuperar los datos del ID correspondiente ( seleccionado )
 $idTrabajador=(isset($_GET['id']))?$_GET['id']:"";

@@ -1,7 +1,7 @@
 <?php
 include("bd.php");
 
-// Obtener los trabajadors de los trabajadores
+// Obtener los datos de los trabajadores
 // Seleccionar registros
 $sentencia = $conexion->prepare("SELECT * FROM `trabajador`");
 $sentencia->execute();
@@ -36,7 +36,6 @@ include("templates/header.php") ?>
     <table>
         <thead>
             <tr>
-            <th>Acción</th>
                 <th>Id</th>
                 <th>Rut</th>
                 <th>Nombre y Apellido</th>
@@ -50,7 +49,7 @@ include("templates/header.php") ?>
                 <th>Correo electronico</th>
                 <th>Estado civil</th>
                 <th>Prevision salud</th>
-                
+                <th>Acción</th>
             </tr>
         </thead>
         <tbody>
@@ -86,76 +85,74 @@ try {
                 $rows = $stmt->fetchAll();
                 break;
             case "apellidoPaterno":
-                $sql="SELECT * FROM `trabajador` WHERE ``=:buscar";
+                $sql="SELECT * FROM `trabajador` WHERE `nombre_apellido`=:buscar";
                 $stmt =$conexion->prepare($sql);
                 $stmt->bindParam(':buscar', $buscar, PDO::PARAM_STR);
                 $stmt->execute();
                 
-                $rows = $stmt->fetchAll();
+                $lista_trabajadores = $stmt->fetchAll();
                 break;
-        }
-         foreach ($rows as $row) {?>
-            <tr onclick="window.location.href='formulario.php?ficha=<?php echo $row['id']; ?>';" style="cursor: pointer;">
-            <td class="text-end">
+        }} catch (PDOException $e) {
+          echo 'Error: ' . $e->getMessage();
+      }
+    }
+
+      ?>
+              <?php 
+              if (count($lista_trabajadores) > 0): ?>
+              <?php foreach ($lista_trabajadores as $trabajador): ?>
+              <tr>
+                <td><?php echo htmlspecialchars($trabajador['id']); ?></td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['rut']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['nombre_apellido']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['sexo']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['fecha_nacimiento']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['nacionalidad']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['profesion']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['domicilio']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['telefono']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['celular']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['correo_electronico']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['estado_civil']); ?>
+                </td>
+                <td>
+                  <?php echo htmlspecialchars($trabajador['prevision_salud']); ?>
+                </td>
+                <td class="text-end">
                   <span class="dropdown">
                     <a class="btn dropdown-toggle align-text-top"
                       href="formulario.php?id=<?php echo $trabajador['id']; ?>" data-bs-boundary="viewport">Ver
                       ficha</a>
                   </span>
                 </td>
-            <td> <?php print_r($row['id']); ?> </td>
-            <td> <?php print_r($row['rut']);?> </td>
-            <td> <?php print_r($row['nombre_apellido']);?> </td>
-            <td> <?php print_r($row['sexo']);?> </td>
-            <td> <?php print_r($row['fecha_nacimiento']);?> </td>
-            <td> <?php print_r($row['nacionalidad']);?> </td>
-            <td> <?php print_r($row['profesion']);?> </td>
-            <td> <?php print_r($row['domicilio']);?> </td>
-            <td> <?php print_r($row['telefono']);?> </td>
-            <td> <?php print_r($row['celular']);?> </td>
-            <td> <?php print_r($row['correo_electronico']);?> </td>
-            <td> <?php print_r($row['estado_civil']);?> </td>
-            <td> <?php print_r($row['prevision_salud']);?> </td>
-            
-                <?php } ?>
-                      
-            </tr>
-
-<?php } catch (PDOException $e) {
-    echo 'Error: ' . $e->getMessage();
-}
-
-}else{
-
-foreach( $lista_trabajadores as $trabajador){?>
-
-<tr onclick="window.location.href='formulario.php?ficha=<?php echo $trabajador['id']; ?>';" style="cursor: pointer;">
-<td class="text-end">
-                  <span class="dropdown">
-                    <a class="btn dropdown-toggle align-text-top"
-                      href="formulario.php?id=<?php echo $trabajador['id']; ?>" data-bs-boundary="viewport">Ver
-                      ficha</a>
-                  </span>
-                </td>
-    <td> <?php print_r($trabajador['id']); ?> </td>
-    <td> <?php print_r($trabajador['rut']);?> </td>
-    <td> <?php print_r($trabajador['nombre_apellido']);?> </td>
-    <td> <?php print_r($trabajador['sexo']);?> </td>
-    <td> <?php print_r($trabajador['fecha_nacimiento']);?> </td>
-    <td> <?php print_r($trabajador['nacionalidad']);?> </td>
-    <td> <?php print_r($trabajador['profesion']);?> </td>
-    <td> <?php print_r($trabajador['domicilio']);?> </td>
-    <td> <?php print_r($trabajador['telefono']);?> </td>
-    <td> <?php print_r($trabajador['celular']);?> </td>
-    <td> <?php print_r($trabajador['correo_electronico']);?> </td>
-    <td> <?php print_r($trabajador['estado_civil']);?> </td>
-    <td> <?php print_r($trabajador['prevision_salud']);?> </td>
-
-</tr>
-
-<?php  } 
-
-};?>
+              </tr>
+              <?php endforeach; ?>
+              <?php else: ?>
+              <tr>
+                <td colspan="10">No se encontraron trabajadores.</td>
+              </tr>
+              <?php endif; ?>
             </tbody>
               </table>
 </div>

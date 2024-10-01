@@ -95,3 +95,64 @@ body::before {
 .social-media a:hover {
     text-decoration: underline;
 }
+
+
+
+
+
+
+/*alejandro*/
+
+
+.cont-button{
+    margin-left: 41%;
+    margin-top: 0px;
+}
+.contenedor {
+    display: flexbox;
+    overflow-x: auto; /* Habilita el desplazamiento horizontal */
+    overflow-y: auto;
+   max-height: 400px;
+    max-width: 100%; /* Ancho de su contenedor */
+    margin: 0px 0;
+}
+
+/* Estilo para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Elimina el espacio entre bordes */
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+thead tr th {
+    position: sticky; /* Fija el encabezado */
+    top: 0; /* Alinea el encabezado con la parte superior del contenedor */
+    background-color: #00bcd4; /* Fondo del encabezado para mejorar la visibilidad */
+    border-bottom: 2px solid #ddd; /* Línea inferior para el encabezado */
+    z-index: 1; /* Asegura que el encabezado esté por encima de las filas */
+    color: #f9f9f9;
+}
+
+/*Celdas de la tabla */
+th, td {
+    border: 0px solid #dddddd;
+    text-align: center; /* Alineación del texto */
+    padding: 8px; /* Espaciado interno */
+}
+
+/* Filas del encabezado */
+th {
+    background-color: #f2f2f2; /*Celdas del encabezado */
+    font-weight: bold; 
+}
+
+/* Filas alternas */
+tr:nth-child(even) {
+    background-color: #f9f9f9; 
+}
+
+/* Cursor sobre ellas */
+tr:hover {
+    background-color: #ddd; /* Color de fondo al pasar el cursor */
+}

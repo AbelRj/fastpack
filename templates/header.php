@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (isset($_SESSION["usuario"])) {
+    echo "Usuario Activo: " .$_SESSION["usuario"];
+}else {
+    header("location:login.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,9 +14,8 @@
   <meta charset="UTF-8">
   <title>Lista de Trabajadores</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
-  <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -26,7 +34,7 @@
           <a class="nav-link" href="./index.php">Lista de trabajadores</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="login.html">Cerrar sesion</a>
+          <a class="nav-link" href="cerrarSesion.php">Cerrar sesion</a>
         </li>
       </ul>
     </div>
