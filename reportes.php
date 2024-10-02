@@ -111,204 +111,207 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
     <title>Document</title>
 </head>
-<body>
 
-<fieldset>
-            <legend>IDENTIFICACIÓN DEL TRABAJADOR</legend>
-            <table>
-                <tr>
-                <th>ID:</th> 
-                <td><?php echo htmlspecialchars($datostrabajador['id']); ?></td>
-                </tr>
-                <tr>
-                <th>Nombre y Apellido:</th> 
-                <td><?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?></td>
-                </tr>
-                <tr>
-                <th>Fecha de Nacimiento:</th> 
-                <td><?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?></td>
-                </tr>
-                <tr>
-                <th>Nacionalidad:</th> 
-                <td><?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?></td>
-                </tr>
-                <tr>
-                <th>Domicilio: </th> 
-                <td><?php echo htmlspecialchars($datostrabajador['domicilio']); ?></td>
-                </tr>
-                <tr>
-                <th>Teléfono:</th> 
-                <td><?php echo htmlspecialchars($datostrabajador['telefono']); ?></td>
-                </tr>
-                <tr>
-                <th>Correo Electrónico:</th> 
-                <td><?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?></td>
-                </tr>
-                <tr>
-                <th>Estado Civil:</th> 
-                <td><?php echo htmlspecialchars($datostrabajador['estado_civil']); ?></td>
-                </tr>
-                <tr>
-                <th>Previsión de Salud:</th> 
-                <td><?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?></td>
-                </tr>
-                    </table>
-        </fieldset>
+<style>
+    * {
+    box-sizing: border-box; /* Asegura que el padding y el borde se incluyan en el ancho y alto de los elementos */
+}
+
+body {
+    margin: 0;  /* Eliminar margen del body */
+    padding: 0; /* Eliminar padding del body */
+}
+</style>
+<body >
+<!-- <h2>FICHA SOCIAL FAMILIAR - TRABAJADORES FASTPACK</h2>-->
+
+            <h4>IDENTIFICACIÓN DEL TRABAJADOR</h4>
+    <table style="border-collapse: collapse; width: 100%;">
+    <tr>
+        <th style="border: 1px solid black;">ID:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['id']); ?></td>
+    </tr>
+    <tr>
+        <th style="border: 1px solid black;">Nombre y Apellido:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?></td>
+    </tr>
+    <tr>
+        <th style="border: 1px solid black;">Fecha de Nacimiento:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?></td>
+    </tr>
+    <tr>
+        <th style="border: 1px solid black;">Nacionalidad:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?></td>
+    </tr>
+    <tr>
+        <th style="border: 1px solid black;">Domicilio: </th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['domicilio']); ?></td>
+    </tr>
+    <tr>
+        <th style="border: 1px solid black;">Teléfono:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['telefono']); ?></td>
+    </tr>
+    <tr>
+        <th style="border: 1px solid black;">Correo Electrónico:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?></td>
+    </tr>
+    <tr>
+        <th style="border: 1px solid black;">Estado Civil:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['estado_civil']); ?></td>
+    </tr>
+    <tr>
+        <th style="border: 1px solid black;">Previsión de Salud:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?></td>
+    </tr>
+</table>
+
         <!-- 2. Grupo Familiar -->
-        <fieldset>
-            <legend>2. Grupo Familiar</legend>
+            <h4>GRUPO FAMILIAR</h4>
 
-            <!-- La tabla se oculta si no hay datos -->
-            <table id="grupo_familiar" border="1" style="<?php echo empty($datosGFamiliar) ? 'display:none;' : ''; ?>">
-                <thead>
-                    <tr>
-                        <th>Nombre y Apellido</th>
-                        <th>Parentesco</th>
-                        <th>Fecha de Nacimiento</th>
-                        <th>Sexo M/F</th>
-                        <th>Estado Civil</th>
-                        <th>Nivel educacional</th>
-                        <th>Actividad</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($datosGFamiliar)): ?>
-                    <?php foreach ($datosGFamiliar as $familiar): ?>
-                    <tr>
-                        <td><input type="text" name="nombre_apellido_familiar[]"
-                                value="<?php echo htmlspecialchars($familiar['nombre_apellido']); ?>"></td>
-                        <td><input type="text" name="parentesco[]"
-                                value="<?php echo htmlspecialchars($familiar['parentesco']); ?>"></td>
-                        <td><input type="date" name="fecha_nacimiento_familiar[]"
-                                value="<?php echo htmlspecialchars($familiar['fecha_nacimiento']); ?>"></td>
-                        <td><input type="text" name="sexo_familiar[]"
-                                value="<?php echo htmlspecialchars($familiar['sexo']); ?>"></td>
-                        <td><input type="text" name="estado_civil_familiar[]"
-                                value="<?php echo htmlspecialchars($familiar['estado_civil']); ?>"></td>
-                        <td><input type="text" name="nivel_educacional[]"
-                                value="<?php echo htmlspecialchars($familiar['nivel_educacional']); ?>"></td>
-                        <td><input type="text" name="actividad_familiar[]"
-                                value="<?php echo htmlspecialchars($familiar['actividad']); ?>"></td>
-                    </tr>
-                    <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+            <table id="grupo_familiar" border="1" style="<?php echo empty($datosGFamiliar) ? 'display:none;' : ''; ?> border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid black; padding: 8px; max-width: 150px; word-wrap: break-word;">Nombre y Apellido</th>
+            <th style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">Parentesco</th>
+            <th style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">Fecha de Nacimiento</th>
+            <th style="border: 1px solid black; padding: 8px; max-width: 50px; word-wrap: break-word;">Sexo M/F</th>
+            <th style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">Estado Civil</th>
+            <th style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">Nivel educacional</th>
+            <th style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">Actividad</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($datosGFamiliar)): ?>
+            <?php foreach ($datosGFamiliar as $familiar): ?>
+                <tr>
+                    <td style="border: 1px solid black; padding: 8px; max-width: 150px; word-wrap: break-word;">
+                        <?php echo htmlspecialchars($familiar['nombre_apellido']); ?>
+                    </td>
+                    <td style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">
+                        <?php echo htmlspecialchars($familiar['parentesco']); ?>
+                    </td>
+                    <td style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">
+                        <?php echo htmlspecialchars($familiar['fecha_nacimiento']); ?>
+                    </td>
+                    <td style="border: 1px solid black; padding: 8px; max-width: 50px; word-wrap: break-word;">
+                        <?php echo htmlspecialchars($familiar['sexo']); ?>
+                    </td>
+                    <td style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">
+                        <?php echo htmlspecialchars($familiar['estado_civil']); ?>
+                    </td>
+                    <td style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">
+                        <?php echo htmlspecialchars($familiar['nivel_educacional']); ?>
+                    </td>
+                    <td style="border: 1px solid black; padding: 8px; max-width: 100px; word-wrap: break-word;">
+                        <?php echo htmlspecialchars($familiar['actividad']); ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
+</table>
+
+
 
             <!-- Mensaje de "No hay miembros familiares registrados" -->
             <p id="no-miembros-msg" style="display: <?php echo empty($datosGFamiliar) ? 'block' : 'none'; ?>;">No hay
                 miembros familiares registrados.</p>
-        </fieldset>
 
         <!-- 4. Historia Familiar -->
-        <fieldset>
-            <legend>4. Historia Familiar (en la actualidad)</legend>
+            <h4>HISTORIA FAMILIAR (EN LA ACTUALIDAD)</h4>
             <textarea name="historia_familiar" rows="5"
                 cols="50"><?php echo htmlspecialchars($historiaFamiliar['historia']); ?></textarea>
-        </fieldset>
 
         <!-- 5. ¿Apoya a algún familiar económicamente? -->
-        <fieldset>
-            <legend>5. ¿Apoya a algún familiar económicamente?</legend>
-
+            <h4>¿APOYA A ALGÚN FAMILIAR ECONÓMICAMENTE?</h4>
             <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" <?php echo
                     !empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label>
             <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)" <?php echo
                     empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label><br>
-
             <div id="contenedor_apoyo_economico"
                 style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
 
-                <table id="apoyo_economico" border="1">
-                    <thead>
-                        <tr>
-                            <th>¿A quién?</th>
-                            <th>Motivo</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($apoyoEconomicoT as $apoyo): ?>
-                        <tr>
-                            <td><input type="text" name="a_quien_apoya[]"
-                                    value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
-                            <td><input type="text" name="motivo_apoyo[]"
-                                    value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
-                            <td>
-                                <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
-                                <!-- Campo oculto para guardar el ID del apoyo -->
-                                <input type="hidden" value="<?php echo htmlspecialchars($apoyo['id']); ?>">
-                                <input type="hidden" name="id_apoyoF[]"
-                                    value="<?php echo htmlspecialchars($apoyo['id']); ?>">
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                <table id="apoyo_economico" border="1" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid black; padding: 8px;">¿A quién?</th>
+            <th style="border: 1px solid black; padding: 8px;">Motivo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($apoyoEconomicoT as $apoyo): ?>
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;">
+            <?php echo htmlspecialchars($apoyo['a_quien']); ?>
+            </td>
+            <td style="border: 1px solid black; padding: 8px;">
+            <?php echo htmlspecialchars($apoyo['motivo']); ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
             </div>
-        </fieldset>
 
 
 
         <!-- 6. ¿Tiene algún emprendimiento? -->
-        <fieldset>
-            <legend>6. ¿Tiene algún emprendimiento?</legend>
+            <h4>¿TIENE ALGÚN EMPRENDIMIENTO?</h4>
             <label>Si <input type="radio" name="emprendimiento" value="si" onclick="handleRadioChangeE(this)" <?php echo
                     !empty($emprendimientoT['descripcion']) ? 'checked' : '' ; ?>></label>
             <label>No <input type="radio" name="emprendimiento" value="no" onclick="handleRadioChangeE(this)" <?php echo
                     empty($emprendimientoT['descripcion']) ? 'checked' : '' ; ?>></label><br>
             <div id="contenedor_emprendimiento"
                 style="display: <?php echo !empty($emprendimientoT['descripcion']) ? 'block' : 'none'; ?>;">
-                <label>¿De qué se trata?:
-                    <input type="text" name="descripcion_emprendimiento"
-                        value="<?php echo htmlspecialchars($emprendimientoT['descripcion']); ?>"></label>
+                <table style="border-collapse: collapse; width: 100%;">
+    <tr>
+        <td style="border: 1px solid black; padding: 8px;">
+            <label for="descripcion_emprendimiento">¿De qué se trata?:</label>
+        </td>
+        <td style="border: 1px solid black; padding: 8px;">
+        <?php echo htmlspecialchars($emprendimientoT['descripcion']); ?>
+        </td>
+    </tr>
+</table>
+
+                
             </div>
-        </fieldset>
 
 
         <!-- 7. ¿Tiene Mascotas? -->
-        <fieldset>
-            <legend>7. ¿Tiene Mascotas?</legend>
+            <h4>7. ¿Tiene Mascotas?</h4>
             <label>Si <input type="radio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo
                     !empty($mascotasT) ? 'checked' : '' ; ?>></label>
             <label>No <input type="radio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo
                     empty($mascotasT) ? 'checked' : '' ; ?>></label><br>
             <div id="contenedor_mascotas" style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">
-                <table id="mascotas">
-                    <thead>
-                        <tr>
-                            <th>¿Qué tipo de mascota?:</th>
-                            <th>¿Cuántas?:</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($mascotasT as $mascota): ?>
-                        <tr>
-                            <td><input type="text" name="tipo_mascota[]"
-                                    value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
-                            <td><input type="number" name="cantidad_mascota[]"
-                                    value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
-                            <td>
-                                <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
-                                <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
-                                <input type="hidden" name="id_mascota[]"
-                                    value="<?php echo htmlspecialchars($mascota['id']); ?>">
+            <table id="mascotas" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid black; padding: 8px;">¿Qué tipo de mascota?:</th>
+            <th style="border: 1px solid black; padding: 8px;">¿Cuántas?:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($mascotasT as $mascota): ?>
+        <tr>
+            <td style="border: 1px solid black; padding: 8px;">
+            <?php echo htmlspecialchars($mascota['tipo_mascota']); ?>
+            </td>
+            <td style="border: 1px solid black; padding: 8px;">
+            <?php echo htmlspecialchars($mascota['cantidad']); ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
 
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
             </div>
-        </fieldset>
         <!-- 7. Situacion economica -->
-        <fieldset>
-            <legend>8. Situación Económica</legend>
+            <h4>SITUACIÓN ECONÓMICA</h4>
             <!-- 8.1 Directa -->
-            <fieldset>
-    <legend>8.1 Directa</legend>
+    <h5>DIRECTA</h5>
 
     <!-- La tabla se oculta si no hay datos -->
     <table id="ingresos_familiares" border="1" style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
@@ -316,7 +319,6 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <th>Nombre</th>
                 <th>Monto</th>
-                <th>Acción</th>
             </tr>
         </thead>
         <tbody>
@@ -334,11 +336,9 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <!-- Mensaje de "No hay ingresos registrados" -->
     <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay ingresos registrados.</p>
     <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar" readonly></label><br><br>
-</fieldset>
 
             <!-- 8.2 Egresos importantes -->
-            <fieldset>
-    <legend>8.2 Egresos importantes</legend>
+    <h5>EGRESOS IMPORTANTES</h5>
 
     <!-- La tabla se oculta si no hay datos -->
     <table id="egresos_importantes" border="1" style="<?php echo empty($egresos) ? 'display:none;' : ''; ?>">
@@ -347,7 +347,6 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <th>Descripción</th>
                 <th>Monto</th>
                 <th>Observaciones</th>
-                <th>Acción</th>
             </tr>
         </thead>
         <tbody>
@@ -368,9 +367,8 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 
     <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
-</fieldset>
 
-        </fieldset>
+
         <!-- 9. Condiciones de Habitabilidad -->
         <fieldset>
             <legend>9. Condiciones de Habitabilidad</legend>
@@ -404,20 +402,20 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             </select><br><br>
 
             <label for="numero_habitaciones">Número de Habitaciones:</label>
-            <input type="number" name="numero_habitaciones" id="numero_habitaciones"
-                value="<?php echo htmlspecialchars($habitalidad['num_habitaciones']); ?>"><br><br>
+<input type="number" name="numero_habitaciones" id="numero_habitaciones"
+       value="<?php echo isset($habitalidad['num_habitaciones']) ? $habitalidad['num_habitaciones'] : 0; ?>"><br><br>
 
-            <label for="numero_banos">Número de Baños:</label>
-            <input type="number" name="numero_banos" id="numero_banos"
-                value="<?php echo htmlspecialchars($habitalidad['num_banos']); ?>"><br><br>
+       <label for="numero_banos">Número de Baños:</label>
+<input type="number" name="numero_banos" id="numero_banos"
+       value="<?php echo isset($habitalidad['num_banos']) ? htmlspecialchars($habitalidad['num_banos']) : 0; ?>"><br><br>
 
-            <label for="cocina">Cocina:</label>
-            <input type="number" name="cocina" id="cocina"
-                value="<?php echo htmlspecialchars($habitalidad['num_cocina']); ?>"><br><br>
+            <<label for="cocina">Cocina:</label>
+<input type="number" name="cocina" id="cocina"
+       value="<?php echo isset($habitalidad['num_cocina']) ? htmlspecialchars($habitalidad['num_cocina']) : 0; ?>"><br><br>
 
-            <label for="logia">Logia:</label>
-            <input type="number" name="logia" id="logia"
-                value="<?php echo htmlspecialchars($habitalidad['num_logia']); ?>"><br><br>
+       <label for="logia">Logia:</label>
+<input type="number" name="logia" id="logia"
+       value="<?php echo isset($habitalidad['num_logia']) ? htmlspecialchars($habitalidad['num_logia']) : 0; ?>"><br><br>
 
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
             <select name="condiciones_habitabilidad" id="condiciones_habitabilidad">
@@ -834,6 +832,7 @@ $dompdf->loadHtml($html);
 
 $dompdf->setPaper('letter');
 //$dompdf->setPaper('A4', 'landscape');
+
 $dompdf->render();
 
 $dompdf->stream("archivo_.pdf",array("Attachment" => false));

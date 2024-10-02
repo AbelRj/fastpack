@@ -1,8 +1,6 @@
 <?php
 include_once("bd.php"); // Asegúrate de que bd.php esté correctamente configurado
 
-// Verificar que la conexión se ha realizado correctamente
-
 // URL API de Talana
 $url = 'https://talana.com/es/api/persona/';
 
@@ -31,33 +29,37 @@ if (curl_errno($ch)) {
 
 curl_close($ch);
 
-// Procesar la respuesta
+// Procesar la respuesta de la API
 $datos = json_decode($response, true);
 
 // Verifica si $datos no está vacío
 if (!empty($datos)) {
-    // Preparar la consulta SQL para insertar o actualizar datos
+
+    // Obtener todos los IDs existentes de la base de datos
+    $sql_ids = "SELECT id FROM trabajador";
+    $result_ids = $conexion->query($sql_ids);
+
+    // Crear un array con los IDs existentes en la base de datos
+    $ids_existentes = [];
+    while ($fila = $result_ids->fetch(PDO::FETCH_ASSOC)) {
+        $ids_existentes[] = $fila['id'];
+    }
+
+    // Preparar la consulta SQL para insertar solo los nuevos trabajadores
     $sql = "INSERT INTO trabajador (id, rut, nombre_apellido, sexo, fecha_nacimiento, 
-    nacionalidad, profesion, domicilio, telefono, celular, correo_electronico, estado_civil)
+            nacionalidad, profesion, domicilio, telefono, celular, correo_electronico, estado_civil)
             VALUES (:id, :rut, :nombre_apellido, :sexo, :fecha_nacimiento, :nacionalidad,
-            :profesion, :domicilio, :telefono, :celular, :correo_electronico, :estado_civil)
-            ON DUPLICATE KEY UPDATE
-                rut = VALUES(rut),
-                nombre_apellido = VALUES(nombre_apellido),
-                sexo = VALUES(sexo),
-                fecha_nacimiento = VALUES(fecha_nacimiento),
-                nacionalidad = VALUES(nacionalidad),
-                profesion = VALUES(profesion),
-                domicilio = VALUES(domicilio),
-                telefono = VALUES(telefono),
-                celular = VALUES(celular),
-                correo_electronico = VALUES(correo_electronico),
-                estado_civil = VALUES(estado_civil)";
+            :profesion, :domicilio, :telefono, :celular, :correo_electronico, :estado_civil)";
 
     $stmt = $conexion->prepare($sql);
 
-    // Insertar datos en la base de datos
+    // Insertar solo los nuevos datos
     foreach ($datos as $personal) {
+        // Si el ID ya existe en la base de datos, saltar la inserción
+        if (in_array($personal['id'], $ids_existentes)) {
+            continue; // Saltar a la siguiente iteración
+        }
+
         // Asegúrate de que 'detalles' existe y tiene al menos un elemento
         $direccionCalle = isset($personal['detalles'][0]['direccionCalle']) ? $personal['detalles'][0]['direccionCalle'] : '';
         $direccionNumero = isset($personal['detalles'][0]['direccionNumero']) ? $personal['detalles'][0]['direccionNumero'] : '';
@@ -66,21 +68,20 @@ if (!empty($datos)) {
         $estadoCivil = isset($personal['detalles'][0]['estadoCivil']) ? $personal['detalles'][0]['estadoCivil'] : '';
         $profesion = isset($personal['detalles'][0]['profesion']) ? $personal['detalles'][0]['profesion'] : '';
         $fechaNacimiento = isset($personal['fechaNacimiento']) ? $personal['fechaNacimiento'] : '';
+
         // Concatenar dirección
         $direccion = trim($direccionCalle . ' ' . $direccionNumero);
 
         // Concatenar nombre completo
         $nombreCompleto = trim($personal['nombre'] . ' ' . $personal['apellidoPaterno'] . ' ' . $personal['apellidoMaterno']);
 
-
-
-        // Ejecutar la consulta con los datos del personal
+        // Ejecutar la consulta para insertar los datos del trabajador nuevo
         $stmt->execute([
             ':id' => $personal['id'],
             ':rut' => $personal['rut'],
             ':nombre_apellido' => $nombreCompleto,
             ':sexo' => $personal['sexo'],
-            ':fecha_nacimiento' => $fechaNacimiento, // Este campo ahora puede ser null
+            ':fecha_nacimiento' => $fechaNacimiento,
             ':nacionalidad' => $personal['nacionalidad'],
             ':profesion' => $profesion,
             ':domicilio' => $direccion,
@@ -90,10 +91,13 @@ if (!empty($datos)) {
             ':estado_civil' => $estadoCivil
         ]);
     }
-    
+
     // Responder con los datos insertados o actualizados
-    echo json_encode($datos);
+    //echo json_encode($datos);
 } else {
     echo "No se encontraron datos.";
 }
+
+header('Location: index.php');
+exit;
 ?>

@@ -89,3 +89,4 @@ include("templates/header.php") ?>
         <?php endforeach; ?>
     </tbody>
 </table>
+<a class="btn btn-primary" href="api.php" role="button">Actualizar</a>

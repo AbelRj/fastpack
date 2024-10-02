@@ -443,20 +443,24 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             </select>
 
             <label for="numero_habitaciones">Número de Habitaciones:</label>
-            <input type="number" name="numero_habitaciones" id="numero_habitaciones"
-                value="<?php echo ($habitalidad['num_habitaciones']); ?>">
+<input type="number" name="numero_habitaciones" id="numero_habitaciones"
+       value="<?php echo isset($habitalidad['num_habitaciones']) ? $habitalidad['num_habitaciones'] : 0; ?>">
 
-            <label for="numero_banos">Número de Baños:</label>
-            <input type="number" name="numero_banos" id="numero_banos"
-                value="<?php echo htmlspecialchars($habitalidad['num_banos']); ?>">
 
-            <label for="cocina">Cocina:</label>
-            <input type="number" name="cocina" id="cocina"
-                value="<?php echo htmlspecialchars($habitalidad['num_cocina']); ?>">
+       <label for="numero_banos">Número de Baños:</label>
+<input type="number" name="numero_banos" id="numero_banos"
+       value="<?php echo isset($habitalidad['num_banos']) ? htmlspecialchars($habitalidad['num_banos']) : 0; ?>">
 
-            <label for="logia">Logia:</label>
-            <input type="number" name="logia" id="logia"
-                value="<?php echo htmlspecialchars($habitalidad['num_logia']); ?>">
+
+       <label for="cocina">Cocina:</label>
+<input type="number" name="cocina" id="cocina"
+       value="<?php echo isset($habitalidad['num_cocina']) ? htmlspecialchars($habitalidad['num_cocina']) : 0; ?>">
+
+
+       <label for="logia">Logia:</label>
+<input type="number" name="logia" id="logia"
+       value="<?php echo isset($habitalidad['num_logia']) ? htmlspecialchars($habitalidad['num_logia']) : 0; ?>">
+
 
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
             <select name="condiciones_habitabilidad" id="condiciones_habitabilidad">
