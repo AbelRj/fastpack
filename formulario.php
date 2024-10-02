@@ -807,11 +807,13 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         </fieldset>
 
         <!-- Button trigger modal -->
-        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+       <div class="cont-btn-fichasocial">
+       <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Actualizar
         </button>
-        <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class="btn btn-primary">pdf</a>
+        <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class="btn btn-primary">Exportar en PDF</a>
 
+       </div>
 
     </form>
     <!-- Modal -->

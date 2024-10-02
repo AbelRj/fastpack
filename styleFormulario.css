@@ -4,7 +4,7 @@ body {
     background-color: #f0f8ff;
     color: #333;
     margin: 0;
-    padding: 0;
+    padding: 20px;
 }
 
 h1 {
@@ -125,4 +125,9 @@ input[type="number"] {
 
 input[type="number"] {
     text-align: right;
+}
+
+.cont-btn-fichasocial{
+    display: flex;
+    justify-content: center;
 }
