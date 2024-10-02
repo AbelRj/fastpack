@@ -4,7 +4,7 @@ include("bd.php");
 session_start();
 
 if (isset($_SESSION["usuario"])) {
-    echo "Usuario Activo: ".$_SESSION["usuario"];
+    //echo "Usuario Activo: ".$_SESSION["usuario"];
 }else {
     header("location:login.php");
 }

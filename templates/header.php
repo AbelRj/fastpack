@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION["usuario"])) {
-    echo "Usuario Activo: " .$_SESSION["usuario"];
+   // echo "Usuario Activo: " .$_SESSION["usuario"];
 }else {
     header("location:login.php");
 }
@@ -15,10 +15,20 @@ if (isset($_SESSION["usuario"])) {
   <title>Lista de Trabajadores</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="header.css">
   <link rel="stylesheet" href="styles.css">
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <!-- DataTables JBootstrap -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+    <!-- DataTables JS library -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+  
+
 </head>
 
 <body>
+  <header>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php">FASTPACK</a>
@@ -40,4 +50,5 @@ if (isset($_SESSION["usuario"])) {
     </div>
   </div>
 </nav>
+</header>
   <main>
