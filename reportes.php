@@ -314,24 +314,29 @@ body {
     <h5>DIRECTA</h5>
 
     <!-- La tabla se oculta si no hay datos -->
-    <table id="ingresos_familiares" border="1" style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Monto</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($ingresos)): ?>
+    <table id="ingresos_familiares" border="1" style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?> border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid black;">Nombre</th>
+            <th style="border: 1px solid black;">Monto</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($ingresos)): ?>
             <?php foreach ($ingresos as $ingreso): ?>
-            <tr>
-                <td><input type="text" name="nombre_ingreso[]" value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
-                <td><input type="number" name="monto_ingreso[]" class="monto_ingreso" value="<?php echo htmlspecialchars($ingreso['monto']); ?>" oninput="calcularTotal()"></td>
-            </tr>
+                <tr>
+                    <td style="border: 1px solid black;">
+                    <?php echo htmlspecialchars($ingreso['nombre_persona']); ?>
+                    </td>
+                    <td style="border: 1px solid black;">
+                    <?php echo htmlspecialchars($ingreso['monto']); ?> 
+                    </td>
+                </tr>
             <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
+        <?php endif; ?>
+    </tbody>
+</table>
+
 
     <!-- Mensaje de "No hay ingresos registrados" -->
     <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay ingresos registrados.</p>
@@ -341,26 +346,33 @@ body {
     <h5>EGRESOS IMPORTANTES</h5>
 
     <!-- La tabla se oculta si no hay datos -->
-    <table id="egresos_importantes" border="1" style="<?php echo empty($egresos) ? 'display:none;' : ''; ?>">
-        <thead>
-            <tr>
-                <th>Descripción</th>
-                <th>Monto</th>
-                <th>Observaciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($egresos)): ?>
+    <table id="egresos_importantes" border="1" style="<?php echo empty($egresos) ? 'display:none;' : ''; ?> border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid black; padding: 8px;">Descripción</th>
+            <th style="border: 1px solid black; padding: 8px;">Monto</th>
+            <th style="border: 1px solid black; padding: 8px;">Observaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($egresos)): ?>
             <?php foreach ($egresos as $egreso): ?>
-            <tr>
-                <td><input type="text" name="descripcion_egreso[]" value="<?php echo htmlspecialchars($egreso['descripcion']); ?>"></td>
-                <td><input type="number" name="monto_egreso[]" class="monto_egreso" value="<?php echo htmlspecialchars($egreso['monto']); ?>" oninput="calcularTotalEgresos()"></td>
-                <td><input type="text" name="observacion_egreso[]" value="<?php echo htmlspecialchars($egreso['observaciones']); ?>"></td>
-            </tr>
+                <tr>
+                    <td style="border: 1px solid black; padding: 8px;">
+                    <?php echo htmlspecialchars($egreso['descripcion']); ?>
+                    </td>
+                    <td style="border: 1px solid black; padding: 8px;">
+                    <?php echo htmlspecialchars($egreso['monto']); ?>
+                    </td>
+                    <td style="border: 1px solid black; padding: 8px;">
+                    <?php echo htmlspecialchars($egreso['observaciones']); ?>
+                    </td>
+                </tr>
             <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
+        <?php endif; ?>
+    </tbody>
+</table>
+
 
     <!-- Mensaje de "No hay egresos registrados" -->
     <p id="no-egresos-msg" style="display: <?php echo empty($egresos) ? 'block' : 'none'; ?>;">No hay egresos registrados.</p>
@@ -370,101 +382,94 @@ body {
 
 
         <!-- 9. Condiciones de Habitabilidad -->
-        <fieldset>
-            <legend>9. Condiciones de Habitabilidad</legend>
-
+        <h4>9. Condiciones de Habitabilidad</h4>
+<table style="border-collapse: collapse; width: 100%; border: 1px solid black;">
+    <tr>
+        <td style="border: 1px solid black;">
             <label for="tipo_vivienda">Tipo de Vivienda:</label>
-            <select name="tipo_vivienda" id="tipo_vivienda">
-                <option value="seleccionar" <?php echo (isset($habitalidad['tipo_vivienda']) &&
-                    $habitalidad['tipo_vivienda']=='seleccionar' ) ? 'selected' : '' ; ?>>Seleccionar</option>
-                <option value="propia" <?php echo (isset($habitalidad['tipo_vivienda']) &&
-                    $habitalidad['tipo_vivienda']=='propia' ) ? 'selected' : '' ; ?>>Propia</option>
-                <option value="arriendo" <?php echo (isset($habitalidad['tipo_vivienda']) &&
-                    $habitalidad['tipo_vivienda']=='arriendo' ) ? 'selected' : '' ; ?>>Arriendo</option>
-                <option value="cedida" <?php echo (isset($habitalidad['tipo_vivienda']) &&
-                    $habitalidad['tipo_vivienda']=='cedida' ) ? 'selected' : '' ; ?>>Cedida</option>
-                <option value="otro" <?php echo (isset($habitalidad['tipo_vivienda']) &&
-                    $habitalidad['tipo_vivienda']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
-            </select><br><br>
-
+        </td>
+        <td style="border: 1px solid black;">
+            <?php echo htmlspecialchars($habitalidad['tipo_vivienda']); ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">
             <label for="material_vivienda">Material de la Vivienda:</label>
-            <select name="material_vivienda" id="material_vivienda">
-                <option value="seleccionar" <?php echo (isset($habitalidad['material_vivienda']) &&
-                    $habitalidad['material_vivienda']=='seleccionar' ) ? 'selected' : '' ; ?>>Seleccionar</option>
-                <option value="fuerte" <?php echo (isset($habitalidad['material_vivienda']) &&
-                    $habitalidad['material_vivienda']=='fuerte' ) ? 'selected' : '' ; ?>>Fuerte</option>
-                <option value="ligero" <?php echo (isset($habitalidad['material_vivienda']) &&
-                    $habitalidad['material_vivienda']=='ligero' ) ? 'selected' : '' ; ?>>Ligero</option>
-                <option value="madera" <?php echo (isset($habitalidad['material_vivienda']) &&
-                    $habitalidad['material_vivienda']=='madera' ) ? 'selected' : '' ; ?>>Madera</option>
-                <option value="otro" <?php echo (isset($habitalidad['material_vivienda']) &&
-                    $habitalidad['material_vivienda']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
-            </select><br><br>
-
+        </td>
+        <td style="border: 1px solid black;">
+            <?php echo htmlspecialchars($habitalidad['material_vivienda']); ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">
             <label for="numero_habitaciones">Número de Habitaciones:</label>
-<input type="number" name="numero_habitaciones" id="numero_habitaciones"
-       value="<?php echo isset($habitalidad['num_habitaciones']) ? $habitalidad['num_habitaciones'] : 0; ?>"><br><br>
-
-       <label for="numero_banos">Número de Baños:</label>
-<input type="number" name="numero_banos" id="numero_banos"
-       value="<?php echo isset($habitalidad['num_banos']) ? htmlspecialchars($habitalidad['num_banos']) : 0; ?>"><br><br>
-
-            <<label for="cocina">Cocina:</label>
-<input type="number" name="cocina" id="cocina"
-       value="<?php echo isset($habitalidad['num_cocina']) ? htmlspecialchars($habitalidad['num_cocina']) : 0; ?>"><br><br>
-
-       <label for="logia">Logia:</label>
-<input type="number" name="logia" id="logia"
-       value="<?php echo isset($habitalidad['num_logia']) ? htmlspecialchars($habitalidad['num_logia']) : 0; ?>"><br><br>
-
+        </td>
+        <td style="border: 1px solid black;">
+            <?php echo isset($habitalidad['num_habitaciones']) ? htmlspecialchars($habitalidad['num_habitaciones']) : 0; ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">
+            <label for="numero_banos">Número de Baños:</label>
+        </td>
+        <td style="border: 1px solid black;">
+            <?php echo isset($habitalidad['num_banos']) ? htmlspecialchars($habitalidad['num_banos']) : 0; ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">
+            <label for="cocina">Cocina:</label>
+        </td>
+        <td style="border: 1px solid black;">
+            <?php echo isset($habitalidad['num_cocina']) ? htmlspecialchars($habitalidad['num_cocina']) : 0; ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">
+            <label for="logia">Logia:</label>
+        </td>
+        <td style="border: 1px solid black;">
+            <?php echo isset($habitalidad['num_logia']) ? htmlspecialchars($habitalidad['num_logia']) : 0; ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;">
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
-            <select name="condiciones_habitabilidad" id="condiciones_habitabilidad">
-                <option value="">Seleccionar</option>
-                <option value="normal" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
-                    $habitalidad['condiciones_habitabilidad']=='normal' ) ? 'selected' : '' ; ?>>Normal</option>
-                <option value="hacinamiento" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
-                    $habitalidad['condiciones_habitabilidad']=='hacinamiento' ) ? 'selected' : '' ; ?>>Hacinamiento
-                </option>
-                <option value="otro" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
-                    $habitalidad['condiciones_habitabilidad']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
-            </select>
-        </fieldset>
+        </td>
+        <td style="border: 1px solid black;">
+            <?php echo htmlspecialchars($habitalidad['condiciones_habitabilidad']); ?>
+        </td>
+    </tr>
+</table>
+
+
         <!-- 10. Mapa conceptual -->
-        <fieldset>
-            <legend>10. Mapa conceptual</legend>
+
+            <h4>10. Mapa conceptual</h4>
             <p>(Herramienta para la comprensión del entorno en que se desarrolla la vida del trabajador y su familia)
             </p>
             <!-- Este espacio está reservado para incluir un mapa conceptual o un campo donde el trabajador pueda describir su entorno -->
             <textarea name="mapa_conceptual" rows="10" cols="80"
                 placeholder="Describe aquí el entorno en el que se desarrolla la vida del trabajador y su familia..."><?php echo htmlspecialchars($mapaConceptual['mapa_conceptual']); ?></textarea>
-        </fieldset>
-
-        <br>
-
+    
         <!-- 11. Otros -->
-        <fieldset>
-            <legend>11. Otros</legend>
+
+            <h4>11. Otros</h4>
             <textarea name="otros" rows="10" cols="80"
                 placeholder="Agregar cualquier otra información relevante..."><?php echo htmlspecialchars($otros['descripcion']); ?></textarea>
-        </fieldset>
-
-        <br>
 
         <!-- 12. ¿Qué beneficios valora de parte de la empresa? -->
-        <fieldset>
-            <legend>12. ¿Qué beneficios valora de parte de la empresa?</legend>
+        
+            <h4>12. ¿Qué beneficios valora de parte de la empresa?</h4>
             <textarea name="beneficios_valora" rows="5" cols="80"
                 placeholder="Escribe aquí los beneficios que valoras de la empresa..."><?php echo htmlspecialchars($beneficioV['beneficio']); ?></textarea>
-        </fieldset>
-
-        <br>
 
         <!-- 13. ¿Qué beneficios no tenemos y considera son necesarios? -->
-        <fieldset>
-            <legend>13. ¿Qué beneficios no tenemos y considera son necesarios?</legend>
+        
+            <h4>13. ¿Qué beneficios no tenemos y considera son necesarios?</h4>
             <textarea name="beneficios_necesarios" rows="5" cols="80"
                 placeholder="Escribe aquí los beneficios que consideras necesarios..."><?php echo htmlspecialchars($beneficioN['beneficio']); ?></textarea>
-        </fieldset>
+        
         <!-- 14. Declaración de salud -->
         <fieldset>
             <legend>14. Declaración de salud</legend>
@@ -772,46 +777,39 @@ body {
         </fieldset>
         <!-- 15. Detalle de Enfermedades Adicionales -->
         <!-- 15. Detalle de Enfermedades Adicionales -->
-        <fieldset>
             <legend>15. Detalles Adicionales de Salud de Usted o su Grupo Familiar</legend>
             <p>Si usted ha respondido afirmativamente en el cuestionario anterior, o si usted o alguien de su grupo
                 familiar, padece alguna otra enfermedad, patología o condición de salud que no haya sido antes
                 detallada, agradecemos completar el detalle señalado a continuación.</p>
 
-            <table id="enfermedades_adicionales" border="1"
-                style="<?php echo empty($infoPersonaE) ? 'display:none;' : ''; ?>">
-                <thead>
-                    <tr>
-                        <th>Nombre Persona Afectada</th>
-                        <th>Enfermedad</th>
-                        <th>Fecha Diagnóstico</th>
-                        <th>Estado Actual (Alta, Tratamiento, Seguimiento)</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($infoPersonaE)): ?>
-                    <?php foreach ($infoPersonaE as $inforPersona): ?>
-                    <tr>
-                        <td><input type="text" name="nombre_persona[]"
-                                value="<?php echo htmlspecialchars($inforPersona['nombre_persona']); ?>"></td>
-                        <td><input type="text" name="enfermedad[]"
-                                value="<?php echo htmlspecialchars($inforPersona['enfermedad']); ?>"></td>
-                        <td><input type="date" name="fecha_diagnostico[]"
-                                value="<?php echo htmlspecialchars($inforPersona['fecha_diagnostico']); ?>"></td>
-                        <td><input type="text" name="estado_actual[]"
-                                value="<?php echo htmlspecialchars($inforPersona['estado_actual']); ?>"></td>
-                    </tr>
-                    <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                <table id="enfermedades_adicionales" border="1" style="border-collapse: collapse; <?php echo empty($infoPersonaE) ? 'display:none;' : ''; ?>">
+    <thead>
+        <tr>
+            <th style="border: 1px solid black;">Nombre Persona Afectada</th>
+            <th style="border: 1px solid black;">Enfermedad</th>
+            <th style="border: 1px solid black;">Fecha Diagnóstico</th>
+            <th style="border: 1px solid black;">Estado Actual (Alta, Tratamiento, Seguimiento)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($infoPersonaE)): ?>
+            <?php foreach ($infoPersonaE as $inforPersona): ?>
+                <tr>
+                    <td style="border: 1px solid black;"><?php echo htmlspecialchars($inforPersona['nombre_persona']); ?></td>
+                    <td style="border: 1px solid black;"><?php echo htmlspecialchars($inforPersona['enfermedad']); ?></td>
+                    <td style="border: 1px solid black;"><?php echo htmlspecialchars($inforPersona['fecha_diagnostico']); ?></td>
+                    <td style="border: 1px solid black;"><?php echo htmlspecialchars($inforPersona['estado_actual']); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
+</table>
+
 
             <!-- Mensaje de "No hay enfermedades registradas" -->
             <p id="no-enfermedades-msg" style="display: <?php echo empty($infoPersonaE) ? 'block' : 'none'; ?>;">No
                 hay
                 enfermedades registradas.</p>
-        </fieldset>
 
 
         </body>

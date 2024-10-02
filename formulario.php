@@ -325,41 +325,47 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <legend>8. Situación Económica</legend>
             <!-- 8.1 Directa -->
             <fieldset>
-    <legend>8.1 Directa</legend>
+                <legend>8.1 Directa</legend>
 
-    <!-- La tabla se oculta si no hay datos -->
-    <table id="ingresos_familiares" border="1" style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Monto</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($ingresos)): ?>
-            <?php foreach ($ingresos as $ingreso): ?>
-            <tr>
-                <td><input type="text" name="nombre_ingreso[]" value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
-                <td><input type="number" name="monto_ingreso[]" class="monto_ingreso" value="<?php echo htmlspecialchars($ingreso['monto']); ?>" oninput="calcularTotal()"></td>
-                <td>
-                    <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
-                    <input type="hidden" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
-                    <input type="hidden" name="id_ingreso[]" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
-                </td>
-            </tr>
-            <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                <!-- La tabla se oculta si no hay datos -->
+                <table id="ingresos_familiares" border="1"
+                    style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Monto</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($ingresos)): ?>
+                        <?php foreach ($ingresos as $ingreso): ?>
+                        <tr>
+                            <td><input type="text" name="nombre_ingreso[]"
+                                    value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
+                            <td><input type="number" name="monto_ingreso[]" class="monto_ingreso"
+                                    value="<?php echo htmlspecialchars($ingreso['monto']); ?>"
+                                    oninput="calcularTotal()"></td>
+                            <td>
+                                <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
+                                <input type="hidden" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
+                                <input type="hidden" name="id_ingreso[]"
+                                    value="<?php echo htmlspecialchars($ingreso['id']); ?>">
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
 
-    <!-- Mensaje de "No hay ingresos registrados" -->
-    <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay ingresos registrados.</p>
+                <!-- Mensaje de "No hay ingresos registrados" -->
+                <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay
+                    ingresos registrados.</p>
 
-    <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con Ingreso</button>
+                <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con Ingreso</button>
 
-    <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar" readonly></label>
-<!-- 
+                <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar" readonly></label>
+                <!-- 
     <label>Rangos Ingreso Grupo Familiar:</label><br>
     <p>$ 460.000 -> $ 700.000</p>
     <p>$ 700.001 -> $ 1.000.000</p>
@@ -367,47 +373,54 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <p>$ 1.500.001 -> $ 2.000.000</p>
     <p>$ 2.000.001 -> $ 2.500.000</p>
     <p>> $ 2.500.000</p>-->
-</fieldset>
+            </fieldset>
 
             <!-- 8.2 Egresos importantes -->
             <fieldset>
-    <legend>8.2 Egresos importantes</legend>
+                <legend>8.2 Egresos importantes</legend>
 
-    <!-- La tabla se oculta si no hay datos -->
-    <table id="egresos_importantes" border="1" style="<?php echo empty($egresos) ? 'display:none;' : ''; ?>">
-        <thead>
-            <tr>
-                <th>Descripción</th>
-                <th>Monto</th>
-                <th>Observaciones</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($egresos)): ?>
-            <?php foreach ($egresos as $egreso): ?>
-            <tr>
-                <td><input type="text" name="descripcion_egreso[]" value="<?php echo htmlspecialchars($egreso['descripcion']); ?>"></td>
-                <td><input type="number" name="monto_egreso[]" class="monto_egreso" value="<?php echo htmlspecialchars($egreso['monto']); ?>" oninput="calcularTotalEgresos()"></td>
-                <td><input type="text" name="observacion_egreso[]" value="<?php echo htmlspecialchars($egreso['observaciones']); ?>"></td>
-                <td>
-                    <button type="button" onclick="eliminarFilaE(this)">Eliminar</button>
-                    <input type="hidden" value="<?php echo htmlspecialchars($egreso['id']); ?>">
-                    <input type="hidden" name="id_egreso[]" value="<?php echo htmlspecialchars($egreso['id']); ?>">
-                </td>
-            </tr>
-            <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                <!-- La tabla se oculta si no hay datos -->
+                <table id="egresos_importantes" border="1"
+                    style="<?php echo empty($egresos) ? 'display:none;' : ''; ?>">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Observaciones</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($egresos)): ?>
+                        <?php foreach ($egresos as $egreso): ?>
+                        <tr>
+                            <td><input type="text" name="descripcion_egreso[]"
+                                    value="<?php echo htmlspecialchars($egreso['descripcion']); ?>"></td>
+                            <td><input type="number" name="monto_egreso[]" class="monto_egreso"
+                                    value="<?php echo htmlspecialchars($egreso['monto']); ?>"
+                                    oninput="calcularTotalEgresos()"></td>
+                            <td><input type="text" name="observacion_egreso[]"
+                                    value="<?php echo htmlspecialchars($egreso['observaciones']); ?>"></td>
+                            <td>
+                                <button type="button" onclick="eliminarFilaE(this)">Eliminar</button>
+                                <input type="hidden" value="<?php echo htmlspecialchars($egreso['id']); ?>">
+                                <input type="hidden" name="id_egreso[]"
+                                    value="<?php echo htmlspecialchars($egreso['id']); ?>">
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
 
-    <!-- Mensaje de "No hay egresos registrados" -->
-    <p id="no-egresos-msg" style="display: <?php echo empty($egresos) ? 'block' : 'none'; ?>;">No hay egresos registrados.</p>
+                <!-- Mensaje de "No hay egresos registrados" -->
+                <p id="no-egresos-msg" style="display: <?php echo empty($egresos) ? 'block' : 'none'; ?>;">No hay
+                    egresos registrados.</p>
 
-    <button type="button" onclick="agregarFilaE('egresos_importantes')">Agregar Egreso</button>
+                <button type="button" onclick="agregarFilaE('egresos_importantes')">Agregar Egreso</button>
 
-    <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
-</fieldset>
+                <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
+            </fieldset>
 
         </fieldset>
         <!-- 9. Condiciones de Habitabilidad -->
@@ -443,23 +456,23 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             </select>
 
             <label for="numero_habitaciones">Número de Habitaciones:</label>
-<input type="number" name="numero_habitaciones" id="numero_habitaciones"
-       value="<?php echo isset($habitalidad['num_habitaciones']) ? $habitalidad['num_habitaciones'] : 0; ?>">
+            <input type="number" name="numero_habitaciones" id="numero_habitaciones"
+                value="<?php echo isset($habitalidad['num_habitaciones']) ? $habitalidad['num_habitaciones'] : 0; ?>">
 
 
-       <label for="numero_banos">Número de Baños:</label>
-<input type="number" name="numero_banos" id="numero_banos"
-       value="<?php echo isset($habitalidad['num_banos']) ? htmlspecialchars($habitalidad['num_banos']) : 0; ?>">
+            <label for="numero_banos">Número de Baños:</label>
+            <input type="number" name="numero_banos" id="numero_banos"
+                value="<?php echo isset($habitalidad['num_banos']) ? htmlspecialchars($habitalidad['num_banos']) : 0; ?>">
 
 
-       <label for="cocina">Cocina:</label>
-<input type="number" name="cocina" id="cocina"
-       value="<?php echo isset($habitalidad['num_cocina']) ? htmlspecialchars($habitalidad['num_cocina']) : 0; ?>">
+            <label for="cocina">Cocina:</label>
+            <input type="number" name="cocina" id="cocina"
+                value="<?php echo isset($habitalidad['num_cocina']) ? htmlspecialchars($habitalidad['num_cocina']) : 0; ?>">
 
 
-       <label for="logia">Logia:</label>
-<input type="number" name="logia" id="logia"
-       value="<?php echo isset($habitalidad['num_logia']) ? htmlspecialchars($habitalidad['num_logia']) : 0; ?>">
+            <label for="logia">Logia:</label>
+            <input type="number" name="logia" id="logia"
+                value="<?php echo isset($habitalidad['num_logia']) ? htmlspecialchars($habitalidad['num_logia']) : 0; ?>">
 
 
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>

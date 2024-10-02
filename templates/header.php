@@ -16,7 +16,7 @@ if (isset($_SESSION["usuario"])) {
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="header.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="index.css">
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
     <!-- DataTables JBootstrap -->
@@ -51,4 +51,5 @@ if (isset($_SESSION["usuario"])) {
   </div>
 </nav>
 </header>
+
   <main>

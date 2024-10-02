@@ -34,7 +34,6 @@ include("templates/header.php") ?>
                 <th>Celular</th>
                 <th>Correo electronico</th>
                 <th>Estado civil</th>
-                <th>Prevision salud</th>
                 
         </tr>
     </thead>
@@ -82,9 +81,7 @@ include("templates/header.php") ?>
                 <td>
                   <?php echo htmlspecialchars($trabajador['estado_civil']); ?>
                 </td>
-                <td>
-                  <?php echo htmlspecialchars($trabajador['prevision_salud']); ?>
-                </td>
+
             </tr>
         <?php endforeach; ?>
     </tbody>
