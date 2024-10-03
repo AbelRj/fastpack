@@ -118,7 +118,7 @@ function agregarFilaAPF(tablaId) {
           <td><input type="text" name="a_quien_apoya[]"></td>
                     <td><input type="text" name="motivo_apoyo[]"></td>
                     <td>
-                    <button type="button" onclick="eliminarFila(this)">Eliminar</button>
+                    <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
                     <input type="hidden" >
                     </td>
 
@@ -173,7 +173,7 @@ function mostrarTablaEmprendimiento(mostrar) {
 //mascotas
 function agregarFilaM() {
     var table = document.getElementById("mascotas").getElementsByTagName('tbody')[0];
-    var newRow = table.insertRow(); // Insertar nueva fila
+    var newRow = table.insertRow();
     newRow.innerHTML = `
         <td><input type="text" name="tipo_mascota[]"></td>
         <td><input type="number" name="cantidad_mascota[]"></td>
@@ -193,12 +193,13 @@ function handleRadioChangeM(radio) {
 function mostrarTablaMascotas(mostrar) {
     var contenedor = document.getElementById('contenedor_mascotas');
     var tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
+    var cabecera = document.getElementById('cabecera_mascotas');
     
-
     if (mostrar) {
         contenedor.style.display = 'block';
-        if (tablaMascotas.rows.length === 0) {
-            agregarFilaM();
+        cabecera.style.display = 'table-header-group'; // Mostrar cabecera
+        if (tablaMascotas.rows.length === 0 || !hayFilasVisibles()) {
+            agregarFilaM(); // Agregar una fila si no hay ninguna visible
         }
     } else {
         contenedor.style.display = 'none';
@@ -209,19 +210,38 @@ function mostrarTablaMascotas(mostrar) {
     }
 }
 
-function eliminarFilaM(button) {
-    var row = button.closest('tr');
-    row.style.display = 'none';
-    var hiddenInput = row.querySelector('input[type="hidden"]');
-    hiddenInput.name = "eliminar_mascota[]"; // Marcar para eliminación
+function hayFilasVisibles() {
+    var filas = document.getElementById('mascotas').getElementsByTagName('tbody')[0].rows;
+    return Array.from(filas).some(fila => fila.style.display !== 'none');
 }
 
-//Situacion economica directa
+function eliminarFilaM(button) {
+    var row = button.closest('tr');
+    row.style.display = 'none'; // Ocultar fila
+    var hiddenInput = row.querySelector('input[type="hidden"]');
+    hiddenInput.name = "eliminar_mascota[]"; // Marcar para eliminación
 
+    // Comprobar si hay filas visibles
+    var tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
+    var filasVisibles = hayFilasVisibles();
+
+    if (!filasVisibles) {
+        // Si no hay filas visibles, ocultar la cabecera y cambiar el checkbox a "No"
+        document.getElementById('cabecera_mascotas').style.display = 'none';
+        var radioNo = document.querySelector('input[name="mascota"][value="no"]');
+        radioNo.checked = true;
+        mostrarTablaMascotas(false); // Ocultar tabla
+    }
+}
+//ingresos
 window.onload = function() {
-    calcularTotal(); // Llama a la función para calcular el total al cargar la página
-    calcularTotalEgresos();
+    // Inicializa la tabla si no hay datos
+    var tabla = document.getElementById('ingresos_familiares');
+    if (tabla.getElementsByTagName('tbody')[0].rows.length === 0) {
+        document.getElementById('no-ingresos-msg').style.display = 'block';
+    }
 };
+
 function agregarFilaI(tablaId) {
     var table = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
     var newRow = table.insertRow();
@@ -230,18 +250,28 @@ function agregarFilaI(tablaId) {
     tabla.style.display = 'table'; // Mostrar la tabla si está oculta
     newRow.innerHTML = `
         <td><input type="text" name="nombre_ingreso[]"></td>
-        <td><input type="number" name="monto_ingreso[]" class="monto_ingreso" oninput="calcularTotal()"></td>
+        <td>
+            <select id="montoIngreso" name="monto_ingreso[]">
+                <option value="">Seleccionar</option>
+                <option value="$460.000 -> $700.000">$460.000 -> $700.000</option>
+                <option value="$700.001 -> $1.000.000">$700.001 -> $1.000.000</option>
+                <option value="$1.000.001 -> $1.500.000">$1.000.001 -> $1.500.000</option>
+                <option value="$1.500.001 -> $2.000.000">$1.500.001 -> $2.000.000</option>
+                <option value="$2.000.001 -> $2.500.000">$2.000.001 -> $2.500.000</option>
+                <option value="$2.500.000">$2.500.000</option>
+            </select>
+        </td>
         <td><button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
         <input type="hidden" value="new"></td>
     `;
 
     // Ocultar el mensaje de "No hay ingresos registrados"
-    var noIngresosMsg = document.getElementById("no-ingresos-msg");
-    noIngresosMsg.style.display = "none";
+    document.getElementById('no-ingresos-msg').style.display = "none";
 }
+
 function eliminarFilaI(button) {
-    const row = button.closest('tr');
-    const hiddenInput = row.querySelector('input[type="hidden"]');
+    var row = button.closest('tr');
+    var hiddenInput = row.querySelector('input[type="hidden"]');
 
     if (!hiddenInput || hiddenInput.value === "new") {
         row.remove(); // Eliminar fila si es nueva
@@ -249,8 +279,6 @@ function eliminarFilaI(button) {
         row.style.display = 'none'; // Ocultar fila visualmente si ya tiene ID
         hiddenInput.name = "eliminar_ingreso[]";
     }
-
-    calcularTotal(); // Recalcular el total
 
     // Verificar si todas las filas están ocultas o eliminadas
     var tabla = document.getElementById("ingresos_familiares");
@@ -267,31 +295,9 @@ function eliminarFilaI(button) {
 
     if (allHidden) {
         tabla.style.display = "none"; // Ocultar tabla
-        var noIngresosMsg = document.getElementById("no-ingresos-msg");
-        noIngresosMsg.style.display = "block"; // Mostrar mensaje de "No hay ingresos registrados"
+        document.getElementById("no-ingresos-msg").style.display = "block"; // Mostrar mensaje de "No hay ingresos registrados"
     }
 }
-function mostrarTablaIngresos() {
-    var tabla = document.getElementById('ingresos_familiares');
-    tabla.style.display = 'block';
-}
-
-function calcularTotal() {
-    var inputs = document.getElementsByClassName('monto_ingreso');
-    var total = 0;
-
-    for (var i = 0; i < inputs.length; i++) {
-        var fila = inputs[i].closest('tr');
-        // Si la fila está oculta, no sumar su monto
-        if (fila.style.display !== 'none') {
-            var value = parseFloat(inputs[i].value) || 0;
-            total += value;
-        }
-    }
-
-    document.getElementById('total_ingreso_familiar').value = total;
-}
-
 //egresos importantes
 
 function agregarFilaE(tablaId) {

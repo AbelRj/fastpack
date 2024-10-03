@@ -9,9 +9,9 @@ include("templates/header.php") ?>
 <script>
     $(document).ready(function() {
         $('#table_id').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
-            },
+           // "language": {
+              //  "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
+           // },
             "autoWidth": true,  // Ajuste automático del ancho de las columnas
             "responsive": true, // Hacer la tabla adaptable
             "pageLength": 5,   // Mostrar 10 filas por página

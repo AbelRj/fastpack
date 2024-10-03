@@ -42,15 +42,16 @@ if ($_POST) {
 </head>
 <body class="d-flex flex-column">
   <script src="./dist/js/demo-theme.min.js?1692870487"></script>
+
   <div class="page page-center">
     <div class="container container-tight py-4">
       <div class="text-center mb-4"></div>
+      <h1>PLATAFORMA DE BIENESTAR </h1>
       <div class="card card-md">
         <div class="card-body">
           <div class="contenedor-imgLogin">
             <img src="img/Logo Fastpack 4.jpg" alt="Logo" class="navbar-brand-image logo-login">
           </div>
-
           <!-- Formulario de Login -->
           <form id="loginForm" action="login.php" method="post" autocomplete="off" novalidate>
             <div class="mb-3">

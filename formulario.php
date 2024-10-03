@@ -119,7 +119,8 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
 
     <link rel="stylesheet" href="styleFormulario.css">
     <!--excel-->
@@ -158,8 +159,15 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                     value="<?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?>"></label>
             <label>Estado Civil: <input readonly type="text" name="estado_civil"
                     value="<?php echo htmlspecialchars($datostrabajador['estado_civil']); ?>"></label>
-            <label>Previsión de Salud: <input readonly type="text" name="prevision_salud"
-                    value="<?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?>"></label>
+            <label for="previsionSalud">Previsión de Salud:</label>
+            <select id="previsionSalud" name="prevision_salud">
+                <option value="" <?php echo (isset($datostrabajador['prevision_salud']) &&
+                    $datostrabajador['prevision_salud']=='' ) ? 'selected' : '' ; ?> >Seleccionar</option>
+                <option value="fonasa" <?php echo (isset($datostrabajador['prevision_salud']) &&
+                    $datostrabajador['prevision_salud']=='fonasa' ) ? 'selected' : '' ; ?>>FONASA</option>
+                <option value="isapre" <?php echo (isset($datostrabajador['prevision_salud']) &&
+                    $datostrabajador['prevision_salud']=='isapre' ) ? 'selected' : '' ; ?>>ISAPRE</option>
+            </select>
         </fieldset>
         <!-- 2. Grupo Familiar -->
         <fieldset>
@@ -286,96 +294,87 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 
         <!-- 7. ¿Tiene Mascotas? -->
-        <fieldset>
-            <legend>7. ¿Tiene Mascotas?</legend>
-            <label>Si <input type="radio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo
-                    !empty($mascotasT) ? 'checked' : '' ; ?>></label>
-            <label>No <input type="radio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo
-                    empty($mascotasT) ? 'checked' : '' ; ?>></label><br>
-            <div id="contenedor_mascotas" style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">
-                <table id="mascotas">
-                    <thead>
-                        <tr>
-                            <th>¿Qué tipo de mascota?:</th>
-                            <th>¿Cuántas?:</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($mascotasT as $mascota): ?>
-                        <tr>
-                            <td><input type="text" name="tipo_mascota[]"
-                                    value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
-                            <td><input type="number" name="cantidad_mascota[]"
-                                    value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
-                            <td>
-                                <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
-                                <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
-                                <input type="hidden" name="id_mascota[]"
-                                    value="<?php echo htmlspecialchars($mascota['id']); ?>">
-
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <button type="button" onclick="agregarFilaM()">Agregar Mascota</button>
-            </div>
-        </fieldset>
-        <!-- 7. Situacion economica -->
+<fieldset>
+    <legend>7. ¿Tiene Mascotas?</legend>
+    <label>Si <input type="radio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo
+        !empty($mascotasT) ? 'checked' : ''; ?>></label>
+    <label>No <input type="radio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo
+        empty($mascotasT) ? 'checked' : ''; ?>></label><br>
+    
+    <div id="contenedor_mascotas" style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">
+        <table id="mascotas">
+            <thead id="cabecera_mascotas">
+                <tr>
+                    <th>¿Qué tipo de mascota?:</th>
+                    <th>¿Cuántas?:</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($mascotasT as $mascota): ?>
+                <tr>
+                    <td><input type="text" name="tipo_mascota[]" value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
+                    <td><input type="number" name="cantidad_mascota[]" value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
+                    <td>
+                        <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
+                        <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
+                        <input type="hidden" name="id_mascota[]" value="<?php echo htmlspecialchars($mascota['id']); ?>">
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <button type="button" onclick="agregarFilaM()">Agregar Mascota</button>
+    </div>
+</fieldset>        <!-- 7. Situacion economica -->
         <fieldset>
             <legend>8. Situación Económica</legend>
             <!-- 8.1 Directa -->
             <fieldset>
-                <legend>8.1 Directa</legend>
+    <legend>8.1 Directa</legend>
 
-                <!-- La tabla se oculta si no hay datos -->
-                <table id="ingresos_familiares" border="1"
-                    style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Monto</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($ingresos)): ?>
-                        <?php foreach ($ingresos as $ingreso): ?>
-                        <tr>
-                            <td><input type="text" name="nombre_ingreso[]"
-                                    value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
-                            <td><input type="number" name="monto_ingreso[]" class="monto_ingreso"
-                                    value="<?php echo htmlspecialchars($ingreso['monto']); ?>"
-                                    oninput="calcularTotal()"></td>
-                            <td>
-                                <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
-                                <input type="hidden" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
-                                <input type="hidden" name="id_ingreso[]"
-                                    value="<?php echo htmlspecialchars($ingreso['id']); ?>">
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+    <!-- La tabla se oculta si no hay datos -->
+    <table id="ingresos_familiares" border="1" style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Monto</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($ingresos)): ?>
+            <?php foreach ($ingresos as $ingreso): ?>
+            <tr>
+                <td><input type="text" name="nombre_ingreso[]" value="<?php echo htmlspecialchars($ingreso['nombre_persona']); ?>"></td>
+                <td>
+                    <select id="montoIngreso" name="monto_ingreso[]">
+                        <option value="" <?php echo (isset($ingreso['monto']) && $ingreso['monto'] == '') ? 'selected' : ''; ?>>Seleccionar</option>
+                        <option value="$460.000 -> $700.000" <?php echo ($ingreso['monto'] == '$460.000 -> $700.000') ? 'selected' : ''; ?>>$460.000 -> $700.000</option>
+                        <option value="$700.001 -> $1.000.000" <?php echo ($ingreso['monto'] == '$700.001 -> $1.000.000') ? 'selected' : ''; ?>>$700.001 -> $1.000.000</option>
+                        <option value="$1.000.001 -> $1.500.000" <?php echo ($ingreso['monto'] == '$1.000.001 -> $1.500.000') ? 'selected' : ''; ?>>$1.000.001 -> $1.500.000</option>
+                        <option value="$1.500.001 -> $2.000.000" <?php echo ($ingreso['monto'] == '$1.500.001 -> $2.000.000') ? 'selected' : ''; ?>>$1.500.001 -> $2.000.000</option>
+                        <option value="$2.000.001 -> $2.500.000" <?php echo ($ingreso['monto'] == '$2.000.001 -> $2.500.000') ? 'selected' : ''; ?>>$2.000.001 -> $2.500.000</option>
+                        <option value="$2.500.000" <?php echo ($ingreso['monto'] == '$2.500.000') ? 'selected' : ''; ?>>$2.500.000</option>
+                    </select>
+                </td>
+                <td>
+                    <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
+                    <input type="hidden" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
+                    <input type="hidden" name="id_ingreso[]" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
-                <!-- Mensaje de "No hay ingresos registrados" -->
-                <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay
-                    ingresos registrados.</p>
+    <!-- Mensaje de "No hay ingresos registrados" -->
+    <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay ingresos registrados.</p>
 
-                <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con Ingreso</button>
+    <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con Ingreso</button>
+</fieldset>
 
-                <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar" readonly></label>
-                <!-- 
-    <label>Rangos Ingreso Grupo Familiar:</label><br>
-    <p>$ 460.000 -> $ 700.000</p>
-    <p>$ 700.001 -> $ 1.000.000</p>
-    <p>$ 1.000.001 -> $ 1.500.000</p>
-    <p>$ 1.500.001 -> $ 2.000.000</p>
-    <p>$ 2.000.001 -> $ 2.500.000</p>
-    <p>> $ 2.500.000</p>-->
-            </fieldset>
 
             <!-- 8.2 Egresos importantes -->
             <fieldset>
@@ -809,13 +808,13 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         </fieldset>
 
         <!-- Button trigger modal -->
-       <div class="cont-btn-fichasocial">
-       <button type="submit" class="btn btn-actualizar" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Actualizar
-        </button>
-        <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class="btn btn-pdf">Exportar en PDF</a>
+        <div class="cont-btn-fichasocial">
+            <button type="submit" class="btn btn-actualizar" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Actualizar
+            </button>
+            <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class="btn btn-pdf">Exportar en PDF</a>
 
-       </div>
+        </div>
 
     </form>
     <!-- Modal -->

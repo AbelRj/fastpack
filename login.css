@@ -15,3 +15,7 @@ body{
 .buttton-login:hover{
 background-color: #C71585;
 }
+h1{
+    color: #C71585;
+    text-align: center;
+}
