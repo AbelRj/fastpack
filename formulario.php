@@ -119,6 +119,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
 
     <link rel="stylesheet" href="styleFormulario.css">
     <!--excel-->
@@ -131,8 +132,9 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
     <h1>Ficha Social Familiar – Trabajadores Fastpack</h1>
-    <div><a type="button" href="index.php">Atrás</a>
-        <button id="enableButton">Editar</button>
+    <div class="btn-fichaS">
+        <a class="btn-icon" href="index.php"><i class="bi bi-arrow-left"></i></a>
+        <button id="enableButton" class="btn btn-custom">Editar</button>
     </div>
 
     <form id="form" method="POST" action="code.php">
@@ -808,10 +810,10 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
         <!-- Button trigger modal -->
        <div class="cont-btn-fichasocial">
-       <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+       <button type="submit" class="btn btn-actualizar" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Actualizar
         </button>
-        <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class="btn btn-primary">Exportar en PDF</a>
+        <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class="btn btn-pdf">Exportar en PDF</a>
 
        </div>
 

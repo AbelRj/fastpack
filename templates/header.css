@@ -1,3 +1,5 @@
-.logoF{
-    width: 20px;
-}
+.logo-navbar {
+    max-height: 30px; /* Ajusta este valor según la altura de tu navbar */
+    height: auto;
+  }
+  

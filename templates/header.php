@@ -14,10 +14,11 @@ if (isset($_SESSION["usuario"])) {
   <meta charset="UTF-8">
   <title>Lista de Trabajadores</title>
   <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="templates/header.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="header.css">
+  
   
   <!-- jquery -->
   <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
@@ -32,32 +33,33 @@ if (isset($_SESSION["usuario"])) {
 </head>
 
 <body>
-  <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">FASTPACK</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./estadistica.php">Estadisticas</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./index.php">Lista de trabajadores</a>
-            </li>
-          </ul>
-
-          <a class="nav-item">
-            <a class="nav-link" href="./cerrarSesion.php">Cerrar sesion</a>
-          </a>
-
-        </div>
+<header>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary px-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.php">
+        <img src="img/Logo Fastpack 4.jpg" alt="Logo Fastpack" class="img-fluid logo-navbar">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="./estadistica.php">Estadísticas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./index.php">Lista de trabajadores</a>
+          </li>
+        </ul>
+        <a class="nav-item">
+          <a class="nav-link" href="./cerrarSesion.php">Cerrar sesión</a>
+        </a>
       </div>
-    </nav>
-  </header>
+    </div>
+  </nav>
+</header>
+
 
 
 
