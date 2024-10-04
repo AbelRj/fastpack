@@ -119,7 +119,7 @@ function agregarFilaAPF(tablaId) {
                     <td><input type="text" name="motivo_apoyo[]"></td>
                     <td>
                     <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
-                    <input type="hidden" >
+                    <input type="hidden" value="new">
                     </td>
 
         </td>
@@ -132,7 +132,13 @@ function eliminarFilaAPF(button) {
     const radioNo = document.querySelector('input[name="apoyo_economico"][value="no"]');
     row.style.display = 'none'; // Oculta la fila visualmente
     const hiddenInput = row.querySelector('input[type="hidden"]');
+
+    if (!hiddenInput || hiddenInput.value === "new") {
+        row.remove(); // Eliminar fila si es nueva
+    } else {
+        row.style.display = 'none'; // Ocultar fila visualmente si ya tiene ID
     hiddenInput.name = "eliminar_apoyoF[]"; // Cambia el nombre para que se envíe en el formulario POST
+    }
 
 
     // Ocultar la fila visualmente
@@ -179,27 +185,33 @@ function agregarFilaM() {
         <td><input type="number" name="cantidad_mascota[]"></td>
         <td>
             <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
-            <input type="hidden" name="id_mascota[]">
+            <input type="hidden" value="new">
         </td>
     `;
 }
 
 function handleRadioChangeM(radio) {
+    var currentValue = radio.value;
     var contenedor = document.getElementById('contenedor_mascotas');
-    var mostrar = radio.value === 'si';
-    mostrarTablaMascotas(mostrar);
+    var isCurrentlyDisplayed = contenedor.style.display === 'block';
+    // Solo ejecutar la función si hay un cambio en la selección
+    if ((currentValue === 'si' && !isCurrentlyDisplayed) || (currentValue === 'no' && isCurrentlyDisplayed)) {
+        mostrarTablaMascotas(currentValue === 'si');
+    }
 }
 
 function mostrarTablaMascotas(mostrar) {
     var contenedor = document.getElementById('contenedor_mascotas');
-    var tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
-    var cabecera = document.getElementById('cabecera_mascotas');
-    
+    var tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];    
     if (mostrar) {
         contenedor.style.display = 'block';
-        cabecera.style.display = 'table-header-group'; // Mostrar cabecera
-        if (tablaMascotas.rows.length === 0 || !hayFilasVisibles()) {
-            agregarFilaM(); // Agregar una fila si no hay ninguna visible
+        Array.from(tablaMascotas.rows).forEach(row => {
+            if (row.style.display === 'none') {
+                row.style.display = ''; // Hacer visible la fila
+            }
+        });
+        if (tablaMascotas.rows.length === 0) {
+            agregarFilaM('mascotas'); // Agregar una fila si no hay ninguna visible
         }
     } else {
         contenedor.style.display = 'none';
@@ -210,26 +222,26 @@ function mostrarTablaMascotas(mostrar) {
     }
 }
 
-function hayFilasVisibles() {
-    var filas = document.getElementById('mascotas').getElementsByTagName('tbody')[0].rows;
-    return Array.from(filas).some(fila => fila.style.display !== 'none');
-}
-
 function eliminarFilaM(button) {
-    var row = button.closest('tr');
+    const row = button.closest('tr');
+    const tablaM = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
+    const rNo = document.querySelector('input[name="mascota"][value="no"')
     row.style.display = 'none'; // Ocultar fila
-    var hiddenInput = row.querySelector('input[type="hidden"]');
-    hiddenInput.name = "eliminar_mascota[]"; // Marcar para eliminación
+    const hiddenInput = row.querySelector('input[type="hidden"]');
+    if (!hiddenInput || hiddenInput.value === "new") {
+        row.remove(); // Eliminar fila si es nueva
+    } else {
+        row.style.display = 'none'; // Ocultar fila visualmente si ya tiene ID
+        hiddenInput.name = "eliminar_mascota[]"; // Marcar para eliminación
+    }
+        // Ocultar la fila visualmente
+        row.style.display = 'none';
 
-    // Comprobar si hay filas visibles
-    var tablaMascotas = document.getElementById('mascotas').getElementsByTagName('tbody')[0];
-    var filasVisibles = hayFilasVisibles();
+        // Verificar si ya no quedan filas visibles en la tabla
+        let visibleRows = Array.from(tablaM.rows).filter(row => row.style.display !== 'none');
 
-    if (!filasVisibles) {
-        // Si no hay filas visibles, ocultar la cabecera y cambiar el checkbox a "No"
-        document.getElementById('cabecera_mascotas').style.display = 'none';
-        var radioNo = document.querySelector('input[name="mascota"][value="no"]');
-        radioNo.checked = true;
+    if (visibleRows.length ===0) {
+        rNo.checked = true;
         mostrarTablaMascotas(false); // Ocultar tabla
     }
 }
