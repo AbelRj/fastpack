@@ -1,3 +1,6 @@
+.table-responsive {
+    overflow-x: auto; /* Agrega esta línea para permitir el desplazamiento horizontal */
+}
 
 .tabla{
     margin: 20px 20px 0px 20px;

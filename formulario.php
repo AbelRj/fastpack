@@ -432,12 +432,16 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <select name="tipo_vivienda" id="tipo_vivienda">
                 <option value="seleccionar" <?php echo (isset($habitalidad['tipo_vivienda']) &&
                     $habitalidad['tipo_vivienda']=='seleccionar' ) ? 'selected' : '' ; ?>>Seleccionar</option>
+
                 <option value="propia" <?php echo (isset($habitalidad['tipo_vivienda']) &&
                     $habitalidad['tipo_vivienda']=='propia' ) ? 'selected' : '' ; ?>>Propia</option>
+
                 <option value="arriendo" <?php echo (isset($habitalidad['tipo_vivienda']) &&
                     $habitalidad['tipo_vivienda']=='arriendo' ) ? 'selected' : '' ; ?>>Arriendo</option>
+
                 <option value="cedida" <?php echo (isset($habitalidad['tipo_vivienda']) &&
                     $habitalidad['tipo_vivienda']=='cedida' ) ? 'selected' : '' ; ?>>Cedida</option>
+                    
                 <option value="otro" <?php echo (isset($habitalidad['tipo_vivienda']) &&
                     $habitalidad['tipo_vivienda']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
             </select>

@@ -123,7 +123,7 @@ body {
 }
 </style>
 <body >
-<!-- <h2>FICHA SOCIAL FAMILIAR - TRABAJADORES FASTPACK</h2>-->
+<h2>FICHA SOCIAL FAMILIAR - TRABAJADORES FASTPACK</h2>
 
             <h4>IDENTIFICACIÓN DEL TRABAJADOR</h4>
     <table style="border-collapse: collapse; width: 100%;">
@@ -336,11 +336,8 @@ body {
         <?php endif; ?>
     </tbody>
 </table>
-
-
     <!-- Mensaje de "No hay ingresos registrados" -->
     <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay ingresos registrados.</p>
-    <label>Total Ingreso Grupo Familiar: <input type="number" id="total_ingreso_familiar" readonly></label><br><br>
 
             <!-- 8.2 Egresos importantes -->
     <h5>EGRESOS IMPORTANTES</h5>
@@ -389,7 +386,8 @@ body {
             <label for="tipo_vivienda">Tipo de Vivienda:</label>
         </td>
         <td style="border: 1px solid black;">
-            <?php echo htmlspecialchars($habitalidad['tipo_vivienda']); ?>
+        <?php echo (isset($habitalidad['tipo_vivienda']) &&
+                    $habitalidad['tipo_vivienda']=='propia' ) ? 'selected' : '' ; ?>
         </td>
     </tr>
     <tr>
@@ -397,7 +395,8 @@ body {
             <label for="material_vivienda">Material de la Vivienda:</label>
         </td>
         <td style="border: 1px solid black;">
-            <?php echo htmlspecialchars($habitalidad['material_vivienda']); ?>
+        <?php echo (isset($habitalidad['material_vivienda']) &&
+                    $habitalidad['material_vivienda']=='seleccionar' ) ? 'selected' : '' ; ?>
         </td>
     </tr>
     <tr>
@@ -405,7 +404,7 @@ body {
             <label for="numero_habitaciones">Número de Habitaciones:</label>
         </td>
         <td style="border: 1px solid black;">
-            <?php echo isset($habitalidad['num_habitaciones']) ? htmlspecialchars($habitalidad['num_habitaciones']) : 0; ?>
+        <?php echo isset($habitalidad['num_habitaciones']) ? $habitalidad['num_habitaciones'] : 0; ?>
         </td>
     </tr>
     <tr>
@@ -421,7 +420,7 @@ body {
             <label for="cocina">Cocina:</label>
         </td>
         <td style="border: 1px solid black;">
-            <?php echo isset($habitalidad['num_cocina']) ? htmlspecialchars($habitalidad['num_cocina']) : 0; ?>
+        <?php echo isset($habitalidad['num_cocina']) ? htmlspecialchars($habitalidad['num_cocina']) : 0; ?>
         </td>
     </tr>
     <tr>
@@ -429,7 +428,7 @@ body {
             <label for="logia">Logia:</label>
         </td>
         <td style="border: 1px solid black;">
-            <?php echo isset($habitalidad['num_logia']) ? htmlspecialchars($habitalidad['num_logia']) : 0; ?>
+        <?php echo isset($habitalidad['num_logia']) ? htmlspecialchars($habitalidad['num_logia']) : 0; ?>
         </td>
     </tr>
     <tr>
@@ -437,7 +436,8 @@ body {
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
         </td>
         <td style="border: 1px solid black;">
-            <?php echo htmlspecialchars($habitalidad['condiciones_habitabilidad']); ?>
+        <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
+                    $habitalidad['condiciones_habitabilidad']=='normal' ) ? 'selected' : '' ; ?>
         </td>
     </tr>
 </table>

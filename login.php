@@ -13,7 +13,7 @@ if ($_POST) {
   $usuario = $_POST["usuario"];
   $contrasenia = $_POST["contrasenia"];
 
-  $sentencia = $conexion->prepare("SELECT * FROM `login` WHERE nombre_usuario=:usuario");
+  $sentencia = $conexion->prepare("SELECT * FROM [login] WHERE nombre_usuario=:usuario");
   $sentencia->bindParam(":usuario", $usuario);
   $sentencia->execute();
   $usuarios = $sentencia->fetchAll();
@@ -41,8 +41,6 @@ if ($_POST) {
   <title>Login</title>
 </head>
 <body class="d-flex flex-column">
-  <script src="./dist/js/demo-theme.min.js?1692870487"></script>
-
   <div class="page page-center">
     <div class="container container-tight py-4">
       <div class="text-center mb-4"></div>
@@ -88,11 +86,8 @@ if ($_POST) {
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="./dist/js/tabler.min.js?1692870487" defer></script>
-  <script src="./dist/js/demo.min.js?1692870487" defer></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+
 
 <!-- Script JavaScript para manejar el login y la habilitación del botón -->
 <script>
@@ -135,6 +130,7 @@ if ($_POST) {
     .catch(error => console.error('Error:', error));
   });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
 </html>
 
 
