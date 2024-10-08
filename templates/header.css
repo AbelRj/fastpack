@@ -1,5 +1,24 @@
 .logo-navbar {
-    max-height: 30px; /* Ajusta este valor según la altura de tu navbar */
+    max-height: 40px; /* Ajusta este valor según la altura de tu navbar */
     height: auto;
   }
-  
+
+  .color-fondo-herader{
+    background-color: #C71585;
+    color: #fff;
+  }
+ 
+  .nav-link{
+    color: white !important; 
+    border-left: #fff !important;
+  }
+  .nav-item{
+    border-left:2px solid #fff !important;
+  }
+  .nav-item:hover{
+    background-color: #cc9cbb;
+  }
+
+  .cerrar-sesion{
+    border-left: #fff !important;
+  }

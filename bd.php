@@ -1,7 +1,7 @@
 <?php
 
 
-
+/*
 $servidor = "srv-sql01";
 $baseDeDatos = "BD_FSocial_Test";
 $usuario = "sql_fsocial";
@@ -18,7 +18,24 @@ try {
 } catch (Exception $error) {
     echo "Error de conexión: " . $error->getMessage();
 }
+*/
 
+$servidor = "ABEL"; // Cambia esto por la dirección de tu servidor
+$baseDeDatos = "BD_FSocial_Test";
+
+try {
+    // Crear la conexión
+    $conexion = new PDO("sqlsrv:server=$servidor;Database=$baseDeDatos", null, null);
+
+    // Configurar el modo de error de PDO para excepciones
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+   // echo "Conexión realizada correctamente.";
+
+} catch (PDOException $error) {
+    // Captura y muestra el mensaje de error
+    echo "Error en la conexión: " . $error->getMessage();
+}
 
 
 

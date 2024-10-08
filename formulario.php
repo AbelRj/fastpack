@@ -838,20 +838,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
 </body>
-<script>
-    //excel
-    document.getElementById('exportButton').addEventListener('click', function () {
-        const formData = new FormData(document.getElementById('form'));
-        const data = [];
-        formData.forEach((value, key) => {
-            data.push({ [key]: value });
-        });
-        const worksheet = XLSX.utils.json_to_sheet(data);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos');
-        XLSX.writeFile(workbook, 'datos_ficha_social.xlsx');
-    });
-</script>
+
 
 <script src="scriptFormulario.js" defer></script>
 <script src="scriptModal.js" defer></script>

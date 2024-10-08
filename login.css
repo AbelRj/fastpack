@@ -10,10 +10,10 @@ body{
     height: auto;
 }
 .buttton-login{
-    background-color: #00BFFF;
+    background-color: #C71585;
 }
 .buttton-login:hover{
-background-color: #C71585;
+background-color:  #00BFFF;
 }
 h1{
     color: #C71585;

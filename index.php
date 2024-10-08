@@ -63,7 +63,10 @@ include("templates/header.php") ?>
     </table>
 </div>
 
-<div class="cont-btnactualizar"><a class="btn btn-primary" href="api.php" role="button">Actualizar</a></div>
+<div class="cont-btnactualizar">
+    <a class="btn btn-primary" href="api.php" role="button">Actualizar</a>
+    <a class="btn btn-success" href="exportar_excel.php" role="button">Exportar a Excel</a>
+</div>
 
 
 </main>
