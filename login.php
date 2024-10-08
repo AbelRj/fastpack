@@ -73,7 +73,7 @@ if ($_POST) {
             </div>
 
             <div class="form-footer">
-              <button type="submit" id="submitButton" class="btn btn-primary w-100 buttton-login" disabled>Iniciar sesión</button>
+              <button type="submit" id="submitButton" class="btn btn-login w-100" disabled>Iniciar sesión</button>
             </div>
           </form>
 

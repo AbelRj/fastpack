@@ -39,8 +39,24 @@
 .cont-btnactualizar{
     display: flex;
     justify-content: center;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0px 20px 0px 20px;
 }
-
+.btn-actualizar{
+    background-color: #C71585 !important;
+    color: #Fff !important;
+}
+.btn-actualizar:hover{
+    background-color: #00BFFF !important;
+}
+.btn-excel{
+    background-color: #00BFFF !important;
+    color: #fff !important;
+}
+.btn-excel:hover{
+    background-color: #C71585  !important;
+}
     body {
         font-family: Arial, sans-serif;
         background-color: white;

@@ -19,3 +19,10 @@ h1{
     color: #C71585;
     text-align: center;
 }
+.btn-login{
+    background-color: #C71585 !important;
+    color: #fff !important;
+}
+.btn-login:hover{
+    background-color:  #00BFFF !important;
+}

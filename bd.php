@@ -1,7 +1,7 @@
 <?php
 
 
-/*
+
 $servidor = "srv-sql01";
 $baseDeDatos = "BD_FSocial_Test";
 $usuario = "sql_fsocial";
@@ -18,8 +18,8 @@ try {
 } catch (Exception $error) {
     echo "Error de conexión: " . $error->getMessage();
 }
-*/
 
+/*
 $servidor = "ABEL"; // Cambia esto por la dirección de tu servidor
 $baseDeDatos = "BD_FSocial_Test";
 
@@ -37,7 +37,7 @@ try {
     echo "Error en la conexión: " . $error->getMessage();
 }
 
-
+*/
 
 
 /*

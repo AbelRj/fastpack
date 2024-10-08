@@ -64,8 +64,8 @@ include("templates/header.php") ?>
 </div>
 
 <div class="cont-btnactualizar">
-    <a class="btn btn-primary" href="api.php" role="button">Actualizar</a>
-    <a class="btn btn-success" href="exportar_excel.php" role="button">Exportar a Excel</a>
+    <a class="btn btn-actualizar" href="api.php" role="button">Actualizar</a>
+    <a class="btn btn-excel" href="exportar_excel.php" role="button">Exportar a Excel</a>
 </div>
 
 
