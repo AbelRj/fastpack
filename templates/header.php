@@ -13,7 +13,7 @@ if (isset($_SESSION["usuario"])) {
 <head>
   <meta charset="UTF-8">
   <title>Lista de Trabajadores</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="templates/header.css">
     <!-- Otros enlaces CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">

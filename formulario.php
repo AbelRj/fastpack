@@ -122,7 +122,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" href="styleFormulario.css">
+    <link rel="stylesheet" href="css/styleFormulario.css">
     <!--excel-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
@@ -132,11 +132,12 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <h1>Ficha Social Familiar – Trabajadores Fastpack</h1>
-    <div class="btn-fichaS">
+    <div class="btn-formulario">
         <a class="btn-icon" href="index.php"><i class="bi bi-arrow-left"></i></a>
-        <button id="enableButton" class="btn btn-custom">Editar</button>
+        <h1>Ficha Social Familiar – Trabajadores Fastpack</h1>
+        <button id="enableButton" class="btn-editar">Editar</button>
     </div>
+  
 
     <form id="form" method="POST" action="code.php">
         <!-- 1. Identificación del Trabajador -->
@@ -839,9 +840,9 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 
+<script src="js/scriptModal.js" defer></script>
+<script src="js/scriptFormulario.js" defer></script>
 
-<script src="scriptFormulario.js" defer></script>
-<script src="scriptModal.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
