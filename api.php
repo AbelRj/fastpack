@@ -36,7 +36,8 @@ $datos = json_decode($response, true);
 if (!empty($datos)) {
 
     // Obtener todos los IDs existentes de la base de datos
-    $sql_ids = "SELECT id FROM [trabajador]";
+   // $sql_ids = "SELECT id FROM [trabajador]";
+    $sql_ids = "SELECT id FROM trabajador";
     $result_ids = $conexion->query($sql_ids);
 
     // Crear un array con los IDs existentes en la base de datos
@@ -46,10 +47,15 @@ if (!empty($datos)) {
     }
 
     // Preparar la consulta SQL para insertar solo los nuevos trabajadores
-    $sql = "INSERT INTO [trabajador] (id, rut, nombre_apellido, sexo, fecha_nacimiento, 
+    /*$sql = "INSERT INTO [trabajador] (id, rut, nombre_apellido, sexo, fecha_nacimiento, 
             nacionalidad, profesion, domicilio, telefono, celular, correo_electronico, estado_civil)
             VALUES (:id, :rut, :nombre_apellido, :sexo, :fecha_nacimiento, :nacionalidad,
-            :profesion, :domicilio, :telefono, :celular, :correo_electronico, :estado_civil)";
+            :profesion, :domicilio, :telefono, :celular, :correo_electronico, :estado_civil)";*/
+
+$sql = "INSERT INTO trabajador (id, rut, nombre_apellido, sexo, fecha_nacimiento, 
+nacionalidad, profesion, domicilio, telefono, celular, correo_electronico, estado_civil)
+VALUES (:id, :rut, :nombre_apellido, :sexo, :fecha_nacimiento, :nacionalidad,
+:profesion, :domicilio, :telefono, :celular, :correo_electronico, :estado_civil)";
 
     $stmt = $conexion->prepare($sql);
 

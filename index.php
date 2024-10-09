@@ -2,7 +2,8 @@
 include("bd.php");
 
 // Obtener los trabajadores
-$sentencia = $conexion->prepare("SELECT * FROM [trabajador]");
+//$sentencia = $conexion->prepare("SELECT * FROM [trabajador]");
+$sentencia = $conexion->prepare("SELECT * FROM trabajador");
 $sentencia->execute();
 $lista_trabajadores = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 include("templates/header.php") ?>
@@ -10,14 +11,16 @@ include("templates/header.php") ?>
     $(document).ready(function() {
         $('#table_id').DataTable({
            // "language": {
-              //  "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
+              //  "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json",
            // },
+          // "scrollX": true,  // Habilitar el desplazamiento horizontal
             "autoWidth": true,  // Ajuste automático del ancho de las columnas
             "responsive": true, // Hacer la tabla adaptable
             "pageLength": 5,   // Mostrar 10 filas por página
             "lengthMenu": [5, 10, 20, 30],  // Opciones para cambiar el número de filas mostradas
         });
     });
+    
 </script>
 
 <div class="table-responsive tabla">
@@ -62,7 +65,6 @@ include("templates/header.php") ?>
         </tbody>
     </table>
 </div>
-
 <div class="cont-btnactualizar">
     <a class="btn btn-actualizar" href="api.php" role="button">Actualizar</a>
     <a class="btn btn-excel" href="exportar_excel.php" role="button">Exportar a Excel</a>

@@ -252,9 +252,9 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <fieldset>
                 <legend>5. ¿Apoya a algún familiar económicamente?</legend>
 
-                <label>Si <input type="radio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" <?php
+                <label>Si <input type="radio" class="inputRadio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" <?php
                         echo !empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label>
-                <label>No <input type="radio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)" <?php
+                <label>No <input type="radio" class="inputRadio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)" <?php
                         echo empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label><br>
 
                 <div id="contenedor_apoyo_economico"
@@ -296,9 +296,9 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <!-- 6. ¿Tiene algún emprendimiento? -->
             <fieldset>
                 <legend>6. ¿Tiene algún emprendimiento?</legend>
-                <label>Si <input type="radio" name="emprendimiento" value="si" onclick="handleRadioChangeE(this)" <?php
+                <label>Si <input  class="inputRadio" type="radio" name="emprendimiento" value="si" onclick="handleRadioChangeE(this)" <?php
                         echo !empty($emprendimientoT['descripcion']) ? 'checked' : '' ; ?>></label>
-                <label>No <input type="radio" name="emprendimiento" value="no" onclick="handleRadioChangeE(this)" <?php
+                <label>No <input type="radio" class="inputRadio"  name="emprendimiento" value="no" onclick="handleRadioChangeE(this)" <?php
                         echo empty($emprendimientoT['descripcion']) ? 'checked' : '' ; ?>></label><br>
                 <div id="contenedor_emprendimiento"
                     style="display: <?php echo !empty($emprendimientoT['descripcion']) ? 'block' : 'none'; ?>;">
@@ -313,9 +313,9 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <!-- 7. ¿Tiene Mascotas? -->
             <fieldset>
                 <legend>7. ¿Tiene Mascotas?</legend>
-                <label>Si <input type="radio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo
+                <label>Si <input type="radio" class="inputRadio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo
                         !empty($mascotasT) ? 'checked' : '' ; ?>></label>
-                <label>No <input type="radio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo
+                <label>No <input type="radio" class="inputRadio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo
                         empty($mascotasT) ? 'checked' : '' ; ?>></label><br>
 
                 <div id="contenedor_mascotas" style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">

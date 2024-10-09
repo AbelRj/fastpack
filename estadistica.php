@@ -3,7 +3,8 @@
 include("bd.php");
 
 // Prepara y ejecuta la consulta
-$sentencia = $conexion->prepare("SELECT nacionalidad, COUNT(*) as total FROM [trabajador] GROUP BY nacionalidad");
+//$sentencia = $conexion->prepare("SELECT nacionalidad, COUNT(*) as total FROM [trabajador] GROUP BY nacionalidad");
+$sentencia = $conexion->prepare("SELECT nacionalidad, COUNT(*) as total FROM trabajador GROUP BY nacionalidad");
 $sentencia->execute();
 $conteo_pais = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
@@ -19,7 +20,7 @@ $sentencia_estado_civil = $conexion->prepare("
             ELSE estado_civil
         END AS estado_civil_normalizado,
         COUNT(*) as total
-    FROM [trabajador]
+    FROM trabajador
     GROUP BY 
         CASE 
             WHEN estado_civil IN ('Casado', 'Casada') THEN 'Casado'
@@ -42,7 +43,8 @@ foreach ($conteo_estado_civil as $row) {
 }
 
 // Consulta para contar hombres y mujeres
-$sentencia_genero = $conexion->prepare("SELECT sexo, COUNT(*) as total FROM [trabajador] GROUP BY sexo");
+//$sentencia_genero = $conexion->prepare("SELECT sexo, COUNT(*) as total FROM [trabajador] GROUP BY sexo");
+$sentencia_genero = $conexion->prepare("SELECT sexo, COUNT(*) as total FROM trabajador GROUP BY sexo");
 $sentencia_genero->execute();
 $conteo_genero = $sentencia_genero->fetchAll(PDO::FETCH_ASSOC);
 

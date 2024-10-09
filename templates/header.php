@@ -12,6 +12,7 @@ if (isset($_SESSION["usuario"])) {
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lista de Trabajadores</title>
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="templates/header.css">
@@ -32,8 +33,8 @@ if (isset($_SESSION["usuario"])) {
 </head>
 
 <body>
-<header>
-  <nav class="navbar navbar-expand-lg  px-3  color-fondo-herader p-0">
+<header class="border">
+  <nav class="navbar navbar-expand-lg  px-3  color-fondo-herader p-0 ">
     <div class="container-fluid p-0 m-0">
       <a class="navbar-brand" href="index.php">
         <img src="img/Logo Fastpack_01.png" alt="Logo Fastpack" class="img-fluid logo-navbar">
@@ -51,7 +52,7 @@ if (isset($_SESSION["usuario"])) {
             <a class="nav-link" href="index.php">Lista de trabajadores</a>
           </li>
         </ul>
-        <a class="nav-item cerrar-sesion border">
+        <a class="nav-item cerrar-sesion">
           <a class="nav-link " href="./cerrarSesion.php">Cerrar sesión</a>
         </a>
       </div>

@@ -22,3 +22,13 @@
   .cerrar-sesion{
     border-left: #fff !important;
   }
+  @media (max-width: 991px) {
+    .nav-item{
+      border:none !important;
+    }
+
+    .border{
+      border: 2px solid;
+    }
+
+}

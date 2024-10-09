@@ -13,7 +13,8 @@ if ($_POST) {
   $usuario = $_POST["usuario"];
   $contrasenia = $_POST["contrasenia"];
 
-  $sentencia = $conexion->prepare("SELECT * FROM [login] WHERE nombre_usuario=:usuario");
+ // $sentencia = $conexion->prepare("SELECT * FROM [login] WHERE nombre_usuario=:usuario");
+  $sentencia = $conexion->prepare("SELECT * FROM login WHERE nombre_usuario=:usuario");
   $sentencia->bindParam(":usuario", $usuario);
   $sentencia->execute();
   $usuarios = $sentencia->fetchAll();

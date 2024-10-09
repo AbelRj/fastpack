@@ -37,6 +37,7 @@
          background-color: #00BFFF !important; 
 }
 .cont-btnactualizar{
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -44,6 +45,7 @@
     padding: 0px 20px 0px 20px;
 }
 .btn-actualizar{
+   
     background-color: #C71585 !important;
     color: #Fff !important;
 }
@@ -139,4 +141,14 @@
     border-color: #C71585 !important;      /* Color de borde al pasar el ratón */
     color: white !important;               /* Color del texto al pasar el ratón */
 }
+@media (max-width: 991px) {
+.dataTables_filter{
+    display: flex;
+}
+.dataTables_length{
+    display: flex;
+}
 
+
+
+}
