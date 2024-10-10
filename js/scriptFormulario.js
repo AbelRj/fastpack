@@ -1,3 +1,4 @@
+
 //2. Grupo Familiar
 // Función para agregar una nueva fila al grupo familiar
 function agregarFilaGF() {
@@ -17,7 +18,7 @@ function agregarFilaGF() {
         <td><input type="text" name="nivel_educacional[]"></td>
         <td><input type="text" name="actividad_familiar[]"></td>
         <td>
-        <button type="button" onclick="ocultarFilaGP(this)">Eliminar</button>
+        <button type="button" onclick="ocultarFilaGP(this)"><span class="texto-eliminar">Eliminar</span><i class="bi bi-trash icon-responsive"></i></button>
         <input type="hidden" name="id_familiar[]" value="new"> <!-- Agregar un valor especial -->
         </td>
     `;
@@ -118,7 +119,7 @@ function agregarFilaAPF(tablaId) {
           <td><input type="text" name="a_quien_apoya[]"></td>
                     <td><input type="text" name="motivo_apoyo[]"></td>
                     <td>
-                    <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
+                    <button type="button" onclick="eliminarFilaAPF(this)"><span class="texto-eliminar">Eliminar</span><i class="bi bi-trash icon-responsive"></i></button>
                     <input type="hidden" value="new">
                     </td>
 
@@ -184,7 +185,7 @@ function agregarFilaM() {
         <td><input type="text" name="tipo_mascota[]"></td>
         <td><input type="number" name="cantidad_mascota[]"></td>
         <td>
-            <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
+            <button type="button" onclick="eliminarFilaM(this)"><span class="texto-eliminar">Eliminar</span><i class="bi bi-trash icon-responsive"></i></button>
             <input type="hidden" value="new">
         </td>
     `;
@@ -273,7 +274,7 @@ function agregarFilaI(tablaId) {
                 <option value="$2.500.000">$2.500.000</option>
             </select>
         </td>
-        <td><button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
+        <td><button type="button" onclick="eliminarFilaI(this)"><span class="texto-eliminar">Eliminar</span><i class="bi bi-trash icon-responsive"></i></button>
         <input type="hidden" value="new"></td>
     `;
 
@@ -322,7 +323,7 @@ function agregarFilaE(tablaId) {
         <td><input type="text" name="descripcion_egreso[]"></td>
         <td><input type="number" name="monto_egreso[]" class="monto_egreso" oninput="calcularTotalEgresos()"></td>
         <td><input type="text" name="observacion_egreso[]"></td>
-        <td><button type="button" onclick="eliminarFilaE(this)">Eliminar</button><input type="hidden" value="new"></td>
+        <td><button type="button" onclick="eliminarFilaE(this)"><span class="texto-eliminar">Eliminar</span><i class="bi bi-trash icon-responsive"></i></button><input type="hidden" value="new"></td>
     `;
 
     // Ocultar el mensaje de "No hay egresos registrados"
@@ -394,7 +395,7 @@ function agregarFilaEA() {
         <td><input type="text" name="enfermedad[]"></td>
         <td><input type="date" name="fecha_diagnostico[]"></td>
         <td><input type="text" name="estado_actual[]"></td>
-        <td><button type="button" onclick="eliminarFila(this)">Eliminar</button>
+        <td><button type="button" onclick="eliminarFila(this)"><span class="texto-eliminar">Eliminar</span><i class="bi bi-trash icon-responsive"></i></button>
             <input type="hidden" name="id_enfermedad[]" value="new"> <!-- Agregar un valor especial -->
         </td>
     `;
@@ -447,3 +448,20 @@ function eliminarFila(button) {
         }
     }
 }
+
+
+        // Deshabilitar todos los inputs al cargar la página
+        function disableInputs() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.disabled = true;
+            });
+        }
+
+        // Habilitar todos los inputs al hacer clic en el botón "Editar"
+        function enableInputs() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.disabled = false;
+            });
+        }

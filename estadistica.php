@@ -68,11 +68,31 @@ foreach ($conteo_pais as $row) {
 
 // Incluir la cabecera de la plantilla
 include("templates/header.php");
-?>
 
-<canvas id="myChart" width="900" height="200"></canvas>
-<canvas id="chartEstadoCivil" width="900" height="200"></canvas>
-<canvas id="chartGenero" width="900" height="200"></canvas>
+
+
+// Consulta para contar personas con y sin correo
+$query = "SELECT 
+            SUM(CASE WHEN correo_electronico IS NOT NULL AND correo_electronico != '' THEN 1 ELSE 0 END) AS con_correo,
+            SUM(CASE WHEN correo_electronico IS NULL OR correo_electronico = '' THEN 1 ELSE 0 END) AS sin_correo
+          FROM trabajador";
+
+$stmt = $conexion->prepare($query);
+$stmt->execute();
+$resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Convertir los datos a variables separadas para usarlos en el gráfico
+$con_correo = $resultado['con_correo'];
+$sin_correo = $resultado['sin_correo'];
+
+?>
+<div class="cont-graficos">
+<canvas id="myChart" class="chart"></canvas>
+<canvas id="chartEstadoCivil" class="chart"></canvas>
+<canvas id="chartGenero" class="chart"></canvas>
+<canvas id="chartCorreo" class="chart"></canvas>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -109,7 +129,7 @@ include("templates/header.php");
 
   var ctxEstadoCivil = document.getElementById('chartEstadoCivil').getContext('2d');
   var chartEstadoCivil = new Chart(ctxEstadoCivil, {
-    type: 'bar', // Tipo de gráfico: barras
+    type: 'line', // Tipo de gráfico: barras
     data: {
         labels: estadosCiviles, // Etiquetas del gráfico (Soltero, Casado, Viudo, etc.)
         datasets: [{
@@ -150,7 +170,7 @@ include("templates/header.php");
 
   var ctxGenero = document.getElementById('chartGenero').getContext('2d');
   var chartGenero = new Chart(ctxGenero, {
-    type: 'bar',
+    type: 'pie',
     data: {
         labels: generos, // Etiquetas de género
         datasets: [{
@@ -170,6 +190,39 @@ include("templates/header.php");
     }
   });
 </script>
+
+
+
+<script>
+  // Obtener los datos de PHP para el gráfico de correos
+  var conCorreo = <?php echo json_encode($con_correo); ?>; // Total de trabajadores con correo
+  var sinCorreo = <?php echo json_encode($sin_correo); ?>; // Total de trabajadores sin correo
+
+  var ctxCorreo = document.getElementById('chartCorreo').getContext('2d');
+  var chartCorreo = new Chart(ctxCorreo, {
+    type: 'doughnut', // Tipo de gráfico de dona
+    data: {
+        labels: ['Con Correo', 'Sin Correo'], // Etiquetas para el gráfico
+        datasets: [{
+            label: 'Trabajadores con y sin Correo Electrónico',
+            data: [conCorreo, sinCorreo], // Datos del conteo
+            backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'], // Colores del gráfico
+            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+        }
+    }
+  });
+</script>
+
+
 </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

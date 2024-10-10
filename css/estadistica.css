@@ -1,0 +1,13 @@
+.cont-graficos{
+    display: flex;
+    flex-wrap: wrap;  
+}
+
+/* Estilo para los gráficos */
+.chart {
+    width: 100%; /* Ancho del gráfico */
+    height: 100%; /* Altura del gráfico, ajusta según tus necesidades */
+    max-width: 600px; /* Ancho máximo, opcional */
+    max-height: 300px;
+    margin: 20px auto; /* Centrar el gráfico en la página */
+}

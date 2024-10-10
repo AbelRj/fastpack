@@ -131,12 +131,13 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 </head>
 
-<body>
+<body onload="disableInputs()"> <!-- Deshabilitar inputs al cargar la página -->
     <header>
         <div class="btn-formulario">
-            <a class="btn-icon" href="index.php"><i class="bi bi-arrow-left"></i></a>
-            <h1>Ficha Social Familiar-Trabajadores Fastpack</h1>
-            <button id="enableButton" class="btn-editar">Editar</button>
+            <a class="btn-icon-atras" href="index.php"><i class="bi bi-arrow-left fs-2"></i></a>
+            <h1>Ficha Social Familiar<span class="span-titulo"> – Trabajadores Fastpack</span></h1>
+            <button id="enableButton" class="btn-editar" type="button" onclick="enableInputs()"><i
+                    class="bi bi-journal-text fs-2"></i></button>
         </div>
     </header>
 
@@ -144,101 +145,120 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <form id="form" method="POST" action="code.php">
             <!-- 1. Identificación del Trabajador -->
             <fieldset>
-    <legend>1. Identificación del Trabajador</legend>
-    <div class="table-identificacion">
-        <div class="row">
-            <div class="col-name">ID:</div>
-            <div class="col-input"><input readonly type="text" name="id" value="<?php echo htmlspecialchars($datostrabajador['id']); ?>"></div>
-            <div class="col-name">Nombre y Apellido:</div>
-            <div class="col-input"><input readonly type="text" name="nombre_apellido" value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>"></div>
-        </div>
-        <div class="row">
-            <div class="col-name">Fecha de Nacimiento:</div>
-            <div class="col-input"><input readonly type="date" name="fecha_nacimiento" value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>"></div>
-            <div class="col-name">Nacionalidad:</div>
-            <div class="col-input"><input readonly type="text" name="nacionalidad" value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>"></div>
-        </div>
-        <div class="row">
-            <div class="col-name">Domicilio:</div>
-            <div class="col-input"><input readonly type="text" name="domicilio" value="<?php echo htmlspecialchars($datostrabajador['domicilio']); ?>"></div>
-            <div class="col-name">Teléfono:</div>
-            <div class="col-input"><input readonly type="tel" name="telefono" value="<?php echo htmlspecialchars($datostrabajador['telefono']); ?>"></div>
-        </div>
-        <div class="row">
-            <div class="col-name">Correo Electrónico:</div>
-            <div class="col-input"><input readonly type="email" name="correo" value="<?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?>"></div>
-            <div class="col-name">Estado Civil:</div>
-            <div class="col-input"><input readonly type="text" name="estado_civil" value="<?php echo htmlspecialchars($datostrabajador['estado_civil']); ?>"></div>
-        </div>
-        <div class="row">
-            <div class="col-name">Previsión de Salud:</div>
-            <div class="col-input" colspan="3">
-                <select id="previsionSalud" name="prevision_salud">
-                    <option value="" <?php echo (isset($datostrabajador['prevision_salud']) && $datostrabajador['prevision_salud']=='') ? 'selected' : ''; ?>>Seleccionar</option>
-                    <option value="fonasa" <?php echo (isset($datostrabajador['prevision_salud']) && $datostrabajador['prevision_salud']=='fonasa') ? 'selected' : ''; ?>>FONASA</option>
-                    <option value="isapre" <?php echo (isset($datostrabajador['prevision_salud']) && $datostrabajador['prevision_salud']=='isapre') ? 'selected' : ''; ?>>ISAPRE</option>
-                </select>
-            </div>
-        </div>
-        
-    </div>
-</fieldset>
+                <legend>1. Identificación del Trabajador</legend>
+                <div class="table-identificacion">
+                    <div class="row">
+                        <div class="col-name">ID:</div>
+                        <div class="col-input"><input type="text" name="id"
+                                value="<?php echo htmlspecialchars($datostrabajador['id']); ?>"></div>
+                        <div class="col-name">Nombre y Apellido:</div>
+                        <div class="col-input"><input type="text" name="nombre_apellido"
+                                value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-name">Fecha de Nacimiento:</div>
+                        <div class="col-input"><input type="date" name="fecha_nacimiento"
+                                value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>"></div>
+                        <div class="col-name">Nacionalidad:</div>
+                        <div class="col-input"><input type="text" name="nacionalidad"
+                                value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-name">Domicilio:</div>
+                        <div class="col-input"><input type="text" name="domicilio"
+                                value="<?php echo htmlspecialchars($datostrabajador['domicilio']); ?>"></div>
+                        <div class="col-name">Teléfono:</div>
+                        <div class="col-input"><input type="tel" name="telefono"
+                                value="<?php echo htmlspecialchars($datostrabajador['telefono']); ?>"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-name">Correo Electrónico:</div>
+                        <div class="col-input"><input type="email" name="correo"
+                                value="<?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?>"></div>
+                        <div class="col-name">Estado Civil:</div>
+                        <div class="col-input"><input type="text" name="estado_civil"
+                                value="<?php echo htmlspecialchars($datostrabajador['estado_civil']); ?>"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-name">Previsión de Salud:</div>
+                        <div class="col-input" colspan="3">
+                            <select id="previsionSalud" name="prevision_salud">
+                                <option value="" <?php echo (isset($datostrabajador['prevision_salud']) &&
+                                    $datostrabajador['prevision_salud']=='' ) ? 'selected' : '' ; ?>>Seleccionar
+                                </option>
+                                <option value="fonasa" <?php echo (isset($datostrabajador['prevision_salud']) &&
+                                    $datostrabajador['prevision_salud']=='fonasa' ) ? 'selected' : '' ; ?>>FONASA
+                                </option>
+                                <option value="isapre" <?php echo (isset($datostrabajador['prevision_salud']) &&
+                                    $datostrabajador['prevision_salud']=='isapre' ) ? 'selected' : '' ; ?>>ISAPRE
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
 
             <!-- 2. Grupo Familiar -->
             <fieldset>
                 <legend>2. Grupo Familiar</legend>
 
                 <!-- La tabla se oculta si no hay datos -->
-                <table id="grupo_familiar" border="1"
-                    style="<?php echo empty($datosGFamiliar) ? 'display:none;' : ''; ?>">
-                    <thead>
-                        <tr>
-                            <th>Nombre y Apellido</th>
-                            <th>Parentesco</th>
-                            <th>Fecha de Nacimiento</th>
-                            <th>Sexo M/F</th>
-                            <th>Estado Civil</th>
-                            <th>Nivel educacional</th>
-                            <th>Actividad</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($datosGFamiliar)): ?>
-                        <?php foreach ($datosGFamiliar as $familiar): ?>
-                        <tr>
-                            <td><input type="text" name="nombre_apellido_familiar[]"
-                                    value="<?php echo htmlspecialchars($familiar['nombre_apellido']); ?>"></td>
-                            <td><input type="text" name="parentesco[]"
-                                    value="<?php echo htmlspecialchars($familiar['parentesco']); ?>"></td>
-                            <td><input type="date" name="fecha_nacimiento_familiar[]"
-                                    value="<?php echo htmlspecialchars($familiar['fecha_nacimiento']); ?>"></td>
-                            <td><input type="text" name="sexo_familiar[]"
-                                    value="<?php echo htmlspecialchars($familiar['sexo']); ?>"></td>
-                            <td><input type="text" name="estado_civil_familiar[]"
-                                    value="<?php echo htmlspecialchars($familiar['estado_civil']); ?>"></td>
-                            <td><input type="text" name="nivel_educacional[]"
-                                    value="<?php echo htmlspecialchars($familiar['nivel_educacional']); ?>"></td>
-                            <td><input type="text" name="actividad_familiar[]"
-                                    value="<?php echo htmlspecialchars($familiar['actividad']); ?>"></td>
-                            <td>
-                                <button type="button" onclick="ocultarFilaGP(this)">Eliminar</button>
-                                <!-- Mantener el input para el ID del familiar -->
-                                <input type="hidden" name="id_familiar[]"
-                                    value="<?php echo htmlspecialchars($familiar['id']); ?>">
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="grupo_familiar" border="1"
+                        style="<?php echo empty($datosGFamiliar) ? 'display:none;' : ''; ?>">
+                        <thead>
+                            <tr>
+                                <th>Nombre y Apellido</th>
+                                <th>Parentesco</th>
+                                <th>Fecha de Nacimiento</th>
+                                <th>Sexo M/F</th>
+                                <th>Estado Civil</th>
+                                <th>Nivel educacional</th>
+                                <th>Actividad</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($datosGFamiliar)): ?>
+                            <?php foreach ($datosGFamiliar as $familiar): ?>
+                            <tr>
+                                <td><input type="text" name="nombre_apellido_familiar[]"
+                                        value="<?php echo htmlspecialchars($familiar['nombre_apellido']); ?>"></td>
+                                <td><input type="text" name="parentesco[]"
+                                        value="<?php echo htmlspecialchars($familiar['parentesco']); ?>"></td>
+                                <td><input type="date" name="fecha_nacimiento_familiar[]"
+                                        value="<?php echo htmlspecialchars($familiar['fecha_nacimiento']); ?>"></td>
+                                <td><input type="text" name="sexo_familiar[]"
+                                        value="<?php echo htmlspecialchars($familiar['sexo']); ?>"></td>
+                                <td><input type="text" name="estado_civil_familiar[]"
+                                        value="<?php echo htmlspecialchars($familiar['estado_civil']); ?>"></td>
+                                <td><input type="text" name="nivel_educacional[]"
+                                        value="<?php echo htmlspecialchars($familiar['nivel_educacional']); ?>"></td>
+                                <td><input type="text" name="actividad_familiar[]"
+                                        value="<?php echo htmlspecialchars($familiar['actividad']); ?>"></td>
+                                <td>
+                                    <button type="button" onclick="ocultarFilaGP(this)"><span
+                                            class="texto-eliminar">Eliminar</span><i
+                                            class="bi bi-trash icon-responsive"></i></button>
+                                    <!-- Mantener el input para el ID del familiar -->
+                                    <input type="hidden" name="id_familiar[]"
+                                        value="<?php echo htmlspecialchars($familiar['id']); ?>">
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
 
                 <!-- Mensaje de "No hay miembros familiares registrados" -->
                 <p id="no-miembros-msg" style="display: <?php echo empty($datosGFamiliar) ? 'block' : 'none'; ?>;">No
                     hay
                     miembros familiares registrados.</p>
 
-                <button type="button" onclick="agregarFilaGF()">Agregar Miembro Familiar</button>
+                <button type="button" onclick="agregarFilaGF()"><span class="texto-oculto">Agregar Miembro
+                        Familiar</span><i class="bi bi-plus-lg icon-responsive"></i></button>
             </fieldset>
 
             <!-- 4. Historia Familiar -->
@@ -252,42 +272,49 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <fieldset>
                 <legend>5. ¿Apoya a algún familiar económicamente?</legend>
 
-                <label>Si <input type="radio" class="inputRadio" name="apoyo_economico" value="si" onclick="handleRadioChange(this)" <?php
-                        echo !empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label>
-                <label>No <input type="radio" class="inputRadio" name="apoyo_economico" value="no" onclick="handleRadioChange(this)" <?php
-                        echo empty($apoyoEconomicoT) ? 'checked' : '' ; ?>></label><br>
+                <label>Si <input type="radio" class="inputRadio" name="apoyo_economico" value="si"
+                        onclick="handleRadioChange(this)" <?php echo !empty($apoyoEconomicoT) ? 'checked' : '' ;
+                        ?>></label>
+                <label>No <input type="radio" class="inputRadio" name="apoyo_economico" value="no"
+                        onclick="handleRadioChange(this)" <?php echo empty($apoyoEconomicoT) ? 'checked' : '' ;
+                        ?>></label><br>
 
                 <div id="contenedor_apoyo_economico"
                     style="display: <?php echo !empty($apoyoEconomicoT) ? 'block' : 'none'; ?>;">
 
-                    <table id="apoyo_economico" border="1">
-                        <thead>
-                            <tr>
-                                <th>¿A quién?</th>
-                                <th>Motivo</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($apoyoEconomicoT as $apoyo): ?>
-                            <tr>
-                                <td><input type="text" name="a_quien_apoya[]"
-                                        value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
-                                <td><input type="text" name="motivo_apoyo[]"
-                                        value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
-                                <td>
-                                    <button type="button" onclick="eliminarFilaAPF(this)">Eliminar</button>
-                                    <!-- Campo oculto para guardar el ID del apoyo -->
-                                    <input type="hidden" value="<?php echo htmlspecialchars($apoyo['id']); ?>">
-                                    <input type="hidden" name="id_apoyoF[]"
-                                        value="<?php echo htmlspecialchars($apoyo['id']); ?>">
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table id="apoyo_economico" border="1">
+                            <thead>
+                                <tr>
+                                    <th>¿A quién?</th>
+                                    <th>Motivo</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($apoyoEconomicoT as $apoyo): ?>
+                                <tr>
+                                    <td><input type="text" name="a_quien_apoya[]"
+                                            value="<?php echo htmlspecialchars($apoyo['a_quien']); ?>"></td>
+                                    <td><input type="text" name="motivo_apoyo[]"
+                                            value="<?php echo htmlspecialchars($apoyo['motivo']); ?>"></td>
+                                    <td>
+                                        <button type="button" onclick="eliminarFilaAPF(this)"><span
+                                                class="texto-eliminar">Eliminar</span><i
+                                                class="bi bi-trash icon-responsive"></button>
+                                        <!-- Campo oculto para guardar el ID del apoyo -->
+                                        <input type="hidden" value="<?php echo htmlspecialchars($apoyo['id']); ?>">
+                                        <input type="hidden" name="id_apoyoF[]"
+                                            value="<?php echo htmlspecialchars($apoyo['id']); ?>">
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <button type="button" onclick="agregarFilaAPF('apoyo_economico')">Agregar Familiar Apoyado</button>
+                    <button type="button" onclick="agregarFilaAPF('apoyo_economico')"><span class="texto-oculto">Agregar
+                            Familiar Apoyado</span><i class="bi bi-plus-lg icon-responsive"></i></button>
                 </div>
             </fieldset>
 
@@ -296,10 +323,12 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <!-- 6. ¿Tiene algún emprendimiento? -->
             <fieldset>
                 <legend>6. ¿Tiene algún emprendimiento?</legend>
-                <label>Si <input  class="inputRadio" type="radio" name="emprendimiento" value="si" onclick="handleRadioChangeE(this)" <?php
-                        echo !empty($emprendimientoT['descripcion']) ? 'checked' : '' ; ?>></label>
-                <label>No <input type="radio" class="inputRadio"  name="emprendimiento" value="no" onclick="handleRadioChangeE(this)" <?php
-                        echo empty($emprendimientoT['descripcion']) ? 'checked' : '' ; ?>></label><br>
+                <label>Si <input class="inputRadio" type="radio" name="emprendimiento" value="si"
+                        onclick="handleRadioChangeE(this)" <?php echo !empty($emprendimientoT['descripcion'])
+                        ? 'checked' : '' ; ?>></label>
+                <label>No <input type="radio" class="inputRadio" name="emprendimiento" value="no"
+                        onclick="handleRadioChangeE(this)" <?php echo empty($emprendimientoT['descripcion']) ? 'checked'
+                        : '' ; ?>></label><br>
                 <div id="contenedor_emprendimiento"
                     style="display: <?php echo !empty($emprendimientoT['descripcion']) ? 'block' : 'none'; ?>;">
                     <label>¿De qué se trata?:
@@ -313,47 +342,53 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <!-- 7. ¿Tiene Mascotas? -->
             <fieldset>
                 <legend>7. ¿Tiene Mascotas?</legend>
-                <label>Si <input type="radio" class="inputRadio" name="mascota" value="si" onclick="handleRadioChangeM(this)" <?php echo
-                        !empty($mascotasT) ? 'checked' : '' ; ?>></label>
-                <label>No <input type="radio" class="inputRadio" name="mascota" value="no" onclick="handleRadioChangeM(this)" <?php echo
-                        empty($mascotasT) ? 'checked' : '' ; ?>></label><br>
+                <label>Si <input type="radio" class="inputRadio" name="mascota" value="si"
+                        onclick="handleRadioChangeM(this)" <?php echo !empty($mascotasT) ? 'checked' : '' ; ?>></label>
+                <label>No <input type="radio" class="inputRadio" name="mascota" value="no"
+                        onclick="handleRadioChangeM(this)" <?php echo empty($mascotasT) ? 'checked' : '' ;
+                        ?>></label><br>
 
                 <div id="contenedor_mascotas" style="display: <?php echo !empty($mascotasT) ? 'block' : 'none'; ?>;">
-                    <table id="mascotas">
-                        <thead id="cabecera_mascotas">
-                            <tr>
-                                <th>¿Qué tipo de mascota?:</th>
-                                <th>¿Cuántas?:</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($mascotasT as $mascota): ?>
-                            <tr>
-                                <td><input type="text" name="tipo_mascota[]"
-                                        value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
-                                <td><input type="number" name="cantidad_mascota[]"
-                                        value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
-                                <td>
-                                    <button type="button" onclick="eliminarFilaM(this)">Eliminar</button>
-                                    <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
-                                    <input type="hidden" name="id_mascota[]"
-                                        value="<?php echo htmlspecialchars($mascota['id']); ?>">
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                    <button type="button" onclick="agregarFilaM()">Agregar Mascota</button>
+                    <div class="table-responsive">
+                        <table id="mascotas">
+                            <thead id="cabecera_mascotas">
+                                <tr>
+                                    <th>¿Qué tipo de mascota?:</th>
+                                    <th>¿Cuántas?:</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($mascotasT as $mascota): ?>
+                                <tr>
+                                    <td><input type="text" name="tipo_mascota[]"
+                                            value="<?php echo htmlspecialchars($mascota['tipo_mascota']); ?>"></td>
+                                    <td><input type="number" name="cantidad_mascota[]"
+                                            value="<?php echo htmlspecialchars($mascota['cantidad']); ?>"></td>
+                                    <td>
+                                        <button type="button" onclick="eliminarFilaM(this)"><span
+                                                class="texto-eliminar">Eliminar</span><i
+                                                class="bi bi-trash icon-responsive"></button>
+                                        <input type="hidden" value="<?php echo htmlspecialchars($mascota['id']); ?>">
+                                        <input type="hidden" name="id_mascota[]"
+                                            value="<?php echo htmlspecialchars($mascota['id']); ?>">
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" onclick="agregarFilaM()"><span class="texto-oculto">Agregar Mascota</span><i
+                            class="bi bi-plus-lg icon-responsive"></i></button>
                 </div>
             </fieldset> <!-- 7. Situacion economica -->
-            <fieldset>
-                <legend>8. Situación Económica</legend>
-                <!-- 8.1 Directa -->
-                <fieldset>
-                    <legend>8.1 Directa</legend>
 
-                    <!-- La tabla se oculta si no hay datos -->
+            <!-- 8.1 Directa -->
+            <fieldset>
+                <legend>8.1 Situación Económica - Directa</legend>
+
+                <!-- La tabla se oculta si no hay datos -->
+                <div class="table-responsive">
                     <table id="ingresos_familiares" border="1"
                         style="<?php echo empty($ingresos) ? 'display:none;' : ''; ?>">
                         <thead>
@@ -395,7 +430,9 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                     </select>
                                 </td>
                                 <td>
-                                    <button type="button" onclick="eliminarFilaI(this)">Eliminar</button>
+                                    <button type="button" onclick="eliminarFilaI(this)"><span
+                                            class="texto-eliminar">Eliminar</span><i
+                                            class="bi bi-trash icon-responsive"></button>
                                     <input type="hidden" value="<?php echo htmlspecialchars($ingreso['id']); ?>">
                                     <input type="hidden" name="id_ingreso[]"
                                         value="<?php echo htmlspecialchars($ingreso['id']); ?>">
@@ -405,21 +442,24 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             <?php endif; ?>
                         </tbody>
                     </table>
+                </div>
 
-                    <!-- Mensaje de "No hay ingresos registrados" -->
-                    <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay
-                        ingresos registrados.</p>
+                <!-- Mensaje de "No hay ingresos registrados" -->
+                <p id="no-ingresos-msg" style="display: <?php echo empty($ingresos) ? 'block' : 'none'; ?>;">No hay
+                    ingresos registrados.</p>
 
-                    <button type="button" onclick="agregarFilaI('ingresos_familiares')">Agregar Persona con
-                        Ingreso</button>
-                </fieldset>
+                <button type="button" onclick="agregarFilaI('ingresos_familiares')"><span class="texto-oculto">Agregar
+                        Persona con
+                        Ingreso</span><i class="bi bi-plus-lg icon-responsive"></i></button>
+            </fieldset>
 
 
-                <!-- 8.2 Egresos importantes -->
-                <fieldset>
-                    <legend>8.2 Egresos importantes</legend>
+            <!-- 8.2 Egresos importantes -->
+            <fieldset>
+                <legend>8.2 Situación Económica - Egresos importantes</legend>
 
-                    <!-- La tabla se oculta si no hay datos -->
+                <!-- La tabla se oculta si no hay datos -->
+                <div class="table-responsive">
                     <table id="egresos_importantes" border="1"
                         style="<?php echo empty($egresos) ? 'display:none;' : ''; ?>">
                         <thead>
@@ -442,7 +482,9 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                 <td><input type="text" name="observacion_egreso[]"
                                         value="<?php echo htmlspecialchars($egreso['observaciones']); ?>"></td>
                                 <td>
-                                    <button type="button" onclick="eliminarFilaE(this)">Eliminar</button>
+                                    <button type="button" onclick="eliminarFilaE(this)"><span
+                                            class="texto-eliminar">Eliminar</span><i
+                                            class="bi bi-trash icon-responsive"></button>
                                     <input type="hidden" value="<?php echo htmlspecialchars($egreso['id']); ?>">
                                     <input type="hidden" name="id_egreso[]"
                                         value="<?php echo htmlspecialchars($egreso['id']); ?>">
@@ -452,17 +494,18 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             <?php endif; ?>
                         </tbody>
                     </table>
+                </div>
 
-                    <!-- Mensaje de "No hay egresos registrados" -->
-                    <p id="no-egresos-msg" style="display: <?php echo empty($egresos) ? 'block' : 'none'; ?>;">No hay
-                        egresos registrados.</p>
+                <!-- Mensaje de "No hay egresos registrados" -->
+                <p id="no-egresos-msg" style="display: <?php echo empty($egresos) ? 'block' : 'none'; ?>;">No hay
+                    egresos registrados.</p>
 
-                    <button type="button" onclick="agregarFilaE('egresos_importantes')">Agregar Egreso</button>
+                <button type="button" onclick="agregarFilaE('egresos_importantes')"><span class="texto-oculto">Agregar
+                        Egreso</span><i class="bi bi-plus-lg icon-responsive"></i></button>
 
-                    <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
-                </fieldset>
-
+                <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
             </fieldset>
+
             <!-- 9. Condiciones de Habitabilidad -->
             <fieldset>
                 <legend>9. Condiciones de Habitabilidad</legend>
@@ -822,55 +865,60 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <p>Si usted ha respondido afirmativamente en el cuestionario anterior, o si usted o alguien de su grupo
                     familiar, padece alguna otra enfermedad, patología o condición de salud que no haya sido antes
                     detallada, agradecemos completar el detalle señalado a continuación.</p>
-
-                <table id="enfermedades_adicionales" border="1"
-                    style="<?php echo empty($infoPersonaE) ? 'display:none;' : ''; ?>">
-                    <thead>
-                        <tr>
-                            <th>Nombre Persona Afectada</th>
-                            <th>Enfermedad</th>
-                            <th>Fecha Diagnóstico</th>
-                            <th>Estado Actual (Alta, Tratamiento, Seguimiento)</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($infoPersonaE)): ?>
-                        <?php foreach ($infoPersonaE as $inforPersona): ?>
-                        <tr>
-                            <td><input type="text" name="nombre_persona[]"
-                                    value="<?php echo htmlspecialchars($inforPersona['nombre_persona']); ?>"></td>
-                            <td><input type="text" name="enfermedad[]"
-                                    value="<?php echo htmlspecialchars($inforPersona['enfermedad']); ?>"></td>
-                            <td><input type="date" name="fecha_diagnostico[]"
-                                    value="<?php echo htmlspecialchars($inforPersona['fecha_diagnostico']); ?>"></td>
-                            <td><input type="text" name="estado_actual[]"
-                                    value="<?php echo htmlspecialchars($inforPersona['estado_actual']); ?>"></td>
-                            <td>
-                                <button type="button" onclick="eliminarFila(this)">Eliminar</button>
-                                <input type="hidden" name="id_enfermedad[]"
-                                    value="<?php echo htmlspecialchars($inforPersona['id']); ?>">
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="enfermedades_adicionales" border="1"
+                        style="<?php echo empty($infoPersonaE) ? 'display:none;' : ''; ?>">
+                        <thead>
+                            <tr>
+                                <th>Nombre y Apellido</th>
+                                <th>Enfermedad</th>
+                                <th>Fecha Diagnóstico</th>
+                                <th>Estado Actual</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($infoPersonaE)): ?>
+                            <?php foreach ($infoPersonaE as $inforPersona): ?>
+                            <tr>
+                                <td><input type="text" name="nombre_persona[]"
+                                        value="<?php echo htmlspecialchars($inforPersona['nombre_persona']); ?>"></td>
+                                <td><input type="text" name="enfermedad[]"
+                                        value="<?php echo htmlspecialchars($inforPersona['enfermedad']); ?>"></td>
+                                <td><input type="date" name="fecha_diagnostico[]"
+                                        value="<?php echo htmlspecialchars($inforPersona['fecha_diagnostico']); ?>">
+                                </td>
+                                <td><input type="text" name="estado_actual[]"
+                                        value="<?php echo htmlspecialchars($inforPersona['estado_actual']); ?>"></td>
+                                <td>
+                                    <button type="button" onclick="eliminarFila(this)"><span
+                                            class="texto-eliminar">Eliminar</span><i
+                                            class="bi bi-trash icon-responsive"></button>
+                                    <input type="hidden" name="id_enfermedad[]"
+                                        value="<?php echo htmlspecialchars($inforPersona['id']); ?>">
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
 
                 <!-- Mensaje de "No hay enfermedades registradas" -->
                 <p id="no-enfermedades-msg" style="display: <?php echo empty($infoPersonaE) ? 'block' : 'none'; ?>;">No
                     hay
                     enfermedades registradas.</p>
 
-                <button type="button" onclick="agregarFilaEA()">Agregar Persona</button>
+                <button type="button" onclick="agregarFilaEA()"><span class="texto-oculto">Agregar Persona</span><i
+                        class="bi bi-plus-lg icon-responsive"></i></button>
             </fieldset>
 
             <!-- Button trigger modal -->
             <div class="cont-btn-fichasocial">
-                <button type="submit" class="btn btn-actualizar" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button type="submit" class=" btn-actualizar" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Actualizar
                 </button>
-                <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class="btn btn-pdf">Exportar en PDF</a>
+                <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class=" btn-pdf">Exportar en PDF</a>
 
             </div>
 

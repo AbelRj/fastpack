@@ -1,3 +1,5 @@
+
+
 /* Estilos generales */
 body {
     font-family: Arial, sans-serif;
@@ -20,13 +22,13 @@ h1 {
     color: #C71585; /* Rosado oscuro */
     display: inline;
     color: #fff;
-    padding: 5px 20px 5px 20px;
+    padding: 10px 20px 10px 20px;
     margin: 0;
     flex-grow: 2 !important;   
     text-align: center;
 }
 
-.btn-icon {
+.btn-icon-atras {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -36,7 +38,7 @@ h1 {
     margin: 0;
     flex-grow: 1 !important;  
 }
-.btn-icon:hover {
+.btn-icon-atras:hover {
     background-color: #eb69bb;
     box-shadow: none;
 }
@@ -48,6 +50,7 @@ h1 {
     border: none;  
     border-radius: 0px;
     padding: 0; 
+    font-size: 1.3rem;
 }
 .btn-editar:hover{
     background-color: #eb69bb;
@@ -229,17 +232,127 @@ legend {
 
 
 /*boton actualizar y exportar pdf*/
+.cont-btn-fichasocial{
+    display: flex;
+    justify-content:space-between;
+    padding: 0px 20px 10px 20px;    
+}
 .btn-actualizar{
-    background-color: #00BFFF;
-    color: #ddd;
+    background-color: #00BFFF ;
+    color: #fff;
+}
+.btn-actualizar:hover{
+background-color: #C71585;
 }
 .btn-pdf{
     background-color: #C71585;
-    color: #ddd;
+    color: #fff !important;
+    display: flex; /* Habilitar flexbox */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+}
+.btn-pdf:hover{
+    background-color: #00BFFF ;
+}
+/*Responsive*/
+.icon-responsive{
+    display: none;
+}
+
+@media (max-width: 991px) {
+.span-titulo{
+    display: none;
+}
+
+h1{
+    padding: 10px 0px 10px 0px;
+
+}
+.fila-grupo-familiar{
+    display: flex;
+    flex-wrap: wrap; 
+
+}
+.icon-responsive{
+    display:flex;
+}
+.texto-eliminar{
+    display: none;
+}
+.texto-oculto{
+    display: none;
+}
+
+fieldset {
+    border: none; /* Celeste */
+    border-radius: 0px;
+    margin: 0px;
+    padding: 10px;
+    background-color: #ffffff;
+    box-shadow: none;
+}
+.cont-btn-fichasocial{
+    display: flex;
+    justify-content:space-between;
+    padding: 10px 20px 10px 20px;
 }
 
 
 
+
+
+
+#grupo_familiar th, 
+#grupo_familiar td,
+#apoyo_economico th,
+#apoyo_economico td,
+#mascotas th,
+#mascotas td,
+#ingresos_familiares th,
+#ingresos_familiares td,
+#egresos_importantes th,
+#egresos_importantes td,
+#enfermedades_adicionales th,
+#enfermedades_adicionales td{
+    font-size: 15px;
+    padding: 8px;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+
+/* Asegurar que la tabla se mantenga legible */
+#grupo_familiar input[type="text"],
+#grupo_familiar input[type="date"],
+#apoyo_economico input[type="text"],
+#mascotas input[type="text"],
+#ingresos_familiares input[type="text"],
+#egresos_importantes input[type="text"],
+#enfermedades_adicionales input[type="text"]{
+    width: 100%; /* Ajustar ancho del input al 100% del contenedor */
+    box-sizing: border-box; /* Incluir el padding en el ancho total */
+}
+
+/* Estilo para evitar que los nombres largos deformen la tabla */
+#grupo_familiar th, 
+#grupo_familiar td,
+#apoyo_economico th,
+#apoyo_economico td,
+#mascotas th,
+#mascotas td,
+#ingresos_familiares th,
+#ingresos_familiares td,
+#egresos_importantes th,
+#egresos_importantes td,
+#enfermedades_adicionales th,
+#enfermedades_adicionales td  {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+}
 
 
 
