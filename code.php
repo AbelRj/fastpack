@@ -5,9 +5,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Identificación del Trabajador
     $trabajador_id = isset($_POST['id']) ? $_POST['id'] : null;
     // Recuperar datos del formulario 
-    $nombreApellidoT = (isset($_POST['nombre_apellido'])) ? $_POST['nombre_apellido']:"";
-    $fechaNacimientoT = (isset($_POST['fecha_nacimiento'])) ? $_POST['fecha_nacimiento']:"";
-    $nacionalidadT = (isset($_POST['nacionalidad'])) ? $_POST['nacionalidad']:"";
+    //$nombreApellidoT = (isset($_POST['nombre_apellido'])) ? $_POST['nombre_apellido']:"";
+    //$fechaNacimientoT = (isset($_POST['fecha_nacimiento'])) ? $_POST['fecha_nacimiento']:"";
+    //$nacionalidadT = (isset($_POST['nacionalidad'])) ? $_POST['nacionalidad']:"";
     $domicilioT = (isset($_POST['domicilio'])) ? $_POST['domicilio']:"";
     $telefonoT = (isset($_POST['telefono'])) ? $_POST['telefono']:"";
     $correoT = (isset($_POST['correo'])) ? $_POST['correo']:"";
@@ -15,14 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $previsionSaludT = (isset($_POST['prevision_salud'])) ? $_POST['prevision_salud']:"";
 
 
-    $sentencia = $conexion->prepare("UPDATE trabajador SET nombre_apellido = :nombre_apellido, fecha_nacimiento = :fecha_nacimiento, 
-    nacionalidad = :nacionalidad, domicilio = :domicilio, telefono = :telefono, 
+    $sentencia = $conexion->prepare("UPDATE trabajador SET 
+    domicilio = :domicilio, telefono = :telefono, 
     correo_electronico = :correo_electronico, estado_civil = :estado_civil, prevision_salud = :prevision_salud 
     WHERE id = :id");
     $sentencia->bindParam(':id', $trabajador_id);
-    $sentencia->bindParam(':nombre_apellido', $nombreApellidoT);
-    $sentencia->bindParam(':fecha_nacimiento', $fechaNacimientoT);
-    $sentencia->bindParam(':nacionalidad', $nacionalidadT);
     $sentencia->bindParam(':domicilio', $domicilioT);
     $sentencia->bindParam(':telefono', $telefonoT);
     $sentencia->bindParam(':correo_electronico', $correoT);
@@ -475,24 +472,24 @@ $sentencia->execute();
 
 
 //Declaracion Salud 
-$salud_cancer = isset($_POST['salud_cancer']) ? $_POST['salud_cancer'] : '';
-$salud_sistema_nervioso = isset($_POST['salud_sistema_nervioso']) ? $_POST['salud_sistema_nervioso'] : '';
-$salud_salud_mental = isset($_POST['salud_salud_mental']) ? $_POST['salud_salud_mental'] : '';
-$salud_ojo = isset($_POST['salud_ojo']) ? $_POST['salud_ojo'] : '';
-$salud_nariz_oidos = isset($_POST['salud_nariz_oidos']) ? $_POST['salud_nariz_oidos'] : '';
-$salud_respiratorio = isset($_POST['salud_respiratorio']) ? $_POST['salud_respiratorio'] : '';
-$salud_corazon = isset($_POST['salud_corazon']) ? $_POST['salud_corazon'] : '';
-$salud_vascular = isset($_POST['salud_vascular']) ? $_POST['salud_vascular'] : '';
-$salud_metabolico = isset($_POST['salud_metabolico']) ? $_POST['salud_metabolico'] : '';
-$salud_digestivo = isset($_POST['salud_digestivo']) ? $_POST['salud_digestivo'] : '';
-$salud_hepatitis_sida = isset($_POST['salud_hepatitis_sida']) ? $_POST['salud_hepatitis_sida'] : '';
-$salud_renal = isset($_POST['salud_renal']) ? $_POST['salud_renal'] : '';
-$salud_reproductor_femenino = isset($_POST['salud_reproductor_femenino']) ? $_POST['salud_reproductor_femenino'] : '';
-$salud_autoinmune = isset($_POST['salud_autoinmune']) ? $_POST['salud_autoinmune'] : '';
-$salud_tiroides = isset($_POST['salud_tiroides']) ? $_POST['salud_tiroides'] : '';
-$salud_esqueletico = isset($_POST['salud_esqueletico']) ? $_POST['salud_esqueletico'] : '';
-$salud_congenito = isset($_POST['salud_congenito']) ? $_POST['salud_congenito'] : '';
-$salud_embarazo = isset($_POST['salud_embarazo']) ? $_POST['salud_embarazo'] : '';
+$salud_cancer = isset($_POST['salud_cancer']) ? $_POST['salud_cancer'] : null;
+$salud_sistema_nervioso = isset($_POST['salud_sistema_nervioso']) ? $_POST['salud_sistema_nervioso'] : null;
+$salud_salud_mental = isset($_POST['salud_salud_mental']) ? $_POST['salud_salud_mental'] : null;
+$salud_ojo = isset($_POST['salud_ojo']) ? $_POST['salud_ojo'] : null;
+$salud_nariz_oidos = isset($_POST['salud_nariz_oidos']) ? $_POST['salud_nariz_oidos'] : null;
+$salud_respiratorio = isset($_POST['salud_respiratorio']) ? $_POST['salud_respiratorio'] : null;
+$salud_corazon = isset($_POST['salud_corazon']) ? $_POST['salud_corazon'] : null;
+$salud_vascular = isset($_POST['salud_vascular']) ? $_POST['salud_vascular'] : null;
+$salud_metabolico = isset($_POST['salud_metabolico']) ? $_POST['salud_metabolico'] : null;
+$salud_digestivo = isset($_POST['salud_digestivo']) ? $_POST['salud_digestivo'] : null;
+$salud_hepatitis_sida = isset($_POST['salud_hepatitis_sida']) ? $_POST['salud_hepatitis_sida'] : null;
+$salud_renal = isset($_POST['salud_renal']) ? $_POST['salud_renal'] : null;
+$salud_reproductor_femenino = isset($_POST['salud_reproductor_femenino']) ? $_POST['salud_reproductor_femenino'] : null;
+$salud_autoinmune = isset($_POST['salud_autoinmune']) ? $_POST['salud_autoinmune'] : null;
+$salud_tiroides = isset($_POST['salud_tiroides']) ? $_POST['salud_tiroides'] : null;
+$salud_esqueletico = isset($_POST['salud_esqueletico']) ? $_POST['salud_esqueletico'] : null;
+$salud_congenito = isset($_POST['salud_congenito']) ? $_POST['salud_congenito'] : null;
+$salud_embarazo = isset($_POST['salud_embarazo']) ? $_POST['salud_embarazo'] : null;
 
 
 $sentencia = $conexion->prepare("SELECT id FROM declaracion_salud WHERE trabajador_id = :trabajador_id");

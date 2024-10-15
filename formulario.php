@@ -172,6 +172,14 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                 value="<?php echo htmlspecialchars($datostrabajador['telefono']); ?>"></div>
                     </div>
                     <div class="row">
+                        <div class="col-name">Celular:</div>
+                        <div class="col-input"><input type="tel" name="celular"
+                                value="<?php echo htmlspecialchars($datostrabajador['celular']); ?>"></div>
+                        <div class="col-name">Sexo:</div>
+                        <div class="col-input"><input type="text" name="sexo"
+                                value="<?php echo ($datostrabajador['sexo'] == 'M') ? 'Masculino' : (($datostrabajador['sexo'] == 'F') ? 'Femenino' : ''); ?>"></div>
+                    </div>
+                    <div class="row">
                         <div class="col-name">Correo Electrónico:</div>
                         <div class="col-input"><input type="email" name="correo"
                                 value="<?php echo htmlspecialchars($datostrabajador['correo_electronico']); ?>"></div>
@@ -888,8 +896,23 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                 <td><input type="date" name="fecha_diagnostico[]"
                                         value="<?php echo htmlspecialchars($inforPersona['fecha_diagnostico']); ?>">
                                 </td>
-                                <td><input type="text" name="estado_actual[]"
-                                        value="<?php echo htmlspecialchars($inforPersona['estado_actual']); ?>"></td>
+                                <td>
+
+                                <select name="estado_actual[]">
+                                        <option value="" <?php echo (isset($inforPersona['estado_actual']) && $inforPersona['estado_actual']=='' )
+                                            ? 'selected' : '' ; ?>>Seleccionar</option>
+                                        <option value="Alta" <?php echo
+                                            ($inforPersona['estado_actual']=='Alta' ) ? 'selected' : '' ; ?>>Alta</option>
+                                        <option value="Tratamiento" <?php echo
+                                            ($inforPersona['estado_actual']=='Tratamiento' ) ? 'selected' : '' ; ?>
+                                            >Tratamiento</option>
+                                        <option value="Seguimiento" <?php echo
+                                            ($inforPersona['estado_actual']=='Seguimiento' ) ? 'selected' : '' ; ?>
+                                            >Seguimiento</option>
+                                    </select>
+
+
+                                </td>
                                 <td>
                                     <button type="button" onclick="eliminarFila(this)"><span
                                             class="texto-eliminar">Eliminar</span><i

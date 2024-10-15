@@ -394,7 +394,14 @@ function agregarFilaEA() {
         <td><input type="text" name="nombre_persona[]"></td>
         <td><input type="text" name="enfermedad[]"></td>
         <td><input type="date" name="fecha_diagnostico[]"></td>
-        <td><input type="text" name="estado_actual[]"></td>
+        <td>
+        <select name="estado_actual[]">
+                                        <option value="">Seleccionar</option>
+                                        <option value="Alta">Alta</option>
+                                        <option value="Tratamiento">Tratamiento</option>
+                                        <option value="Seguimiento">Seguimiento</option>
+                                    </select>
+        </td>
         <td><button type="button" onclick="eliminarFila(this)"><span class="texto-eliminar">Eliminar</span><i class="bi bi-trash icon-responsive"></i></button>
             <input type="hidden" name="id_enfermedad[]" value="new"> <!-- Agregar un valor especial -->
         </td>

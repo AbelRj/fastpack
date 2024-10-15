@@ -47,15 +47,15 @@ if (!empty($datos)) {
     }
 
     // Preparar la consulta SQL para insertar solo los nuevos trabajadores
-    /*$sql = "INSERT INTO [trabajador] (id, rut, nombre_apellido, sexo, fecha_nacimiento, 
+    $sql = "INSERT INTO [trabajador] (id, rut, nombre_apellido, sexo, fecha_nacimiento, 
             nacionalidad, profesion, domicilio, telefono, celular, correo_electronico, estado_civil)
             VALUES (:id, :rut, :nombre_apellido, :sexo, :fecha_nacimiento, :nacionalidad,
-            :profesion, :domicilio, :telefono, :celular, :correo_electronico, :estado_civil)";*/
+            :profesion, :domicilio, :telefono, :celular, :correo_electronico, :estado_civil)";
 
-$sql = "INSERT INTO trabajador (id, rut, nombre_apellido, sexo, fecha_nacimiento, 
+/*$sql = "INSERT INTO trabajador (id, rut, nombre_apellido, sexo, fecha_nacimiento, 
 nacionalidad, profesion, domicilio, telefono, celular, correo_electronico, estado_civil)
 VALUES (:id, :rut, :nombre_apellido, :sexo, :fecha_nacimiento, :nacionalidad,
-:profesion, :domicilio, :telefono, :celular, :correo_electronico, :estado_civil)";
+:profesion, :domicilio, :telefono, :celular, :correo_electronico, :estado_civil)";*/
 
     $stmt = $conexion->prepare($sql);
 

@@ -1,8 +1,9 @@
 <?php
 
-/*
+
 
 $servidor = "srv-sql01";
+//$servidor = "srv-sql.fastpack.cl";
 $baseDeDatos = "BD_FSocial_Test";
 $usuario = "sql_fsocial";
 $contraseña = "Fsgj98!fg.QA";
@@ -18,7 +19,7 @@ try {
 } catch (Exception $error) {
     echo "Error de conexión: " . $error->getMessage();
 }
-*/
+
 
 /*
 $servidor = "ABEL"; // Cambia esto por la dirección de tu servidor
@@ -41,7 +42,7 @@ try {
 */
 
 
-
+/*
 $servidor="localhost";
 $baseDeDatos="ficha_social_familiar";
 $usuario="root";
@@ -56,6 +57,6 @@ try{
     echo $error->getMessage();
 }
 
-
+*/
 
 ?>
