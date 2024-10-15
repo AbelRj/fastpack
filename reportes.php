@@ -382,8 +382,7 @@ body {
     <!-- Mensaje de "No hay egresos registrados" -->
     <p id="no-egresos-msg" style="display: <?php echo empty($egresos) ? 'block' : 'none'; ?>;">No hay egresos registrados.</p>
 
-
-    <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>
+    <!-- <label>Total Egresos: <input type="number" id="total_egresos" readonly></label>-->
 
 
         <!-- 9. Condiciones de Habitabilidad -->

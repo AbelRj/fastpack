@@ -312,7 +312,9 @@ function eliminarFilaI(button) {
     }
 }
 //egresos importantes
-
+window.onload = function() {
+    calcularTotalEgresos();
+};
 function agregarFilaE(tablaId) {
     var table = document.getElementById(tablaId).getElementsByTagName('tbody')[0];
     var newRow = table.insertRow();

@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //$nacionalidadT = (isset($_POST['nacionalidad'])) ? $_POST['nacionalidad']:"";
     $domicilioT = (isset($_POST['domicilio'])) ? $_POST['domicilio']:"";
     $telefonoT = (isset($_POST['telefono'])) ? $_POST['telefono']:"";
+    $celularT = (isset($_POST['celular'])) ? $_POST['celular']:"";
     $correoT = (isset($_POST['correo'])) ? $_POST['correo']:"";
     $estadoCivilT = (isset($_POST['estado_civil'])) ? $_POST['estado_civil']:"";
     $previsionSaludT = (isset($_POST['prevision_salud'])) ? $_POST['prevision_salud']:"";
@@ -17,11 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $sentencia = $conexion->prepare("UPDATE trabajador SET 
     domicilio = :domicilio, telefono = :telefono, 
-    correo_electronico = :correo_electronico, estado_civil = :estado_civil, prevision_salud = :prevision_salud 
+    correo_electronico = :correo_electronico, estado_civil = :estado_civil, prevision_salud = :prevision_salud, 
+    celular = :celular 
     WHERE id = :id");
     $sentencia->bindParam(':id', $trabajador_id);
     $sentencia->bindParam(':domicilio', $domicilioT);
     $sentencia->bindParam(':telefono', $telefonoT);
+    $sentencia->bindParam(':celular', $celularT);
     $sentencia->bindParam(':correo_electronico', $correoT);
     $sentencia->bindParam(':estado_civil', $estadoCivilT);
     $sentencia->bindParam(':prevision_salud', $previsionSaludT);

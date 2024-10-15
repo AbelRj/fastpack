@@ -148,9 +148,14 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <legend>1. Identificación del Trabajador</legend>
                 <div class="table-identificacion">
                     <div class="row">
-                        <div class="col-name">ID:</div>
-                        <div class="col-input"><input type="text" name="id"
-                                value="<?php echo htmlspecialchars($datostrabajador['id']); ?>" readonly></div>
+                        <div class="col-name">Rut:</div>
+                        <div class="col-input">
+                            <input type="hidden" name="id"
+                                value="<?php echo htmlspecialchars($datostrabajador['id']); ?>" readonly>
+                            
+                                <input type="text" name="rut"
+                                value="<?php echo htmlspecialchars($datostrabajador['rut']); ?>" readonly>
+                            </div>
                         <div class="col-name">Nombre y Apellido:</div>
                         <div class="col-input"><input type="text" name="nombre_apellido"
                                 value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>" readonly></div>
@@ -940,7 +945,8 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <button type="submit" class=" btn-actualizar" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Actualizar
                 </button>
-                <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class=" btn-pdf">Exportar en PDF</a>
+                <a href="reportes.php?id=<?php echo $datostrabajador['id']; ?>" class="btn-pdf" target="_blank">Exportar en PDF</a>
+
 
             </div>
 
@@ -950,7 +956,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">¿Estas seguro de guardar ests datos?</h1>
+                        <h1 class="modal-title fs-5 colorletra-modal" id="exampleModalLabel">¿Estas seguro de guardar estos datos?</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-footer">
