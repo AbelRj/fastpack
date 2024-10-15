@@ -132,6 +132,10 @@ body {
         <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['id']); ?></td>
     </tr>
     <tr>
+        <th style="border: 1px solid black;">Rut:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['rut']); ?></td>
+    </tr>
+    <tr>
         <th style="border: 1px solid black;">Nombre y Apellido:</th> 
         <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?></td>
     </tr>
@@ -144,12 +148,20 @@ body {
         <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?></td>
     </tr>
     <tr>
+        <th style="border: 1px solid black;">Sexo:</th> 
+        <td style="border: 1px solid black;"><?php echo ($datostrabajador['sexo'] == 'M') ? 'Masculino' : (($datostrabajador['sexo'] == 'F') ? 'Femenino' : ''); ?></td>
+    </tr>
+    <tr>
         <th style="border: 1px solid black;">Domicilio: </th> 
         <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['domicilio']); ?></td>
     </tr>
     <tr>
         <th style="border: 1px solid black;">Teléfono:</th> 
         <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['telefono']); ?></td>
+    </tr>
+    <tr>
+        <th style="border: 1px solid black;">Celular:</th> 
+        <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['celular']); ?></td>
     </tr>
     <tr>
         <th style="border: 1px solid black;">Correo Electrónico:</th> 
@@ -164,10 +176,8 @@ body {
         <td style="border: 1px solid black;"><?php echo htmlspecialchars($datostrabajador['prevision_salud']); ?></td>
     </tr>
 </table>
-
-        <!-- 2. Grupo Familiar -->
-            <h4>GRUPO FAMILIAR</h4>
-
+<!-- 2. Grupo Familiar -->
+        <h4>GRUPO FAMILIAR</h4>
             <table id="grupo_familiar" border="1" style="<?php echo empty($datosGFamiliar) ? 'display:none;' : ''; ?> border-collapse: collapse; width: 100%;">
     <thead>
         <tr>
@@ -210,8 +220,6 @@ body {
         <?php endif; ?>
     </tbody>
 </table>
-
-
 
             <!-- Mensaje de "No hay miembros familiares registrados" -->
             <p id="no-miembros-msg" style="display: <?php echo empty($datosGFamiliar) ? 'block' : 'none'; ?>;">No hay

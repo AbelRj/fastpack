@@ -396,7 +396,6 @@ function agregarFilaEA() {
         <td><input type="date" name="fecha_diagnostico[]"></td>
         <td>
         <select name="estado_actual[]">
-                                        <option value="">Seleccionar</option>
                                         <option value="Alta">Alta</option>
                                         <option value="Tratamiento">Tratamiento</option>
                                         <option value="Seguimiento">Seguimiento</option>

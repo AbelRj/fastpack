@@ -150,18 +150,18 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row">
                         <div class="col-name">ID:</div>
                         <div class="col-input"><input type="text" name="id"
-                                value="<?php echo htmlspecialchars($datostrabajador['id']); ?>"></div>
+                                value="<?php echo htmlspecialchars($datostrabajador['id']); ?>" readonly></div>
                         <div class="col-name">Nombre y Apellido:</div>
                         <div class="col-input"><input type="text" name="nombre_apellido"
-                                value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>"></div>
+                                value="<?php echo htmlspecialchars($datostrabajador['nombre_apellido']); ?>" readonly></div>
                     </div>
                     <div class="row">
                         <div class="col-name">Fecha de Nacimiento:</div>
                         <div class="col-input"><input type="date" name="fecha_nacimiento"
-                                value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>"></div>
+                                value="<?php echo htmlspecialchars($datostrabajador['fecha_nacimiento']); ?>" readonly></div>
                         <div class="col-name">Nacionalidad:</div>
                         <div class="col-input"><input type="text" name="nacionalidad"
-                                value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>"></div>
+                                value="<?php echo htmlspecialchars($datostrabajador['nacionalidad']); ?>" readonly></div>
                     </div>
                     <div class="row">
                         <div class="col-name">Domicilio:</div>
@@ -177,7 +177,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                 value="<?php echo htmlspecialchars($datostrabajador['celular']); ?>"></div>
                         <div class="col-name">Sexo:</div>
                         <div class="col-input"><input type="text" name="sexo"
-                                value="<?php echo ($datostrabajador['sexo'] == 'M') ? 'Masculino' : (($datostrabajador['sexo'] == 'F') ? 'Femenino' : ''); ?>"></div>
+                                value="<?php echo ($datostrabajador['sexo'] == 'M') ? 'Masculino' : (($datostrabajador['sexo'] == 'F') ? 'Femenino' : ''); ?>" readonly></div>
                     </div>
                     <div class="row">
                         <div class="col-name">Correo Electrónico:</div>
@@ -899,8 +899,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                 <td>
 
                                 <select name="estado_actual[]">
-                                        <option value="" <?php echo (isset($inforPersona['estado_actual']) && $inforPersona['estado_actual']=='' )
-                                            ? 'selected' : '' ; ?>>Seleccionar</option>
+
                                         <option value="Alta" <?php echo
                                             ($inforPersona['estado_actual']=='Alta' ) ? 'selected' : '' ; ?>>Alta</option>
                                         <option value="Tratamiento" <?php echo

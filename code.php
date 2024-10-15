@@ -376,20 +376,33 @@ foreach ($eliminar_egresos as $idEgreso) {
  $n_logia = isset($_POST['logia']) ? $_POST['logia'] :"";
  $condiciones_h = isset($_POST['condiciones_habitabilidad']) ? $_POST['condiciones_habitabilidad'] :"";
 
+ $sentencia_existente = $conexion->prepare("SELECT COUNT(*) FROM condiciones_habitabilidad WHERE trabajador_id = :trabajador_id");
+ $sentencia_existente->bindParam(':trabajador_id', $trabajador_id);
+ $sentencia_existente->execute();
+ $registro_existente = $sentencia_existente->fetchColumn();
+ if ($registro_existente > 0) {
+    // Actualizar el registro existente
+    $sentencia = $conexion->prepare("
+        UPDATE condiciones_habitabilidad 
+        SET tipo_vivienda = :tipo_vivienda,
+            material_vivienda = :material_vivienda,
+            num_habitaciones = :num_habitaciones,
+            num_banos = :num_banos,
+            num_cocina = :num_cocina,
+            num_logia = :num_logia,
+            condiciones_habitabilidad = :condiciones_habitabilidad
+        WHERE trabajador_id = :trabajador_id
+    ");
+} else {
+    // Insertar un nuevo registro
+    $sentencia = $conexion->prepare("
+        INSERT INTO condiciones_habitabilidad 
+        (trabajador_id, tipo_vivienda, material_vivienda, num_habitaciones, num_banos, num_cocina, num_logia, condiciones_habitabilidad) 
+        VALUES (:trabajador_id, :tipo_vivienda, :material_vivienda, :num_habitaciones, :num_banos, :num_cocina, :num_logia, :condiciones_habitabilidad)
+    ");
+}
 
- $sentencia = $conexion->prepare("
- UPDATE condiciones_habitabilidad 
- SET tipo_vivienda = :tipo_vivienda,
-     material_vivienda = :material_vivienda,
-     num_habitaciones = :num_habitaciones,
-     num_banos = :num_banos,
-     num_cocina = :num_cocina,
-     num_logia = :num_logia,
-     condiciones_habitabilidad = :condiciones_habitabilidad
- WHERE trabajador_id = :trabajador_id
-");
-
-// Vincular los parámetros a la consulta SQ
+// Vincular los parámetros a la consulta SQL
 $sentencia->bindParam(':trabajador_id', $trabajador_id);
 $sentencia->bindParam(':tipo_vivienda', $tipo_vivienda);
 $sentencia->bindParam(':material_vivienda', $material_vivienda);
@@ -398,7 +411,10 @@ $sentencia->bindParam(':num_banos', $n_banos);
 $sentencia->bindParam(':num_cocina', $n_cocina);
 $sentencia->bindParam(':num_logia', $n_logia);
 $sentencia->bindParam(':condiciones_habitabilidad', $condiciones_h);
+
+// Ejecutar la consulta
 $sentencia->execute();
+
 
 //Mapa conceptual
 $mapa_conceptual = isset($_POST['mapa_conceptual']) ? $_POST['mapa_conceptual'] :"";
