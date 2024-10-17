@@ -120,7 +120,14 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 body {
     margin: 0;  /* Eliminar margen del body */
     padding: 0; /* Eliminar padding del body */
+    font-family: Arial, sans-serif;
 }
+textarea {
+        font-family: Arial, sans-serif;
+        font-size: 12pt; /* Ajusta el tamaño si es necesario */
+        height: auto;
+    }
+
 </style>
 <body >
 <h2>FICHA SOCIAL FAMILIAR - TRABAJADORES FASTPACK</h2>
@@ -393,8 +400,7 @@ body {
             <label for="tipo_vivienda">Tipo de Vivienda:</label>
         </td>
         <td style="border: 1px solid black;">
-        <?php echo (isset($habitalidad['tipo_vivienda']) &&
-                    $habitalidad['tipo_vivienda']=='propia' ) ? 'selected' : '' ; ?>
+        <?php echo htmlspecialchars($habitalidad['tipo_vivienda'] ?? ''); ?>
         </td>
     </tr>
     <tr>
@@ -402,8 +408,7 @@ body {
             <label for="material_vivienda">Material de la Vivienda:</label>
         </td>
         <td style="border: 1px solid black;">
-        <?php echo (isset($habitalidad['material_vivienda']) &&
-                    $habitalidad['material_vivienda']=='seleccionar' ) ? 'selected' : '' ; ?>
+        <?php echo htmlspecialchars($habitalidad['material_vivienda'] ?? ''); ?>
         </td>
     </tr>
     <tr>
@@ -443,8 +448,7 @@ body {
             <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
         </td>
         <td style="border: 1px solid black;">
-        <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
-                    $habitalidad['condiciones_habitabilidad']=='normal' ) ? 'selected' : '' ; ?>
+        <?php echo htmlspecialchars($habitalidad['condiciones_habitabilidad'] ?? ''); ?>
         </td>
     </tr>
 </table>

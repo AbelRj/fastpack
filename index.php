@@ -7,20 +7,38 @@ $sentencia = $conexion->prepare("SELECT * FROM [trabajador]");
 $sentencia->execute();
 $lista_trabajadores = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 include("templates/header.php") ?>
+
 <script>
     $(document).ready(function() {
         $('#table_id').DataTable({
-           // "language": {
-              //  "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json",
-           // },
-          // "scrollX": true,  // Habilitar el desplazamiento horizontal
+            "language": {
+                "sEmptyTable": "No hay datos disponibles en la tabla",
+                "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                "sInfoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "sInfoFiltered": "(filtrado de _MAX_ entradas totales)",
+                "sLengthMenu": "Mostrar _MENU_ entradas",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing": "Procesando...",
+                "sSearch": "Buscar:",
+                "sZeroRecords": "No se encontraron resultados",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": activar para ordenar la columna de manera descendente"
+                }
+            },
+           // "scrollX": true,  // Habilitar el desplazamiento horizontal
             "autoWidth": true,  // Ajuste automático del ancho de las columnas
             "responsive": true, // Hacer la tabla adaptable
-            "pageLength": 5,   // Mostrar 10 filas por página
+            "pageLength": 5,   // Mostrar 5 filas por página
             "lengthMenu": [5, 10, 20, 30],  // Opciones para cambiar el número de filas mostradas
         });
     });
-    
 </script>
 
 <div class="table-responsive tabla">
