@@ -576,7 +576,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 
                 <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
-                <select name="condiciones_habitabilidad" id="condiciones_habitabilidad">
+                <select name="condiciones_habitabilidad" id="condiciones_habitabilidad" onchange="showInput('condiciones_habitabilidad_other')">
                     <option value="">Seleccionar</option>
                     <option value="normal" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
                         $habitalidad['condiciones_habitabilidad']=='normal' ) ? 'selected' : '' ; ?>>Normal</option>
@@ -586,6 +586,7 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                     <option value="otro" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
                         $habitalidad['condiciones_habitabilidad']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
                 </select>
+                <input type="text" name="condiciones_habitabilidad_other" id="condiciones_habitabilidad_other" placeholder="Especificar" style="display:none;">
             </fieldset>
             <!-- 10. Mapa conceptual -->
             <fieldset>

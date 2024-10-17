@@ -382,6 +382,30 @@ function calcularTotalEgresos() {
     document.getElementById('total_egresos').value = total;
 }
 
+
+
+//9. Condiciones de Habitabilidad 
+    function showInput(inputId) {
+        const select = document.getElementById(inputId.replace('_other', '').replace('tipo_vivienda', 'tipo_vivienda').replace('material_vivienda', 'material_vivienda').replace('condiciones_habitabilidad', 'condiciones_habitabilidad'));
+        const input = document.getElementById(inputId);
+        input.style.display = select.value === 'otro' ? 'block' : 'none';
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //15. Detalles Adicionales de Salud de Usted o su Grupo Familiar
 // Función para agregar una nueva fila al detalle de enfermedades
 function agregarFilaEA() {
