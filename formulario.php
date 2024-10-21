@@ -576,17 +576,14 @@ $infoPersonaE = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 
                 <label for="condiciones_habitabilidad">Condiciones de Habitabilidad:</label>
-                <select name="condiciones_habitabilidad" id="condiciones_habitabilidad" onchange="showInput('condiciones_habitabilidad_other')">
-                    <option value="">Seleccionar</option>
-                    <option value="normal" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
-                        $habitalidad['condiciones_habitabilidad']=='normal' ) ? 'selected' : '' ; ?>>Normal</option>
-                    <option value="hacinamiento" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
-                        $habitalidad['condiciones_habitabilidad']=='hacinamiento' ) ? 'selected' : '' ; ?>>Hacinamiento
-                    </option>
-                    <option value="otro" <?php echo (isset($habitalidad['condiciones_habitabilidad']) &&
-                        $habitalidad['condiciones_habitabilidad']=='otro' ) ? 'selected' : '' ; ?>>Otro</option>
-                </select>
-                <input type="text" name="condiciones_habitabilidad_other" id="condiciones_habitabilidad_other" placeholder="Especificar" style="display:none;">
+                <select name="condiciones_habitabilidad" id="condiciones_habitabilidad" onchange="toggleInput('condiciones_habitabilidad')">
+        <option value="">Seleccionar</option>
+        <option value="normal" <?php echo (isset($habitalidad['condiciones_habitabilidad']) && $habitalidad['condiciones_habitabilidad']=='normal') ? 'selected' : ''; ?>>Normal</option>
+        <option value="hacinamiento" <?php echo (isset($habitalidad['condiciones_habitabilidad']) && $habitalidad['condiciones_habitabilidad']=='hacinamiento') ? 'selected' : ''; ?>>Hacinamiento</option>
+        <option value="otro" <?php echo (isset($habitalidad['condiciones_habitabilidad']) && !in_array($habitalidad['condiciones_habitabilidad'], ['normal', 'hacinamiento'])) ? 'selected' : ''; ?>>Otro</option>
+    </select>
+    <!-- Campo de texto para la opción "Otro" -->
+    <input type="text" name="condiciones_habitabilidad_other" id="condiciones_habitabilidad_other" placeholder="Especificar" style="display: <?php echo (isset($habitalidad['condiciones_habitabilidad']) && !in_array($habitalidad['condiciones_habitabilidad'], ['normal', 'hacinamiento'])) ? 'block' : 'none'; ?>;" value="<?php echo (isset($habitalidad['condiciones_habitabilidad']) && !in_array($habitalidad['condiciones_habitabilidad'], ['normal', 'hacinamiento'])) ? htmlspecialchars($habitalidad['condiciones_habitabilidad']) : ''; ?>">
             </fieldset>
             <!-- 10. Mapa conceptual -->
             <fieldset>

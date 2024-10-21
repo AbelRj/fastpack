@@ -379,6 +379,11 @@ foreach ($eliminar_egresos as $idEgreso) {
  $n_logia = isset($_POST['logia']) ? $_POST['logia'] :"";
  $condiciones_h = isset($_POST['condiciones_habitabilidad']) ? $_POST['condiciones_habitabilidad'] :"";
 
+ // Si selecciona "Otro", usamos el valor ingresado en el input
+if ($condiciones_h === 'otro') {
+    $condiciones_h = isset($_POST['condiciones_habitabilidad_other']) ? $_POST['condiciones_habitabilidad_other'] : "";
+}
+
  $sentencia_existente = $conexion->prepare("SELECT COUNT(*) FROM condiciones_habitabilidad WHERE trabajador_id = :trabajador_id");
  $sentencia_existente->bindParam(':trabajador_id', $trabajador_id);
  $sentencia_existente->execute();

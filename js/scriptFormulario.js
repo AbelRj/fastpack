@@ -385,11 +385,11 @@ function calcularTotalEgresos() {
 
 
 //9. Condiciones de Habitabilidad 
-    function showInput(inputId) {
-        const select = document.getElementById(inputId.replace('_other', '').replace('tipo_vivienda', 'tipo_vivienda').replace('material_vivienda', 'material_vivienda').replace('condiciones_habitabilidad', 'condiciones_habitabilidad'));
-        const input = document.getElementById(inputId);
-        input.style.display = select.value === 'otro' ? 'block' : 'none';
-    }
+function toggleInput(selectId) {
+    const select = document.getElementById(selectId);
+    const otherInput = document.getElementById(selectId + '_other');
+    otherInput.style.display = select.value === 'otro' ? 'block' : 'none';
+}
 
 
 

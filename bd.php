@@ -1,7 +1,7 @@
 <?php
 
 
-
+/*
 $servidor = "srv-sql01";
 //$servidor = "srv-sql.fastpack.cl";
 $baseDeDatos = "BD_FSocial_Test";
@@ -20,8 +20,8 @@ try {
     echo "Error de conexión: " . $error->getMessage();
 }
 
+*/
 
-/*
 $servidor = "ABEL"; // Cambia esto por la dirección de tu servidor
 $baseDeDatos = "BD_FSocial_Test";
 
@@ -39,7 +39,7 @@ try {
     echo "Error en la conexión: " . $error->getMessage();
 }
 
-*/
+
 
 
 /*
