@@ -52,6 +52,9 @@ if (isset($_SESSION["usuario"])) {
           <li class="nav-item">
             <a class="nav-link" href="index.php">Lista de trabajadores</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="listaUsuarios.php">Usuarios</a>
+          </li>
         </ul>
         <a class="nav-item cerrar-sesion">
           <a class="nav-link " href="./cerrarSesion.php">Cerrar sesión</a>
@@ -60,8 +63,5 @@ if (isset($_SESSION["usuario"])) {
     </div>
   </nav>
 </header>
-
-
-
 
   <main>

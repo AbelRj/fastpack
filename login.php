@@ -13,20 +13,22 @@ if ($_POST) {
   $usuario = $_POST["usuario"];
   $contrasenia = $_POST["contrasenia"];
 
- // $sentencia = $conexion->prepare("SELECT * FROM [login] WHERE nombre_usuario=:usuario");
   $sentencia = $conexion->prepare("SELECT * FROM login WHERE nombre_usuario=:usuario");
   $sentencia->bindParam(":usuario", $usuario);
   $sentencia->execute();
-  $usuarios = $sentencia->fetchAll();
+  $user = $sentencia->fetch(PDO::FETCH_ASSOC);
 
-  foreach ($usuarios as $user) {
-    if ($user["nombre_usuario"] == $usuario && $user["password"] == $contrasenia) {
+  // Verifica si se encontró el usuario en la base de datos
+  if ($user) {
+    // Usar password_verify para verificar la contraseña hasheada
+    if (password_verify($contrasenia, $user["password"])) {
       $_SESSION["usuario"] = $user["nombre_usuario"];
       echo 'index.php'; // Devuelve la URL si la autenticación es correcta.
       exit();
     }
   }
 
+  // Si no se encontró el usuario o la contraseña no coincide
   echo 'error'; // Devuelve 'error' si falló la autenticación.
   exit();
 }
@@ -58,25 +60,27 @@ if ($_POST) {
               <input type="text" id="usuarioInput" name="usuario" class="form-control" placeholder="usuario" autocomplete="off">
             </div>
             <div class="mb-2">
-              <label class="form-label">Contraseña</label>
-              <div class="input-group input-group-flat">
-                <input type="password" id="contraseniaInput" name="contrasenia" class="form-control" placeholder="contraseña" autocomplete="off">
-                <span class="input-group-text">
-                  <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                      <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                    </svg>
-                  </a>
-                </span>
-              </div>
-            </div>
+  <label class="form-label">Contraseña</label>
+  <div class="input-group input-group-flat">
+    <input type="password" id="contraseniaInput" name="contrasenia" class="form-control" placeholder="contraseña" autocomplete="off">
+    <span class="input-group-text">
+      <a href="#" class="link-secondary" data-bs-toggle="tooltip" id="togglePassword">
+        <svg id="passwordIcon" xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+          <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+        </svg>
+      </a>
+    </span>
+  </div>
+</div>
+
 
             <div class="form-footer">
               <button type="submit" id="submitButton" class="btn btn-login w-100" disabled>Iniciar sesión</button>
             </div>
           </form>
+          <a href="contRest.php">¿Se olvido su contraseña?</a>
 
           <!-- Mensaje de error -->
           <div id="errorAlert" class="alert alert-danger mt-3" role="alert" style="display: none;">
@@ -88,7 +92,36 @@ if ($_POST) {
   </div>
 
 </body>
+<script>
+  // Manejo del toggle de contraseña
+const togglePassword = document.getElementById('togglePassword');
+const passwordIcon = document.getElementById('passwordIcon');
 
+togglePassword.addEventListener('click', function(event) {
+  event.preventDefault(); // Evita que el enlace recargue la página.
+
+  // Cambiar el tipo de input
+  const type = contraseniaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+  contraseniaInput.setAttribute('type', type);
+
+  // Cambiar el icono según el estado
+  if (type === 'text') {
+    passwordIcon.innerHTML = `
+<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+  <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
+  <path d="M3 3l18 18" />
+    `;
+  } else {
+    passwordIcon.innerHTML = `
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+    `;
+  }
+});
+
+  </script>
 
 <!-- Script JavaScript para manejar el login y la habilitación del botón -->
 <script>
@@ -131,6 +164,7 @@ if ($_POST) {
     .catch(error => console.error('Error:', error));
   });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
 </html>
 

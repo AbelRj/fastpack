@@ -13,7 +13,12 @@ function agregarFilaGF() {
         <td><input type="text" name="nombre_apellido_familiar[]"></td>
         <td><input type="text" name="parentesco[]"></td>
         <td><input type="date" name="fecha_nacimiento_familiar[]"></td>
-        <td><input type="text" name="sexo_familiar[]"></td>
+        <td>
+                <select name="sexo[]" id="">
+                    <option value="m">M</option>
+                    <option value="f">F</option>
+                </select>
+        </td>
         <td><input type="text" name="estado_civil_familiar[]"></td>
         <td><input type="text" name="nivel_educacional[]"></td>
         <td><input type="text" name="actividad_familiar[]"></td>

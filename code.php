@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombres_apellido = isset($_POST['nombre_apellido_familiar']) ? $_POST['nombre_apellido_familiar'] : [];
     $parentescos = isset($_POST['parentesco']) ? $_POST['parentesco'] : [];
     $fechas_nacimiento = isset($_POST['fecha_nacimiento_familiar']) ? $_POST['fecha_nacimiento_familiar'] : [];
-    $sexos = isset($_POST['sexo_familiar']) ? $_POST['sexo_familiar'] : [];
+    $sexos = isset($_POST['sexo']) ? $_POST['sexo'] : [];
     $estados_civil = isset($_POST['estado_civil_familiar']) ? $_POST['estado_civil_familiar'] : [];
     $niveles_educacionales = isset($_POST['nivel_educacional']) ? $_POST['nivel_educacional'] : [];
     $actividades = isset($_POST['actividad_familiar']) ? $_POST['actividad_familiar'] : [];

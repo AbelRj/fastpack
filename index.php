@@ -2,8 +2,8 @@
 include("bd.php");
 
 // Obtener los trabajadores
-$sentencia = $conexion->prepare("SELECT * FROM [trabajador]");
-//$sentencia = $conexion->prepare("SELECT * FROM trabajador");
+//$sentencia = $conexion->prepare("SELECT * FROM [trabajador]");
+$sentencia = $conexion->prepare("SELECT * FROM trabajador");
 $sentencia->execute();
 $lista_trabajadores = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 include("templates/header.php") ?>
